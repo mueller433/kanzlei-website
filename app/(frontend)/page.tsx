@@ -1,59 +1,156 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
+import type { Posten } from '@/payload-types'
 import './styles.css'
 
-export default async function HomePage() {
-  const headers = await getHeaders()
+/**
+ * Feste Reihenfolge der Kategorien für die Gruppierung.
+ * Entspricht den `options` des `kategorie`-Feldes in collections/Posten.ts.
+ */
+const KATEGORIE_REIHENFOLGE = [
+  'immobilien',
+  'maschinen',
+  'fahrzeuge',
+  'inventar',
+  'sonstiges',
+] as const
+
+const KATEGORIE_LABELS: Record<(typeof KATEGORIE_REIHENFOLGE)[number], string> = {
+  immobilien: 'Immobilien',
+  maschinen: 'Maschinen',
+  fahrzeuge: 'Fahrzeuge',
+  inventar: 'Inventar',
+  sonstiges: 'Sonstiges',
+}
+
+type KategorieGruppe = {
+  kategorie: (typeof KATEGORIE_REIHENFOLGE)[number]
+  label: string
+  posten: Posten[]
+  anzahl: number
+  minimalpreis: number | null
+}
+
+/**
+ * Gruppiert veröffentlichte Posten nach Kategorie und ermittelt je Gruppe
+ * die Anzahl der Positionen sowie den niedrigsten bekannten Preis
+ * (Posten mit "Preis auf Anfrage" fließen nicht in die Preisberechnung ein).
+ */
+function gruppiereNachKategorie(posten: Posten[]): KategorieGruppe[] {
+  const gruppen = new Map<string, Posten[]>()
+
+  for (const eintrag of posten) {
+    const liste = gruppen.get(eintrag.kategorie) ?? []
+    liste.push(eintrag)
+    gruppen.set(eintrag.kategorie, liste)
+  }
+
+  return KATEGORIE_REIHENFOLGE.filter((kategorie) => gruppen.has(kategorie)).map((kategorie) => {
+    const eintraege = gruppen.get(kategorie) ?? []
+
+    const preise = eintraege
+      .filter((eintrag) => !eintrag.preisAufAnfrage && typeof eintrag.preis === 'number')
+      .map((eintrag) => eintrag.preis as number)
+
+    return {
+      kategorie,
+      label: KATEGORIE_LABELS[kategorie],
+      posten: eintraege,
+      anzahl: eintraege.length,
+      minimalpreis: preise.length > 0 ? Math.min(...preise) : null,
+    }
+  })
+}
+
+function formatiertePreis(preis: number): string {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(preis)
+}
+
+/**
+ * Platzhalter für die Karten-Komponente einer einzelnen Position.
+ * Wird in Prompt 4 durch die eigentliche Karten-Komponente ersetzt.
+ */
+function PostenKartePlatzhalter({ posten }: { posten: Posten }) {
+  return (
+    <article className="katalog-karte-platzhalter" data-posten-id={posten.id}>
+      <p className="katalog-karte-platzhalter__titel">{posten.titel}</p>
+      <p className="katalog-karte-platzhalter__meta">
+        {posten.preisAufAnfrage
+          ? 'Preis auf Anfrage'
+          : typeof posten.preis === 'number'
+            ? formatiertePreis(posten.preis)
+            : '—'}
+      </p>
+    </article>
+  )
+}
+
+export default async function KatalogSeite() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const { docs: veroeffentlichtePosten, totalDocs } = await payload.find({
+    collection: 'posten',
+    where: {
+      veroeffentlicht: {
+        equals: true,
+      },
+    },
+    sort: '-createdAt',
+    depth: 1,
+    limit: 0,
+  })
+
+  const kategorieGruppen = gruppiereNachKategorie(veroeffentlichtePosten)
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
+    <div className="katalog">
+      <header className="katalog-kopf">
+        <h1>Aktueller Bestand</h1>
+        <p className="katalog-kopf__anzahl">
+          {totalDocs} veröffentlichte {totalDocs === 1 ? 'Position' : 'Positionen'}
+        </p>
+      </header>
+
+      {/* Platzhalter: Filterleiste (folgt in Prompt 3) */}
+      <section aria-label="Filter" className="katalog-filterleiste-platzhalter" data-slot="filterleiste" />
+
+      {/* Platzhalter: Suche (folgt in Prompt 3) */}
+      <section aria-label="Suche" className="katalog-suche-platzhalter" data-slot="suche" />
+
+      {totalDocs === 0 ? (
+        <p className="katalog-leer">Derzeit sind keine Positionen veröffentlicht.</p>
+      ) : (
+        <div className="katalog-kategorien">
+          {kategorieGruppen.map((gruppe) => (
+            <section key={gruppe.kategorie} className="katalog-kategorie" data-kategorie={gruppe.kategorie}>
+              <div className="katalog-kategorie__kopf">
+                <h2>{gruppe.label}</h2>
+                <span className="katalog-kategorie__anzahl">
+                  {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
+                </span>
+                {gruppe.minimalpreis !== null && (
+                  <span className="katalog-kategorie__ab-preis">
+                    ab {formatiertePreis(gruppe.minimalpreis)}
+                  </span>
+                )}
+              </div>
+
+              <div className="katalog-grid">
+                {gruppe.posten.map((eintrag) => (
+                  <PostenKartePlatzhalter key={eintrag.id} posten={eintrag} />
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+      )}
     </div>
   )
 }

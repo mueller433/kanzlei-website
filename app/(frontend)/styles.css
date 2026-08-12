@@ -89,6 +89,60 @@ svg {
   vertical-align: middle;
 }
 
+/* Katalogseite: nur strukturelles Layout, visuelles Feintuning folgt separat */
+
+.katalog {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.katalog-kopf {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.katalog-kopf h1 {
+  margin: 0;
+}
+
+.katalog-filterleiste-platzhalter,
+.katalog-suche-platzhalter {
+  min-height: 48px;
+  margin-bottom: 16px;
+}
+
+.katalog-kategorien {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.katalog-kategorie__kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.katalog-kategorie__kopf h2 {
+  margin: 0;
+}
+
+.katalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.katalog-karte-platzhalter {
+  border: 1px solid currentColor;
+  padding: 16px;
+}
+
 .home {
   display: flex;
   flex-direction: column;
