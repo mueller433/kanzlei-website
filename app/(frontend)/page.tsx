@@ -1,11 +1,14 @@
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { KontaktCta } from '@/components/kontakt-cta'
 import { ProzessSchritte } from '@/components/prozess-schritte'
+import { TeamKarte } from '@/components/team-karte'
 import { VertrauensBereich } from '@/components/vertrauens-bereich'
-import { ANSPRECHPARTNER } from '@/lib/kanzlei-daten'
+import { TEAM, TEAM_GRUPPENFOTO } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import type { Posten } from '@/payload-types'
 import './styles.css'
@@ -26,7 +29,7 @@ function formatiertePreis(preis: number): string {
   }).format(preis)
 }
 
-const LEISTUNGSBEREICHE = [
+const KOMPETENZBEREICHE = [
   {
     titel: 'Insolvenzrecht',
     href: '/insolvenzrecht',
@@ -40,6 +43,12 @@ const LEISTUNGSBEREICHE = [
       'Sanierungskonzepte und Restrukturierung außerhalb und innerhalb der Insolvenz, um Unternehmen tragfähig neu aufzustellen.',
   },
   {
+    titel: 'Wirtschaftsrecht',
+    href: '/leistungen',
+    beschreibung:
+      'Wirtschaftsrechtliche Fragestellungen im Umfeld von Krisensituationen, Verfahren und unternehmerischen Entscheidungen – eingebettet in unsere Verfahrenspraxis.',
+  },
+  {
     titel: 'Verwertung',
     href: '/verwertung',
     beschreibung:
@@ -47,37 +56,46 @@ const LEISTUNGSBEREICHE = [
   },
 ] as const
 
+// Bewusst nur so weit ausdifferenziert, wie es zu den bestehenden Abläufen
+// auf /insolvenzrecht (Antrag & Prüfung, Eröffnung, Verwaltung, Verteilung)
+// und /verwertung (Identifikation, Bewertung, Verwertung, Dokumentation) passt.
 const ABLAUF_SCHRITTE = [
   {
     schritt: '01',
-    titel: 'Erstkontakt',
+    titel: 'Prüfung',
     beschreibung:
-      'Vertrauliches Erstgespräch zur Einordnung der Situation und der kurzfristig notwendigen Schritte.',
+      'Einordnung der wirtschaftlichen und rechtlichen Lage sowie Prüfung der Insolvenzgründe und der geeigneten Verfahrensart.',
   },
   {
     schritt: '02',
-    titel: 'Analyse',
+    titel: 'Verfahren',
     beschreibung:
-      'Prüfung der wirtschaftlichen und rechtlichen Lage sowie Bewertung der Handlungsoptionen.',
+      'Eröffnung des Verfahrens, Bestellung des Verwalters und Sicherung der vorhandenen Masse.',
   },
   {
     schritt: '03',
-    titel: 'Umsetzung',
+    titel: 'Verwaltung',
     beschreibung:
-      'Einleitung des geeigneten Verfahrens, Sicherung der Masse und Steuerung aller Beteiligten.',
+      'Fortführung oder Stilllegung, Forderungsprüfung und laufende Verwaltung der Insolvenzmasse.',
   },
   {
     schritt: '04',
+    titel: 'Verwertung',
+    beschreibung:
+      'Identifikation, Bewertung und marktgerechte Verwertung der vorhandenen Vermögenswerte.',
+  },
+  {
+    schritt: '05',
     titel: 'Abschluss',
     beschreibung:
-      'Geordnete Verwertung, Verteilung und Abschluss des Verfahrens mit vollständiger Dokumentation.',
+      'Verteilung der Erlöse an die Gläubiger, vollständige Dokumentation und Beendigung des Verfahrens.',
   },
 ] as const
 
 function KatalogTeaserKarte({ posten }: { posten: Posten }) {
   return (
     <Link
-      href="/katalog"
+      href={`/katalog/${posten.id}`}
       className="group flex flex-col justify-between gap-6 border border-border bg-card p-6 transition-colors hover:border-accent"
     >
       <div className="flex flex-col gap-3">
@@ -117,39 +135,74 @@ export default async function Startseite() {
 
   return (
     <div>
-      {/* 1. HERO */}
-      <section className="border-b border-border">
+      {/* HERO */}
+      <section className="overflow-hidden border-b border-border">
         <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Insolvenzverwaltung &amp; Restrukturierung
-          </p>
-          <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl lg:text-7xl">
-            Kompetenz im Insolvenzrecht. Werte sichern. Perspektiven schaffen.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Müller &amp; Partner begleitet Unternehmen, Gläubiger und Beteiligte durch Insolvenz-
-            und Sanierungsverfahren. Mit klarer Struktur, wirtschaftlichem Augenmaß und einer
-            geordneten Verwertung schaffen wir tragfähige Lösungen in schwierigen Lagen.
-          </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/leistungen"
-              className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+          <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
+            {/* Textspalte */}
+            <div className="hero-einblenden">
+              <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Insolvenzrecht &middot; Restrukturierung &middot; Wirtschaftsrecht &middot; Verwertung
+              </p>
+              <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.08] tracking-tight text-foreground text-balance md:text-5xl lg:text-6xl">
+                Wirtschaftliche Krisen ordnen. Werte sichern. Verfahren verantworten.
+              </h1>
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
+                Müller &amp; Partner begleitet Unternehmen, Gläubiger und Beteiligte durch
+                Insolvenz- und Sanierungsverfahren sowie die anschließende Verwertung von
+                Vermögenswerten – mit klarer Struktur, wirtschaftlichem Augenmaß und
+                nachvollziehbarer Dokumentation.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/leistungen"
+                  className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+                >
+                  Unsere Leistungen
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/katalog"
+                  className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+                >
+                  Zum Verwertungskatalog
+                </Link>
+              </div>
+            </div>
+
+            {/* Gestalterische Fläche: gestaffelte Ebenen aus dem Designsystem,
+                das freigestellte Teamfoto als geerdetes, atmosphärisches
+                Element – bewusst kein Stock-Foto-Hero. */}
+            <div
+              className="hero-einblenden relative hidden md:block"
+              style={{ animationDelay: '140ms' }}
+              aria-hidden="true"
             >
-              Unsere Leistungen
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/katalog"
-              className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
-            >
-              Zum Verwertungskatalog
-            </Link>
+              <div className="absolute inset-0 translate-x-5 translate-y-5 border border-border" />
+              <div className="relative flex min-h-[26rem] flex-col justify-between border border-border bg-card p-8">
+                <div className="flex items-center gap-4">
+                  <span className="h-px flex-1 bg-accent" />
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Müller &amp; Partner
+                  </span>
+                </div>
+                <div className="relative mx-auto -mb-8 h-72 w-full max-w-[19rem]">
+                  <Image
+                    src={TEAM_GRUPPENFOTO || '/placeholder.svg'}
+                    alt=""
+                    fill
+                    sizes="19rem"
+                    className="object-contain object-bottom"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. KANZLEI / KOMPETENZ */}
+      {/* 01 KANZLEI / POSITIONIERUNG */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
@@ -173,23 +226,23 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* 3. LEISTUNGSBEREICHE */}
+      {/* 02 KOMPETENZBEREICHE */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Leistungsbereiche
+              Kompetenzbereiche
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Drei Schwerpunkte, ein Anspruch
+              Vier Bereiche, ein Anspruch
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-            {LEISTUNGSBEREICHE.map((bereich) => (
+          <div className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+            {KOMPETENZBEREICHE.map((bereich) => (
               <Link
                 key={bereich.href}
                 href={bereich.href}
-                className="group flex flex-col gap-4 bg-background p-8 transition-colors hover:bg-card md:p-10"
+                className="group flex flex-col gap-4 bg-background p-8 transition-colors hover:bg-card"
               >
                 <h3 className="font-serif text-2xl text-foreground">{bereich.titel}</h3>
                 <p className="flex-1 text-base leading-relaxed text-muted-foreground text-pretty">
@@ -205,40 +258,98 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* 4. VERTRAUENSBEREICH – qualitative Aussagen, bewusst ohne Zahlen */}
+      {/* 03 WARUM DIESE KANZLEI – qualitative Aussagen, bewusst ohne Zahlen */}
       <VertrauensBereich />
 
-      {/* 5. KATALOG-TEASER */}
-      {neuestePosten.length > 0 && (
-        <section className="border-b border-border">
-          <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-              <div className="max-w-2xl">
-                <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                  Verwertungskatalog
-                </p>
-                <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                  Aktuelle Positionen aus laufenden Verfahren
-                </h2>
-              </div>
+      {/* 04 INSOLVENZRECHT */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            <div>
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Fachgebiet
+              </p>
+              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+                Insolvenzrecht
+              </h2>
+            </div>
+            <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                Ein Insolvenzverfahren ordnet eine wirtschaftliche Krise rechtlich – es sichert das
+                vorhandene Vermögen, behandelt Gläubiger nach klaren Regeln und schafft einen
+                verbindlichen Rahmen für das weitere Vorgehen. Wir begleiten Regel- und
+                Eigenverwaltungsverfahren ebenso wie die Vertretung von Gläubigern.
+              </p>
               <Link
-                href="/katalog"
-                className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-opacity hover:opacity-80"
+                href="/insolvenzrecht"
+                className="inline-flex w-fit items-center gap-2 text-sm font-medium text-accent transition-opacity hover:opacity-80"
               >
-                Zum vollständigen Katalog
+                Insolvenzrecht im Detail
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {neuestePosten.map((posten) => (
-                <KatalogTeaserKarte key={posten.id} posten={posten} />
-              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 05 VERWERTUNG mit expliziter Überleitung zu 06 AKTUELLE POSITIONEN */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Verwertung
+            </h2>
+            <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                Verwertung schafft nur dann Vertrauen, wenn sie nachvollziehbar ist. Wir
+                identifizieren, bewerten und verwerten Vermögenswerte aus laufenden Verfahren –
+                dokumentiert und für alle Beteiligten nachvollziehbar offengelegt.
+              </p>
+              <p>
+                Einen aktuellen Ausschnitt aus unserem Bestand finden Sie direkt im Anschluss – der
+                vollständige Verwertungskatalog ist jederzeit einsehbar.
+              </p>
+              <Link
+                href="/verwertung"
+                className="inline-flex w-fit items-center gap-2 text-sm font-medium text-accent transition-opacity hover:opacity-80"
+              >
+                Verwertung im Detail
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
-        </section>
-      )}
 
-      {/* 6. ARBEITSWEISE / ABLAUF */}
+          {/* 06 AKTUELLE POSITIONEN – dynamisch aus der posten-Collection */}
+          {neuestePosten.length > 0 && (
+            <div className="mt-16 border-t border-border pt-16">
+              <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+                <div className="max-w-2xl">
+                  <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                    Verwertungskatalog
+                  </p>
+                  <h3 className="font-serif text-2xl leading-tight text-foreground text-balance md:text-3xl">
+                    Aktuelle Positionen aus laufenden Verfahren
+                  </h3>
+                </div>
+                <Link
+                  href="/katalog"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-opacity hover:opacity-80"
+                >
+                  Zum vollständigen Katalog
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {neuestePosten.map((posten) => (
+                  <KatalogTeaserKarte key={posten.id} posten={posten} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 07 ARBEITSWEISE / ABLAUF */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
@@ -253,62 +364,28 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* 7. ANSPRECHPARTNER */}
+      {/* 08 TEAM – echte Mitarbeiterfotos aus lib/kanzlei-daten.ts */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Ansprechpartner
-            </p>
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">Team</p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Persönliche Betreuung
+              Wer für Sie tätig wird
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {ANSPRECHPARTNER.map((person, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-5 border border-dashed border-border bg-card p-6 md:p-8"
-              >
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center bg-muted font-serif text-lg text-muted-foreground">
-                  {person.initialen}
-                </span>
-                <div className="flex flex-col gap-1">
-                  <span className="font-serif text-xl text-card-foreground">{person.name}</span>
-                  <span className="text-sm text-accent">{person.rolle}</span>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
-                    {person.beschreibung}
-                  </p>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {TEAM.map((person) => (
+              <TeamKarte key={person.name} person={person} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* 8. KONTAKT-CTA */}
-      <section>
-        <div className="reveal mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-2xl">
-              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                Sie stehen vor einer schwierigen wirtschaftlichen Entscheidung?
-              </h2>
-              <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-                Sprechen Sie uns an. Wir ordnen Ihre Situation ein und zeigen Ihnen die möglichen
-                nächsten Schritte – vertraulich und unverbindlich.
-              </p>
-            </div>
-            <Link
-              href="/kontakt"
-              className="inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-            >
-              Kontakt aufnehmen
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 09 KONTAKT */}
+      <KontaktCta
+        titel="Sie stehen vor einer schwierigen wirtschaftlichen Entscheidung?"
+        text="Sprechen Sie uns an. Wir ordnen Ihre Situation ein und zeigen Ihnen die möglichen nächsten Schritte – vertraulich und unverbindlich."
+      />
     </div>
   )
 }

@@ -3,9 +3,8 @@
  *  ZENTRALE PLATZHALTERDATEN – VOR VERÖFFENTLICHUNG ERSETZEN
  * ============================================================================
  *
- * ACHTUNG: Sämtliche hier hinterlegten Angaben – Kanzleiname, Anschrift,
- * Telefon, E-Mail, die Ansprechpartner-Profile sowie die Beispiel-Beiträge
- * auf /aktuelles – sind FREI ERFUNDENE PLATZHALTER.
+ * ACHTUNG: Kanzleiname, Anschrift, Telefon, E-Mail sowie die Beispiel-
+ * Beiträge auf /aktuelles sind FREI ERFUNDENE PLATZHALTER.
  *
  * Sie sind bewusst an genau EINER Stelle gebündelt, damit sie später an
  * einem einzigen Ort durch die echten, verifizierten Kanzleidaten ersetzt
@@ -14,6 +13,9 @@
  *
  * NICHT durch andere erfundene Daten ersetzen – ausschließlich durch echte,
  * von der Kanzlei bestätigte Angaben.
+ *
+ * Das TEAM (siehe unten) ist davon ausgenommen: Namen, Rollen und
+ * Porträtfotos sind ECHTE, bereitgestellte Daten – keine Platzhalter.
  * ============================================================================
  */
 
@@ -45,25 +47,54 @@ export const KANZLEI = {
 } as const
 
 /**
- * Ansprechpartner-Profile (Platzhalter).
- * `beschreibung` wird auf der Startseite genutzt, auf /kontakt nur Name + Rolle.
+ * Team – ECHTE Mitarbeiterdaten (keine Platzhalter).
+ *
+ * Name und Rolle sind unverändert aus den Dateinamen der bereitgestellten
+ * Porträtfotos übernommen. Es werden bewusst KEINE zusätzlichen Titel,
+ * Fachanwaltsbezeichnungen oder Werdegänge/Biografien ergänzt.
+ *
+ * `bild` verweist auf das freigestellte Porträt unter public/team/.
+ * Fehlt bei einem Eintrag der Bildpfad, greift in den Anzeige-Komponenten
+ * die bisherige Platzhalter-Darstellung mit `initialen`.
  */
-export const ANSPRECHPARTNER = [
+export const TEAM = [
   {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Insolvenzverwalter · Rechtsanwalt',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
+    name: 'Phillip Schaper',
+    rolle: 'Geschäftsführung',
+    bild: '/team/phillip-schaper.jpg',
+    initialen: 'PS',
   },
   {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Fachanwältin für Insolvenz- und Sanierungsrecht',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
+    name: 'Dirk Schymura',
+    rolle: 'Geschäftsführung',
+    bild: '/team/dirk-schymura.jpg',
+    initialen: 'DS',
+  },
+  {
+    name: 'Andreas Schmidt',
+    rolle: 'Rechtsanwalt Insolvenzverfahren',
+    bild: '/team/andreas-schmidt.jpg',
+    initialen: 'AS',
+  },
+  {
+    name: 'Andrea Kloser',
+    rolle: 'Rechtsanwältin',
+    bild: '/team/andrea-kloser.jpg',
+    initialen: 'AK',
+  },
+  {
+    name: 'Christine Meier',
+    rolle: 'Buchhaltung & Rechnungswesen',
+    bild: '/team/christine-meier.jpg',
+    initialen: 'CM',
   },
 ] as const
+
+/**
+ * Freigestellte Gruppenaufnahme des Teams – optional als atmosphärisches
+ * Element in der Hero-Komposition der Startseite nutzbar.
+ */
+export const TEAM_GRUPPENFOTO = '/team/team-freigestellt.png'
 
 /**
  * Beispiel-Beiträge für /aktuelles (Platzhalter).

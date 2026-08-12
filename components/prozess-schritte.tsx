@@ -13,7 +13,8 @@ export type Schritt = {
  * "Vorgehensweise" überall dieselbe Formensprache hat.
  */
 export function ProzessSchritte({ schritte }: { schritte: readonly Schritt[] }) {
-  const spalten = schritte.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+  const spalten =
+    schritte.length === 3 ? 'lg:grid-cols-3' : schritte.length === 5 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'
   return (
     <ol className={`grid grid-cols-1 gap-10 sm:grid-cols-2 ${spalten}`}>
       {schritte.map((s) => (

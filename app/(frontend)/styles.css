@@ -51,6 +51,27 @@ html {
 }
 
 /*
+ * Dezentes Einblenden des Hero-Inhalts beim Laden der Startseite – bewusst
+ * einmalig und ohne Scroll-Bezug (der Hero ist beim Laden bereits sichtbar).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-einblenden {
+    animation: hero-einblenden 0.7s ease both;
+  }
+}
+
+@keyframes hero-einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
  * Weicher Übergang der Katalog-Ergebnisse: Da jede Filteränderung eine
  * vollständige GET-Navigation auslöst, genügt ein einmaliges, kurzes
  * Einblenden beim Laden der (neu gefilterten) Ergebnisliste.
@@ -78,7 +99,8 @@ html {
     scroll-behavior: auto;
   }
   .reveal,
-  .ergebnis-fade {
+  .ergebnis-fade,
+  .hero-einblenden {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
