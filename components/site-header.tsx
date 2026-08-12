@@ -10,7 +10,7 @@ export const NAV_LINKS = [
   { href: '/insolvenzrecht', label: 'Insolvenzrecht' },
   { href: '/leistungen', label: 'Leistungen' },
   { href: '/verwertung', label: 'Verwertung' },
-  { href: '/', label: 'Katalog' },
+  { href: '/katalog', label: 'Katalog' },
   { href: '/aktuelles', label: 'Aktuelles' },
   { href: '/kontakt', label: 'Kontakt' },
 ] as const

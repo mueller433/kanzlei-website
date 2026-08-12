@@ -20,8 +20,8 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     titel: 'Verwertung',
     links: [
       { href: '/verwertung', label: 'Verwertung' },
-      { href: '/', label: 'Katalog' },
-      { href: '/', label: 'Aktuelle Angebote' },
+      { href: '/katalog', label: 'Katalog' },
+      { href: '/katalog', label: 'Aktuelle Angebote' },
     ],
   },
   {
