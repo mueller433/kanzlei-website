@@ -113,30 +113,54 @@ export default async function KatalogSeite() {
   const kategorieGruppen = gruppiereNachKategorie(veroeffentlichtePosten)
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-      <header className="mb-14 max-w-2xl border-b border-border pb-10 md:mb-20">
-        <h1 className="font-serif text-4xl leading-tight text-foreground text-balance md:text-5xl">
-          Aktueller Bestand
-        </h1>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-          Die Kanzlei stellt derzeit {totalDocs} veröffentlichte{' '}
-          {totalDocs === 1 ? 'Position' : 'Positionen'} aus laufenden Insolvenzverfahren zur
-          Verwertung bereit.
-        </p>
+    <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+      <header className="mb-24 grid grid-cols-1 items-center gap-12 md:mb-32 md:grid-cols-[1.15fr_1fr] md:gap-16">
+        <div>
+          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            Verwertungskatalog der Kanzlei
+          </p>
+          <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl lg:text-7xl">
+            {totalDocs} {totalDocs === 1 ? 'Position' : 'Positionen'} im aktuellen Bestand
+          </h1>
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
+            Sämtliche hier gelisteten Vermögenswerte stammen aus von der Kanzlei betreuten
+            Insolvenz- und Auflösungsverfahren. Sie werden geordnet zur Verwertung angeboten –
+            von Immobilien über Maschinen und Fahrzeuge bis hin zu Inventar.
+          </p>
+        </div>
+
+        <div
+          aria-hidden="true"
+          className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br from-accent to-foreground md:aspect-[3/4]"
+        >
+          {/* Ruhige, hochwertige Fläche: dezente Keyline-Rahmung statt Stock-Foto */}
+          <div className="absolute inset-4 border border-background/15" />
+          <div className="absolute inset-0 flex flex-col justify-between p-8 text-background md:p-10">
+            <span className="font-serif text-2xl leading-none text-background/90">§</span>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs uppercase tracking-[0.2em] text-background/60">
+                Geordnete Verwertung
+              </span>
+              <span className="font-serif text-2xl leading-tight text-background text-balance">
+                Assets aus Insolvenz- &amp; Auflösungsverfahren
+              </span>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Platzhalter: Filterleiste (folgt in Prompt 3) */}
       <section aria-label="Filter" className="mb-4 min-h-12" data-slot="filterleiste" />
 
       {/* Platzhalter: Suche (folgt in Prompt 3) */}
-      <section aria-label="Suche" className="mb-14 min-h-12 md:mb-20" data-slot="suche" />
+      <section aria-label="Suche" className="mb-16 min-h-12 md:mb-24" data-slot="suche" />
 
       {totalDocs === 0 ? (
         <p className="text-base text-muted-foreground">
           Derzeit sind keine Positionen veröffentlicht.
         </p>
       ) : (
-        <div className="flex flex-col gap-16 md:gap-20">
+        <div className="flex flex-col gap-20 md:gap-28">
           {kategorieGruppen.map((gruppe) => (
             <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
               <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
