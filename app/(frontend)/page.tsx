@@ -78,9 +78,12 @@ function formatiertePreis(preis: number): string {
  */
 function PostenKartePlatzhalter({ posten }: { posten: Posten }) {
   return (
-    <article className="katalog-karte-platzhalter" data-posten-id={posten.id}>
-      <p className="katalog-karte-platzhalter__titel">{posten.titel}</p>
-      <p className="katalog-karte-platzhalter__meta">
+    <article
+      className="flex flex-col justify-between gap-3 border border-border p-5"
+      data-posten-id={posten.id}
+    >
+      <p className="font-serif text-lg leading-snug text-foreground text-balance">{posten.titel}</p>
+      <p className="text-sm text-muted-foreground">
         {posten.preisAufAnfrage
           ? 'Preis auf Anfrage'
           : typeof posten.preis === 'number'
@@ -110,39 +113,47 @@ export default async function KatalogSeite() {
   const kategorieGruppen = gruppiereNachKategorie(veroeffentlichtePosten)
 
   return (
-    <div className="katalog">
-      <header className="katalog-kopf">
-        <h1>Aktueller Bestand</h1>
-        <p className="katalog-kopf__anzahl">
-          {totalDocs} veröffentlichte {totalDocs === 1 ? 'Position' : 'Positionen'}
+    <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+      <header className="mb-14 max-w-2xl border-b border-border pb-10 md:mb-20">
+        <h1 className="font-serif text-4xl leading-tight text-foreground text-balance md:text-5xl">
+          Aktueller Bestand
+        </h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+          Die Kanzlei stellt derzeit {totalDocs} veröffentlichte{' '}
+          {totalDocs === 1 ? 'Position' : 'Positionen'} aus laufenden Insolvenzverfahren zur
+          Verwertung bereit.
         </p>
       </header>
 
       {/* Platzhalter: Filterleiste (folgt in Prompt 3) */}
-      <section aria-label="Filter" className="katalog-filterleiste-platzhalter" data-slot="filterleiste" />
+      <section aria-label="Filter" className="mb-4 min-h-12" data-slot="filterleiste" />
 
       {/* Platzhalter: Suche (folgt in Prompt 3) */}
-      <section aria-label="Suche" className="katalog-suche-platzhalter" data-slot="suche" />
+      <section aria-label="Suche" className="mb-14 min-h-12 md:mb-20" data-slot="suche" />
 
       {totalDocs === 0 ? (
-        <p className="katalog-leer">Derzeit sind keine Positionen veröffentlicht.</p>
+        <p className="text-base text-muted-foreground">
+          Derzeit sind keine Positionen veröffentlicht.
+        </p>
       ) : (
-        <div className="katalog-kategorien">
+        <div className="flex flex-col gap-16 md:gap-20">
           {kategorieGruppen.map((gruppe) => (
-            <section key={gruppe.kategorie} className="katalog-kategorie" data-kategorie={gruppe.kategorie}>
-              <div className="katalog-kategorie__kopf">
-                <h2>{gruppe.label}</h2>
-                <span className="katalog-kategorie__anzahl">
-                  {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
-                </span>
-                {gruppe.minimalpreis !== null && (
-                  <span className="katalog-kategorie__ab-preis">
-                    ab {formatiertePreis(gruppe.minimalpreis)}
+            <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
+              <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
+                <h2 className="font-serif text-2xl text-foreground md:text-3xl">{gruppe.label}</h2>
+                <div className="flex items-baseline gap-4 text-sm text-muted-foreground">
+                  <span>
+                    {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
                   </span>
-                )}
+                  {gruppe.minimalpreis !== null && (
+                    <span className="text-accent">
+                      ab {formatiertePreis(gruppe.minimalpreis)}
+                    </span>
+                  )}
+                </div>
               </div>
 
-              <div className="katalog-grid">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {gruppe.posten.map((eintrag) => (
                   <PostenKartePlatzhalter key={eintrag.id} posten={eintrag} />
                 ))}
