@@ -131,17 +131,19 @@ export default async function KatalogSeite() {
 
         <div
           aria-hidden="true"
-          className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br from-accent to-foreground md:aspect-[3/4]"
+          className="relative aspect-[4/5] w-full overflow-hidden border border-border bg-card md:aspect-[3/4]"
         >
-          {/* Ruhige, hochwertige Fläche: dezente Keyline-Rahmung statt Stock-Foto */}
-          <div className="absolute inset-4 border border-background/15" />
-          <div className="absolute inset-0 flex flex-col justify-between p-8 text-background md:p-10">
-            <span className="font-serif text-2xl leading-none text-background/90">§</span>
+          {/* Ruhige, neutrale Fläche: Bordeaux nur noch als kleiner Akzent */}
+          <div className="absolute inset-4 border border-border" />
+          <div className="absolute inset-0 flex flex-col justify-between p-8 text-foreground md:p-10">
+            <span className="flex h-10 w-10 items-center justify-center bg-accent font-serif text-xl leading-none text-accent-foreground">
+              §
+            </span>
             <div className="flex flex-col gap-1">
-              <span className="text-xs uppercase tracking-[0.2em] text-background/60">
+              <span className="text-xs uppercase tracking-[0.2em] text-accent">
                 Geordnete Verwertung
               </span>
-              <span className="font-serif text-2xl leading-tight text-background text-balance">
+              <span className="font-serif text-2xl leading-tight text-foreground text-balance">
                 Assets aus Insolvenz- &amp; Auflösungsverfahren
               </span>
             </div>

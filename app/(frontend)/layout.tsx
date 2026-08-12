@@ -1,5 +1,8 @@
 import { Public_Sans, Source_Serif_4 } from 'next/font/google'
 import React from 'react'
+
+import { SiteFooter } from '@/components/site-footer'
+import { SiteHeader } from '@/components/site-header'
 import './styles.css'
 
 const headline = Source_Serif_4({
@@ -15,13 +18,16 @@ const grotesk = Public_Sans({
 })
 
 export const metadata = {
+  title: {
+    default: 'Müller & Partner – Insolvenzverwaltung & Restrukturierung',
+    template: '%s | Müller & Partner',
+  },
   description:
-    'Verwertungskatalog der Kanzlei: veröffentlichte Positionen aus laufenden Insolvenzverfahren – Immobilien, Maschinen, Fahrzeuge, Inventar und Sonstiges.',
-  title: 'Verwertungskatalog',
+    'Müller & Partner ist eine spezialisierte Kanzlei für Insolvenzrecht, Sanierung und Restrukturierung. Zusätzlich betreiben wir einen Verwertungskatalog für Vermögenswerte aus laufenden Verfahren.',
 }
 
 export const viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#f7f5f0',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -29,8 +35,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="de" className={`${headline.variable} ${grotesk.variable} bg-background`}>
-      <body className="font-sans text-foreground antialiased">
-        <main>{children}</main>
+      <body className="flex min-h-screen flex-col font-sans text-foreground antialiased">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   )

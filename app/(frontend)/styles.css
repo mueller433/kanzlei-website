@@ -6,12 +6,15 @@
 }
 
 @theme {
-  --color-background: #f6f2eb;
-  --color-foreground: #211c16;
-  --color-card: #fbf9f4;
-  --color-border: #e3dccf;
-  --color-muted-foreground: #6f665a;
+  --color-background: #f7f5f0;
+  --color-foreground: #23201b;
+  --color-card: #ffffff;
+  --color-card-foreground: #23201b;
+  --color-muted: #edeae2;
+  --color-muted-foreground: #6d675e;
+  --color-border: #e4e0d6;
   --color-accent: #6e2230;
+  --color-accent-foreground: #f7f5f0;
 }
 
 html {
