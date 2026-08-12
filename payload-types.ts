@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    posten: Posten;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    posten: PostenSelect<false> | PostenSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -160,6 +162,65 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posten".
+ */
+export interface Posten {
+  id: string;
+  titel: string;
+  beschreibung?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  kategorie: 'immobilien' | 'maschinen' | 'fahrzeuge' | 'inventar' | 'sonstiges';
+  preis?: number | null;
+  preisAufAnfrage?: boolean | null;
+  status: 'verfuegbar' | 'reserviert' | 'verkauft';
+  bilder?: (string | Media)[] | null;
+  insolvenzverfahren?: string | null;
+  zustand: 'neu' | 'gebraucht' | 'restbestand';
+  kurzspezifikation?: string | null;
+  stueckzahl: number;
+  standort?: string | null;
+  dokumente?: (string | Media)[] | null;
+  veroeffentlicht?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posten_select".
+ */
+export interface PostenSelect<T extends boolean = true> {
+  titel?: T;
+  beschreibung?: T;
+  kategorie?: T;
+  preis?: T;
+  preisAufAnfrage?: T;
+  status?: T;
+  bilder?: T;
+  insolvenzverfahren?: T;
+  zustand?: T;
+  kurzspezifikation?: T;
+  stueckzahl?: T;
+  standort?: T;
+  dokumente?: T;
+  veroeffentlicht?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
