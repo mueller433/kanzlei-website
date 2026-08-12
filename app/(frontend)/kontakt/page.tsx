@@ -12,6 +12,7 @@ const KONTAKTDATEN = [
     Icon: MapPin,
     label: 'Anschrift',
     zeilen: ['Müller & Partner', 'Musterstraße 12', '10115 Berlin'],
+    href: undefined,
   },
   {
     Icon: Phone,
