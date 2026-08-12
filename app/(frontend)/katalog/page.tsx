@@ -270,7 +270,7 @@ export default async function KatalogSeite({
               </div>
 
               {totalDocs === 0 ? (
-                <div className="border border-border bg-card px-6 py-16 text-center">
+                <div className="ergebnis-fade border border-border bg-card px-6 py-16 text-center">
                   <p className="text-base text-foreground">
                     Keine Positionen entsprechen Ihrer Auswahl.
                   </p>
@@ -283,7 +283,7 @@ export default async function KatalogSeite({
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-16 md:gap-20">
+                <div className="ergebnis-fade flex flex-col gap-16 md:gap-20">
                   {kategorieGruppen.map((gruppe) => (
                     <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
                       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-border pb-5">
