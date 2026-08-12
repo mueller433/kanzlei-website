@@ -36,13 +36,34 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
 
   const zeige = (index: number) => setAktiv((index + anzahl) % anzahl)
 
+  // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild
+  const touchStartX = React.useRef<number | null>(null)
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const delta = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(delta) > 40) {
+      zeige(delta < 0 ? aktiv + 1 : aktiv - 1)
+    }
+    touchStartX.current = null
+  }
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative aspect-[4/3] w-full overflow-hidden border border-border bg-card">
+      <div
+        className="relative aspect-[4/3] w-full touch-pan-y select-none overflow-hidden border border-border bg-card"
+        onTouchStart={zeigeNavigation ? onTouchStart : undefined}
+        onTouchEnd={zeigeNavigation ? onTouchEnd : undefined}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={aktuelles.url || '/placeholder.svg'}
           alt={aktuelles.alt}
+          draggable={false}
           className="h-full w-full object-cover"
         />
 
@@ -72,7 +93,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
       </div>
 
       {zeigeNavigation && (
-        <div className="flex flex-wrap gap-3">
+        <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:thin]">
           {bilder.map((bild, index) => (
             <button
               key={bild.url}

@@ -231,16 +231,17 @@ export default async function KatalogSeite({
               selectedZustaende={selectedZustaende}
               selectedPreis={selectedPreis}
               kategorieCounts={kategorieCounts}
+              totalDocs={totalDocs}
             />
 
             <div>
               {/* Ergebniszähler + Sortierung */}
-              <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
+              <div className="mb-10 flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">{totalDocs}</span>{' '}
                   {totalDocs === 1 ? 'Position' : 'Positionen'}
                 </p>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <label
                     htmlFor="sort"
                     className="text-xs uppercase tracking-[0.15em] text-muted-foreground"
@@ -251,7 +252,7 @@ export default async function KatalogSeite({
                     id="sort"
                     name="sort"
                     defaultValue={selectedSort}
-                    className="border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
+                    className="min-w-0 flex-1 border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:border-accent focus:outline-none sm:flex-none"
                   >
                     {SORT_OPTIONS.map((option) => (
                       <option key={option.key} value={option.key}>
@@ -261,7 +262,7 @@ export default async function KatalogSeite({
                   </select>
                   <button
                     type="submit"
-                    className="border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
+                    className="shrink-0 border border-border px-4 py-2.5 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
                   >
                     Anwenden
                   </button>

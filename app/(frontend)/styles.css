@@ -20,3 +20,18 @@
 html {
   -webkit-font-smoothing: antialiased;
 }
+
+/*
+ * Lange deutsche Komposita (z. B. "Vermögenswerten") würden große
+ * Display-Überschriften auf schmalen Viewports über den Rand schieben.
+ * Auf kleinen Breiten daher Silbentrennung + harten Umbruch erlauben,
+ * ab md wieder normales Verhalten (kein Trennstrich im ruhigen Layout).
+ */
+@media (max-width: 767px) {
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+}
