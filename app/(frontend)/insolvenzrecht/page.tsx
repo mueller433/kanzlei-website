@@ -1,6 +1,8 @@
 import React from 'react'
 
 import { KontaktCta } from '@/components/kontakt-cta'
+import { ProzessSchritte, type Schritt } from '@/components/prozess-schritte'
+import { SeitenHero } from '@/components/seiten-hero'
 
 export const metadata = {
   title: 'Insolvenzrecht',
@@ -39,7 +41,7 @@ const ZIELGRUPPEN = [
   },
 ] as const
 
-const ABLAUF = [
+const ABLAUF: readonly Schritt[] = [
   {
     schritt: '01',
     titel: 'Antrag & Prüfung',
@@ -60,31 +62,43 @@ const ABLAUF = [
     titel: 'Verteilung',
     beschreibung: 'Verteilung der Erlöse an die Gläubiger und Beendigung des Verfahrens.',
   },
-] as const
+]
 
 export default function InsolvenzrechtSeite() {
   return (
     <div>
-      {/* HERO */}
+      <SeitenHero
+        eyebrow="Fachgebiet"
+        titel="Insolvenzrecht mit Weitblick"
+        lead="Vom Eröffnungsantrag bis zur Verfahrensbeendigung: Wir kennen die rechtlichen Anforderungen und wirtschaftlichen Zusammenhänge insolvenzrechtlicher Verfahren und begleiten alle Beteiligten sicher durch jede Phase."
+      />
+
+      {/* EINORDNUNG – zweispaltig: Überschrift links, kurze Einordnung rechts */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Fachgebiet
-          </p>
-          <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl">
-            Insolvenzrecht mit Weitblick
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Vom Eröffnungsantrag bis zur Verfahrensbeendigung: Wir kennen die rechtlichen
-            Anforderungen und wirtschaftlichen Zusammenhänge insolvenzrechtlicher Verfahren und
-            begleiten alle Beteiligten sicher durch jede Phase.
-          </p>
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Worum es im Insolvenzrecht geht
+            </h2>
+            <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                Ein Insolvenzverfahren ordnet eine wirtschaftliche Krise rechtlich – es sichert das
+                vorhandene Vermögen, behandelt alle Gläubiger nach klaren Regeln und schafft einen
+                verbindlichen Rahmen für das weitere Vorgehen.
+              </p>
+              <p>
+                Ob Fortführung, Sanierung oder geordnete Abwicklung: Entscheidend ist, früh die
+                richtigen Weichen zu stellen. Wir bringen die rechtliche und wirtschaftliche
+                Perspektive zusammen und behalten dabei die Interessen aller Beteiligten im Blick.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* LEISTUNGEN */}
+      {/* LEISTUNGEN IM DETAIL – 3-spaltiges Tile-Grid */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Unsere Rolle
@@ -106,9 +120,9 @@ export default function InsolvenzrechtSeite() {
         </div>
       </section>
 
-      {/* ZIELGRUPPEN */}
+      {/* ZIELGRUPPEN – zwei Bordered-Cards */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Für wen relevant
@@ -119,7 +133,10 @@ export default function InsolvenzrechtSeite() {
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {ZIELGRUPPEN.map((gruppe) => (
-              <div key={gruppe.titel} className="border border-border bg-card p-8 md:p-10">
+              <div
+                key={gruppe.titel}
+                className="border border-border bg-card p-8 transition-colors hover:border-accent md:p-10"
+              >
                 <h3 className="font-serif text-2xl text-card-foreground">{gruppe.titel}</h3>
                 <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty">
                   {gruppe.beschreibung}
@@ -130,9 +147,9 @@ export default function InsolvenzrechtSeite() {
         </div>
       </section>
 
-      {/* ABLAUF */}
+      {/* VORGEHENSWEISE – vier nummerierte Schritte */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Grober Ablauf
@@ -141,19 +158,7 @@ export default function InsolvenzrechtSeite() {
               Wie ein Verfahren verläuft
             </h2>
           </div>
-          <ol className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {ABLAUF.map((schritt) => (
-              <li key={schritt.schritt} className="flex flex-col gap-3">
-                <span className="font-serif text-2xl text-accent">{schritt.schritt}</span>
-                <span className="border-t border-border pt-4 font-serif text-xl text-foreground">
-                  {schritt.titel}
-                </span>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                  {schritt.beschreibung}
-                </p>
-              </li>
-            ))}
-          </ol>
+          <ProzessSchritte schritte={ABLAUF} />
         </div>
       </section>
 

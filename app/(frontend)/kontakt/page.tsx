@@ -1,43 +1,34 @@
 import { Mail, MapPin, Phone } from 'lucide-react'
 import React from 'react'
 
+import { ANSPRECHPARTNER, KANZLEI, KANZLEI_ORT } from '@/lib/kanzlei-daten'
+
 export const metadata = {
   title: 'Kontakt',
   description:
     'Kontaktieren Sie Müller & Partner – Insolvenzverwaltung und Restrukturierung. Adresse, Telefon, E-Mail und Anfrageformular.',
 }
 
+// Kontaktkanäle – Werte stammen zentral aus lib/kanzlei-daten.ts (Platzhalter),
+// nur Icon und Beschriftung werden hier als Darstellung ergänzt.
 const KONTAKTDATEN = [
   {
     Icon: MapPin,
     label: 'Anschrift',
-    zeilen: ['Müller & Partner', 'Musterstraße 12', '10115 Berlin'],
+    zeilen: [KANZLEI.name, KANZLEI.adresse.strasse, KANZLEI_ORT],
     href: undefined,
   },
   {
     Icon: Phone,
     label: 'Telefon',
-    zeilen: ['+49 30 000 000 00'],
-    href: 'tel:+493000000000',
+    zeilen: [KANZLEI.telefon.anzeige],
+    href: KANZLEI.telefon.href,
   },
   {
     Icon: Mail,
     label: 'E-Mail',
-    zeilen: ['kontakt@mueller-partner.de'],
-    href: 'mailto:kontakt@mueller-partner.de',
-  },
-] as const
-
-const ANSPRECHPARTNER = [
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Insolvenzverwalter · Rechtsanwalt',
-  },
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Fachanwältin für Insolvenz- und Sanierungsrecht',
+    zeilen: [KANZLEI.email.anzeige],
+    href: KANZLEI.email.href,
   },
 ] as const
 
@@ -62,7 +53,7 @@ export default function KontaktSeite() {
 
       {/* KONTAKTDATEN + FORMULAR */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
             {/* Kontaktdaten */}
             <div className="flex flex-col gap-10">

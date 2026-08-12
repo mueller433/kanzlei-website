@@ -3,6 +3,9 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { ProzessSchritte } from '@/components/prozess-schritte'
+import { VertrauensBereich } from '@/components/vertrauens-bereich'
+import { ANSPRECHPARTNER } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import type { Posten } from '@/payload-types'
 import './styles.css'
@@ -68,23 +71,6 @@ const ABLAUF_SCHRITTE = [
     titel: 'Abschluss',
     beschreibung:
       'Geordnete Verwertung, Verteilung und Abschluss des Verfahrens mit vollständiger Dokumentation.',
-  },
-] as const
-
-const ANSPRECHPARTNER = [
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Insolvenzverwalter · Rechtsanwalt',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
-  },
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Fachanwältin für Insolvenz- und Sanierungsrecht',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
   },
 ] as const
 
@@ -165,7 +151,7 @@ export default async function Startseite() {
 
       {/* 2. KANZLEI / KOMPETENZ */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               Erfahrung, die in kritischen Situationen Halt gibt
@@ -189,7 +175,7 @@ export default async function Startseite() {
 
       {/* 3. LEISTUNGSBEREICHE */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Leistungsbereiche
@@ -219,10 +205,13 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* 4. KATALOG-TEASER */}
+      {/* 4. VERTRAUENSBEREICH – qualitative Aussagen, bewusst ohne Zahlen */}
+      <VertrauensBereich />
+
+      {/* 5. KATALOG-TEASER */}
       {neuestePosten.length > 0 && (
         <section className="border-b border-border">
-          <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
             <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
               <div className="max-w-2xl">
                 <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
@@ -249,9 +238,9 @@ export default async function Startseite() {
         </section>
       )}
 
-      {/* 5. ARBEITSWEISE / ABLAUF */}
+      {/* 6. ARBEITSWEISE / ABLAUF */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Arbeitsweise
@@ -260,25 +249,13 @@ export default async function Startseite() {
               So verläuft die Zusammenarbeit
             </h2>
           </div>
-          <ol className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {ABLAUF_SCHRITTE.map((schritt) => (
-              <li key={schritt.schritt} className="flex flex-col gap-3">
-                <span className="font-serif text-2xl text-accent">{schritt.schritt}</span>
-                <span className="border-t border-border pt-4 font-serif text-xl text-foreground">
-                  {schritt.titel}
-                </span>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                  {schritt.beschreibung}
-                </p>
-              </li>
-            ))}
-          </ol>
+          <ProzessSchritte schritte={ABLAUF_SCHRITTE} />
         </div>
       </section>
 
-      {/* 6. ANSPRECHPARTNER */}
+      {/* 7. ANSPRECHPARTNER */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Ansprechpartner
@@ -309,9 +286,9 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* 7. KONTAKT-CTA */}
+      {/* 8. KONTAKT-CTA */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
+        <div className="reveal mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
           <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">

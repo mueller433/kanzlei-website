@@ -1,41 +1,12 @@
 import React from 'react'
 
+import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
+
 export const metadata = {
   title: 'Aktuelles',
   description:
     'Fachbeiträge, Meldungen und Entwicklungen aus dem Insolvenz- und Sanierungsrecht von Müller & Partner.',
 }
-
-const BEITRAEGE = [
-  {
-    kategorie: 'Fachbeitrag',
-    datum: 'Datum folgt',
-    titel: 'Eigenverwaltung als Chance für den Mittelstand',
-    anriss:
-      'Wann sich das Eigenverwaltungsverfahren für Unternehmen eignet und welche Voraussetzungen erfüllt sein müssen – ein Überblick über Möglichkeiten und Grenzen.',
-  },
-  {
-    kategorie: 'Meldung',
-    datum: 'Datum folgt',
-    titel: 'Neue Positionen im Verwertungskatalog',
-    anriss:
-      'In unserem Verwertungskatalog stehen regelmäßig neue Vermögenswerte aus laufenden Verfahren zur Verfügung. Ein Blick auf die aktuellen Kategorien lohnt sich.',
-  },
-  {
-    kategorie: 'Fachbeitrag',
-    datum: 'Datum folgt',
-    titel: 'Fristen im Insolvenzverfahren richtig einordnen',
-    anriss:
-      'Von der Antragspflicht bis zur Forderungsanmeldung: Welche Fristen für Geschäftsführung und Gläubiger besonders relevant sind – und warum frühes Handeln zählt.',
-  },
-  {
-    kategorie: 'Meldung',
-    datum: 'Datum folgt',
-    titel: 'Restrukturierung: Frühzeitigkeit entscheidet',
-    anriss:
-      'Warum der Handlungsspielraum bei Sanierungen mit jeder Woche schrumpft und wie eine strukturierte Vorbereitung die Erfolgsaussichten deutlich erhöht.',
-  },
-] as const
 
 export default function AktuellesSeite() {
   return (
@@ -59,9 +30,9 @@ export default function AktuellesSeite() {
 
       {/* BEITRÄGE */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {BEITRAEGE.map((beitrag, i) => (
+            {NEWS_BEITRAEGE.map((beitrag, i) => (
               <article
                 key={i}
                 className="flex flex-col gap-4 border border-dashed border-border bg-card p-8 md:p-10"
