@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import { getPayload } from 'payload'
 import type { Where } from 'payload'
 import React from 'react'
@@ -70,8 +71,9 @@ function formatiertePreis(preis: number): string {
  */
 function PostenKartePlatzhalter({ posten }: { posten: Posten }) {
   return (
-    <article
-      className="group flex min-h-44 flex-col justify-between gap-6 border border-border bg-background p-6 transition-colors hover:bg-card"
+    <Link
+      href={`/katalog/${posten.id}`}
+      className="group flex min-h-44 flex-col justify-between gap-6 border border-border bg-background p-6 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent"
       data-posten-id={posten.id}
     >
       <div className="flex flex-col gap-2">
@@ -95,7 +97,7 @@ function PostenKartePlatzhalter({ posten }: { posten: Posten }) {
           aria-hidden="true"
         />
       </div>
-    </article>
+    </Link>
   )
 }
 
