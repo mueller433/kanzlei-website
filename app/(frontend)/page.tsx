@@ -114,7 +114,7 @@ export default async function KatalogSeite() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-      <header className="mb-24 grid grid-cols-1 items-center gap-12 md:mb-32 md:grid-cols-[1.15fr_1fr] md:gap-16">
+      <header className="mb-14 grid grid-cols-1 items-center gap-12 md:mb-20 md:grid-cols-[1.15fr_1fr] md:gap-16">
         <div>
           <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
             Verwertungskatalog der Kanzlei
@@ -149,11 +149,11 @@ export default async function KatalogSeite() {
         </div>
       </header>
 
-      {/* Platzhalter: Filterleiste (folgt in Prompt 3) */}
-      <section aria-label="Filter" className="mb-4 min-h-12" data-slot="filterleiste" />
+      {/* Platzhalter: Filterleiste (folgt in Prompt 3) – reserviert noch keinen Raum */}
+      <section aria-label="Filter" className="empty:hidden" data-slot="filterleiste" />
 
-      {/* Platzhalter: Suche (folgt in Prompt 3) */}
-      <section aria-label="Suche" className="mb-16 min-h-12 md:mb-24" data-slot="suche" />
+      {/* Platzhalter: Suche (folgt in Prompt 3) – reserviert noch keinen Raum */}
+      <section aria-label="Suche" className="mb-14 empty:hidden md:mb-16" data-slot="suche" />
 
       {totalDocs === 0 ? (
         <p className="text-base text-muted-foreground">
