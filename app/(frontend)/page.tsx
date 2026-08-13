@@ -72,7 +72,7 @@ export default function Startseite() {
       {/* Negativer Abstand entspricht der festen Header-Höhe (h-20 md:h-24),
           damit der transparente Header direkt über dem Bild liegt. Das Bild
           füllt die gesamte Hero-Fläche (kein zweispaltiges Layout). */}
-      <section className="relative -mt-20 flex min-h-[680px] items-end overflow-hidden md:-mt-24 md:min-h-[880px]">
+      <section className="relative -mt-20 flex min-h-[680px] items-end overflow-hidden md:-mt-[100px] md:min-h-[920px]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
@@ -81,20 +81,24 @@ export default function Startseite() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Leichte, gleichmäßige Abdunklung – Bilddetails bleiben sichtbar */}
-        <div className="absolute inset-0 bg-[#0c0a08]/30" aria-hidden="true" />
-        {/* Zusätzlicher Kontrast unten links, wo der Text steht */}
+        {/* Dezente Grundabdunklung – rechte Bildhälfte bleibt deutlich sichtbar */}
+        <div className="absolute inset-0 bg-[#0c0a08]/20" aria-hidden="true" />
+        {/* Stärkerer Verlauf links, wo der Text steht; klingt vor der Bildmitte aus */}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/80 via-[#0c0a08]/15 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/95 from-0% via-[#0c0a08]/55 via-40% to-transparent to-72%"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/85 via-[#0c0a08]/10 to-transparent"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full pb-16 pl-6 pr-6 pt-16 md:pb-[160px] md:pl-[120px] md:pr-16 md:pt-16">
+        <div className="relative z-10 w-full pb-16 pl-6 pr-6 pt-16 md:pb-[280px] md:pl-[120px] md:pr-16 md:pt-16">
           <div className="max-w-[650px]">
             <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[3rem] font-semibold leading-[0.95] tracking-tight text-[#f7f5f0] text-balance md:text-[5.5rem] lg:text-[6.5rem]">
+            <h1 className="font-serif text-[3rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[5.625rem]">
               Vermögenswerte
               <br />
               professionell
@@ -156,30 +160,24 @@ export default function Startseite() {
             </p>
           </div>
 
-          <div className="karten-grid grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="karten-grid grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-3">
             {POSITIONEN_KATEGORIEN.map((kategorie) => (
-              <Link
-                key={kategorie.titel}
-                href={kategorie.href}
-                className="group relative flex h-[420px] flex-col justify-end overflow-hidden border border-border"
-              >
-                <Image
-                  src={kategorie.bild}
-                  alt={kategorie.titel}
-                  fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/25 to-transparent"
-                  aria-hidden="true"
-                />
-                <div className="relative z-10 flex flex-col gap-2 p-7">
-                  <h3 className="font-serif text-2xl text-background">{kategorie.titel}</h3>
-                  <p className="text-sm leading-relaxed text-background/80 text-pretty">
+              <Link key={kategorie.titel} href={kategorie.href} className="group flex flex-col">
+                <div className="relative h-[300px] overflow-hidden md:h-[520px]">
+                  <Image
+                    src={kategorie.bild}
+                    alt={kategorie.titel}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 pt-6">
+                  <h3 className="font-serif text-2xl text-foreground">{kategorie.titel}</h3>
+                  <p className="text-base leading-relaxed text-muted-foreground text-pretty">
                     {kategorie.beschreibung}
                   </p>
-                  <span className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-background">
+                  <span className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
                     Positionen ansehen
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </span>

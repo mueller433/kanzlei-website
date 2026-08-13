@@ -29,7 +29,7 @@ function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrun
         width={800}
         height={400}
         priority
-        className={`h-auto w-[130px] object-contain transition-[filter] duration-300 md:w-[180px] ${
+        className={`h-auto w-[156px] object-contain transition-[filter] duration-300 md:w-[216px] ${
           aufHellemGrund ? '' : 'brightness-0 invert'
         }`}
       />
@@ -40,8 +40,8 @@ function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrun
 // Feste Header-Höhe (unabhängig vom Scrollzustand), damit die Startseite den
 // Hero-Bereich exakt um diesen Wert nach oben ziehen und den Header
 // transparent darüberlegen kann.
-export const HEADER_HOEHE_KLASSE = 'h-20 md:h-24'
-// Referenzhöhe für den negativen Hero-Abstand: 96px auf Desktop (md:h-24).
+export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[100px]'
+// Referenzhöhe für den negativen Hero-Abstand: 100px auf Desktop (md:h-[100px]).
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -79,12 +79,12 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-6 md:px-12 lg:px-16`}
+        className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-8 md:px-16 lg:px-24`}
       >
         <Logo aufHellemGrund={!aufDunklemHero} />
 
         <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
-          <ul className="flex items-center gap-10">
+          <ul className="flex items-center gap-12">
             {NAV_LINKS.map((link) => {
               const aktiv = istAktiv(pathname, link.href)
               return (
@@ -92,7 +92,7 @@ export function SiteHeader() {
                   <Link
                     href={link.href}
                     aria-current={aktiv ? 'page' : undefined}
-                    className={`text-sm transition-colors ${
+                    className={`text-[15px] transition-colors ${
                       aufDunklemHero
                         ? aktiv
                           ? 'text-accent'
