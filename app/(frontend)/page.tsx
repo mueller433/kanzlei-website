@@ -60,17 +60,20 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative flex h-[560px] items-center overflow-hidden md:h-[760px]">
+      {/* Negativer Abstand entspricht der festen Header-Höhe (h-20 md:h-24),
+          damit der transparente Header direkt über dem Bild liegt. */}
+      <section className="relative -mt-20 flex min-h-[560px] items-start overflow-hidden pb-16 pt-28 md:-mt-24 md:h-[760px] md:min-h-0 md:items-center md:pb-0 md:pt-0">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right"
+          className="object-cover object-right brightness-[0.4]"
         />
+        <div className="absolute inset-0 bg-[#080706]/45" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/70 from-10% via-[#0c0a08]/25 via-45% to-transparent to-70%"
+          className="absolute inset-0 bg-gradient-to-r from-[#080706]/85 from-15% via-[#080706]/50 via-50% to-[#080706]/10 to-90%"
           aria-hidden="true"
         />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-20">
@@ -103,6 +106,21 @@ export default async function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
+            <p className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
+              <span>Erfassung</span>
+              <span className="text-accent" aria-hidden="true">
+                •
+              </span>
+              <span>Bewertung</span>
+              <span className="text-accent" aria-hidden="true">
+                •
+              </span>
+              <span>Vermarktung</span>
+              <span className="text-accent" aria-hidden="true">
+                •
+              </span>
+              <span>Verkauf</span>
+            </p>
           </div>
         </div>
       </section>

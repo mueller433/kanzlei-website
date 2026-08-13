@@ -29,13 +29,18 @@ function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrun
         width={800}
         height={400}
         priority
-        className={`h-auto w-36 object-contain transition-[filter] duration-300 lg:w-48 ${
+        className={`h-10 w-auto object-contain transition-[filter] duration-300 md:h-12 ${
           aufHellemGrund ? '' : 'brightness-0 invert'
         }`}
       />
     </Link>
   )
 }
+
+// Feste Header-Höhe (unabhängig vom Scrollzustand), damit die Startseite den
+// Hero-Bereich exakt um diesen Wert nach oben ziehen und den Header
+// transparent darüberlegen kann.
+export const HEADER_HOEHE_KLASSE = 'h-20 md:h-24'
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -73,9 +78,7 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
-          kompakt ? 'py-3' : 'py-4'
-        }`}
+        className={`mx-auto flex ${HEADER_HOEHE_KLASSE} w-full max-w-6xl items-center justify-between gap-6 px-6 md:px-10`}
       >
         <Logo aufHellemGrund={!aufDunklemHero} />
 
