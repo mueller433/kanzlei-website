@@ -35,7 +35,8 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
       ? `ab ${formatiertePreis(posten.preis)}`
       : '—'
 
-  const mengeText = posten.stueckzahl > 1 ? `${posten.stueckzahl} Stück verfügbar` : null
+  const mengeText =
+    typeof posten.stueckzahl === 'number' ? `${posten.stueckzahl} Stück` : null
   const nebeninfo = [posten.insolvenzverfahren, posten.standort, mengeText]
     .filter(Boolean)
     .join(' · ')
@@ -43,7 +44,7 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
   return (
     <Link
       href={`/katalog/${posten.id}`}
-      className="group flex gap-4 border-b border-border bg-background px-4 py-4 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5"
+      className="group flex gap-4 border-b border-border bg-background px-4 py-3 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5"
       data-posten-id={posten.id}
     >
       {/* Thumbnail – erstes Bild aus dem bestehenden Upload-Feld, sonst dezenter Platzhalter */}

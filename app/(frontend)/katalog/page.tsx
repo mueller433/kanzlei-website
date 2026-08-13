@@ -208,10 +208,10 @@ export default async function KatalogSeite({
                 </p>
               </div>
             ) : (
-              <div className="ergebnis-fade flex flex-col gap-10 md:gap-12">
+              <div className="ergebnis-fade flex flex-col gap-8 md:gap-9">
                 {kategorieGruppen.map((gruppe) => (
                   <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
-                    <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-4">
+                    <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-3">
                       <h2 className="font-serif text-2xl text-foreground">{gruppe.label}</h2>
                       <div className="flex items-baseline gap-5 text-sm">
                         <span className="text-muted-foreground">
