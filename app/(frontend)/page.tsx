@@ -4,9 +4,12 @@ import Link from 'next/link'
 import React from 'react'
 
 import { EditorialProzess } from '@/components/editorial-prozess'
+import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import type { Schritt } from '@/components/prozess-schritte'
+import config from '@/payload.config'
+import { getPayload } from 'payload'
 import './styles.css'
 
 export const metadata = {
@@ -44,28 +47,16 @@ const WARUM_DPSS_PUNKTE = [
   'Verbindliche Abwicklung',
 ] as const
 
-const POSITIONEN_KATEGORIEN = [
-  {
-    titel: 'Maschinen',
-    beschreibung: 'Produktions-, Fertigungs- und Sondermaschinen aus laufenden Verfahren.',
-    bild: '/kategorie-maschinen.png',
-    href: '/katalog?kategorie=maschinen',
-  },
-  {
-    titel: 'Fahrzeuge',
-    beschreibung: 'Nutzfahrzeuge, Fuhrparks und Spezialfahrzeuge in unterschiedlichen Zuständen.',
-    bild: '/kategorie-fahrzeuge.png',
-    href: '/katalog?kategorie=fahrzeuge',
-  },
-  {
-    titel: 'Betriebsausstattung',
-    beschreibung: 'Inventar, Lagertechnik und weitere Ausstattung aus Betriebsauflösungen.',
-    bild: '/kategorie-betriebsausstattung.png',
-    href: '/katalog?kategorie=inventar',
-  },
-] as const
+export default async function Startseite() {
+  const payload = await getPayload({ config: await config })
+  const { docs } = await payload.find({
+    collection: 'posten',
+    where: { veroeffentlicht: { equals: true } },
+    sort: '-createdAt',
+    depth: 1,
+    limit: 3,
+  })
 
-export default function Startseite() {
   return (
     <div>
       {/* HERO */}
@@ -82,10 +73,11 @@ export default function Startseite() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Ausschließlich ein dezenter Verlauf von links nach rechts – kein
-            starkes Overlay, das Bild bleibt hell und hochwertig sichtbar. */}
+        {/* Dezente Grundabdunklung von ca. 25%: Das Hallenbild bleibt klar
+            sichtbar und erhält nur links zusätzlichen Textkontrast. */}
+        <div className="absolute inset-0 bg-[#1a1a1a]/25" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/80 from-0% via-[#1a1a1a]/35 via-45% to-transparent to-75%"
+          className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/55 from-0% via-[#1a1a1a]/20 via-42% to-transparent to-72%"
           aria-hidden="true"
         />
 
@@ -155,39 +147,20 @@ export default function Startseite() {
             </p>
           </div>
 
-          <div className="karten-grid flex flex-col border-t border-border">
-            {POSITIONEN_KATEGORIEN.map((kategorie) => (
-              <Link
-                key={kategorie.titel}
-                href={kategorie.href}
-                className="group flex items-center gap-6 border-b border-border py-7 transition-colors md:gap-10 md:py-9"
-              >
-                <div className="relative h-20 w-20 shrink-0 overflow-hidden md:h-28 md:w-28">
-                  <Image
-                    src={kategorie.bild}
-                    alt={kategorie.titel}
-                    fill
-                    sizes="112px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-8">
-                  <div>
-                    <h3 className="font-serif text-xl text-foreground md:text-2xl">
-                      {kategorie.titel}
-                    </h3>
-                    <p className="mt-1 max-w-md text-sm leading-relaxed text-muted-foreground text-pretty md:text-base">
-                      {kategorie.beschreibung}
-                    </p>
-                  </div>
-                  <span className="inline-flex shrink-0 items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
-                    Ansehen
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {docs.length > 0 ? (
+            <div className="karten-grid grid grid-cols-1 gap-6 md:grid-cols-3">
+              {docs.map((posten) => (
+                <KatalogPositionKarte key={posten.id} posten={posten} />
+              ))}
+            </div>
+          ) : (
+            <div className="border-t border-border py-10">
+              <p className="font-serif text-xl text-foreground">Derzeit keine Positionen verfügbar.</p>
+              <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+                Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
+              </p>
+            </div>
+          )}
 
           <div className="mt-10">
             <Link
@@ -198,6 +171,7 @@ export default function Startseite() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
+
         </div>
       </section>
 
