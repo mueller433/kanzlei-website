@@ -4,12 +4,10 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
-import { AktuelleVerwertungTicker, type TickerEintrag } from '@/components/aktuelle-verwertung-ticker'
 import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import { ProzessSchritte, type Schritt } from '@/components/prozess-schritte'
-import { KATEGORIE_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import './styles.css'
 
@@ -86,23 +84,6 @@ export default async function Startseite() {
     limit: 3,
   })
 
-  // Ausschließlich aus echten, veröffentlichten Katalogdaten abgeleitet –
-  // keine erfundenen Beispieleinträge. Ohne veröffentlichte Posten bleibt
-  // der Ticker leer und die Komponente rendert nichts.
-  const tickerEintraege: TickerEintrag[] = docs.map((posten, index) => {
-    const label =
-      posten.status === 'verkauft'
-        ? 'Verwertung abgeschlossen'
-        : posten.status === 'reserviert'
-          ? 'Position reserviert'
-          : index === 0
-            ? 'Neue Position'
-            : 'Position verfügbar'
-    const kategorieLabel = KATEGORIE_LABELS[posten.kategorie]
-    const sub = posten.standort ? `${kategorieLabel} · ${posten.standort}` : kategorieLabel
-    return { label, sub }
-  })
-
   return (
     <div>
       {/* HERO */}
@@ -134,7 +115,6 @@ export default async function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
-            <AktuelleVerwertungTicker eintraege={tickerEintraege} />
           </div>
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-[4/5]">
             <Image

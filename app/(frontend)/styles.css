@@ -115,50 +115,6 @@ html {
 }
 
 /*
- * "Aktuelle Verwertung"-Ticker im Hero: Ein-/Ausblenden eines Eintrags,
- * zeitlich auf das 6-Sekunden-Wechselintervall der Komponente abgestimmt,
- * damit der Wechsel nie hektisch wirkt. Der Punkt pulsiert unabhängig
- * und sehr sanft.
- */
-@media (prefers-reduced-motion: no-preference) {
-  .ticker-eintrag {
-    animation: ticker-einblenden 6s ease both;
-  }
-  .ticker-punkt {
-    animation: ticker-punkt-puls 2.4s ease-in-out infinite;
-  }
-}
-
-@keyframes ticker-einblenden {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  8% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  85% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes ticker-punkt-puls {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-/*
  * Leicht zeitversetztes Einblenden der Katalogkarten und der drei
  * "Warum DPSS"-Punkte, jeweils über eine minimale animation-delay
  * innerhalb desselben Scroll-Timeline-Bereichs wie `.reveal`.
@@ -248,8 +204,6 @@ html {
   .ergebnis-fade,
   .hero-einblenden,
   .hero-bild-scale,
-  .ticker-eintrag,
-  .ticker-punkt,
   .karten-grid > *,
   .warum-bild-fade,
   .warum-overlay-reveal,
