@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -65,10 +66,15 @@ export default async function Startseite() {
               <Link href="/kontakt" className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent">Verwertung anfragen</Link>
             </div>
           </div>
-          <div className="hidden border border-border bg-card p-8 md:block">
-            <p className="text-xs uppercase tracking-[0.18em] text-accent">Für Auftraggeber und Käufer</p>
-            <p className="mt-8 font-serif text-3xl leading-tight text-card-foreground">Struktur im Bestand. Klarheit im Prozess. Nachvollziehbarkeit im Ergebnis.</p>
-            <div className="mt-12 flex items-center gap-4"><span className="h-px flex-1 bg-accent" /><span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Göttingen</span></div>
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-square">
+            <Image
+              src="/hero-lagerhalle.jpg"
+              alt="Lagerhalle mit Regalsystemen und Gabelstapler bei der Bestandsverwertung"
+              fill
+              priority
+              sizes="(min-width: 768px) 45vw, 100vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
