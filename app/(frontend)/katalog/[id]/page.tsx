@@ -112,7 +112,7 @@ export default async function AssetDetailSeite({
   return (
     <div>
       <section>
-        <div className="mx-auto max-w-6xl px-6 pt-12 md:px-10 md:pt-16">
+        <div className="mx-auto max-w-6xl px-6 pt-8 md:px-10 md:pt-10">
           <Link
             href="/katalog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
@@ -124,31 +124,31 @@ export default async function AssetDetailSeite({
       </section>
 
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+        <div className="mx-auto max-w-6xl px-6 py-6 md:px-10 md:py-8">
           {/*
             Layout: flex-col auf Mobile (DOM-Reihenfolge = visuelle Reihenfolge:
             Titel/Status vor Bildgalerie), ab lg: 2-spaltiges Grid mit Bild links
             über die volle Höhe und Titel/Kerninfo rechts gestapelt.
           */}
-          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-16">
+          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-12">
             {/* Titel-Block */}
             <div className="order-1 lg:order-2 lg:col-start-2 lg:row-start-1">
-              <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
 
-              <h1 className="font-serif text-4xl leading-tight text-foreground text-balance md:text-5xl">
+              <h1 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
                 {posten.titel}
               </h1>
 
               {posten.kurzspezifikation && (
-                <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty md:text-lg">
                   {posten.kurzspezifikation}
                 </p>
               )}
 
               {/* Status + Zustand – Kategorie steht bereits in der Eyebrow-Zeile */}
-              <div className="mt-7 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 <span className="border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
                   {STATUS_LABELS[posten.status]}
                 </span>
@@ -171,11 +171,11 @@ export default async function AssetDetailSeite({
                 }`}
               >
                 {kerninfo.map((eintrag) => (
-                  <div key={eintrag.label} className="bg-background p-5">
+                  <div key={eintrag.label} className="bg-background p-4">
                     <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
                       {eintrag.label}
                     </dt>
-                    <dd className="mt-2 break-words font-serif text-lg leading-snug text-foreground text-balance md:text-xl">
+                    <dd className="mt-1.5 break-words font-serif text-lg leading-snug text-foreground text-balance md:text-xl">
                       {eintrag.wert}
                     </dd>
                   </div>
@@ -183,7 +183,7 @@ export default async function AssetDetailSeite({
               </dl>
 
               {posten.insolvenzverfahren && (
-                <div className="mt-6 border-t border-border pt-5">
+                <div className="mt-4 border-t border-border pt-4">
                   <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
                     Aktenzeichen / Verfahren
                   </dt>
