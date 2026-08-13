@@ -29,7 +29,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
         width={1200}
         height={300}
         priority
-        className="h-auto w-36 object-contain lg:w-52"
+        className="h-auto w-48 object-contain lg:w-64"
       />
     </Link>
   )
@@ -68,7 +68,7 @@ export function SiteHeader() {
     >
       <div
         className={`mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
-          kompakt ? 'py-3' : 'py-5'
+          kompakt ? 'py-3' : 'py-4'
         }`}
       >
         <Logo />
