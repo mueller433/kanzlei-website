@@ -15,17 +15,21 @@ export type GalerieBild = {
  */
 export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   const [aktiv, setAktiv] = React.useState(0)
+  // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild.
+  // Muss vor jedem bedingten `return` stehen (Rules of Hooks).
+  const touchStartX = React.useRef<number | null>(null)
 
   if (bilder.length === 0) {
     return (
-      <div
-        aria-hidden="true"
-        className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden border border-border bg-card"
-      >
-        <div className="absolute inset-4 border border-border" />
-        <span className="flex h-12 w-12 items-center justify-center bg-accent font-serif text-2xl leading-none text-accent-foreground">
+      <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 overflow-hidden border border-border bg-card">
+        <div className="absolute inset-4 border border-border" aria-hidden="true" />
+        <span
+          aria-hidden="true"
+          className="flex h-12 w-12 items-center justify-center bg-accent font-serif text-2xl leading-none text-accent-foreground"
+        >
           §
         </span>
+        <p className="text-sm text-muted-foreground">Keine Abbildung vorhanden</p>
       </div>
     )
   }
@@ -35,9 +39,6 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   const aktuelles = bilder[aktiv]
 
   const zeige = (index: number) => setAktiv((index + anzahl) % anzahl)
-
-  // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild
-  const touchStartX = React.useRef<number | null>(null)
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX

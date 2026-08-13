@@ -1,191 +1,200 @@
-'use client'
-
-import { ChevronDown, SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, LayoutGrid, List, Search } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 import {
-  KATEGORIE_LABELS,
-  KATEGORIE_REIHENFOLGE,
+  ANSICHT_LABELS,
+  ANSICHT_REIHENFOLGE,
+  buildKatalogQuery,
   PREIS_RANGES,
+  SORT_OPTIONS,
+  type Ansicht,
   ZUSTAND_LABELS,
   ZUSTAND_REIHENFOLGE,
 } from '@/lib/katalog'
 
 /**
- * Filter-Sidebar der Katalogseite. Die Steuerelemente sind native
- * Formularfelder innerhalb eines <form method="get"> (im übergeordneten
- * Seiten-Layout), sodass die Auswahl kombinierbar und als URL teilbar bleibt –
- * es gibt bewusst keinen Filter-Zustand im Client, nur ein Auf-/Zuklappen.
+ * Horizontale Filterleiste der Katalogseite: Suche, Zustand, Preis,
+ * Sortierung und die Karten-/Listenansicht. Die Steuerelemente sind native
+ * Formularfelder innerhalb des umgebenden <form method="get"> der Seite,
+ * sodass die Auswahl kombinierbar und als URL teilbar bleibt – es gibt
+ * bewusst keinen Filter-Zustand im Client. Zustand/Preis nutzen native
+ * <details>-Aufklapper statt eigenem JS-State.
  *
- * Auf kleinen Viewports ist die Leiste eingeklappt und wird über einen
- * "Filter"-Button mit aktueller Trefferzahl geöffnet; ab lg ist sie dauerhaft
- * als Sidebar sichtbar.
+ * Kategorie und Ansicht werden außerhalb dieses Formulars über <Link>
+ * gesteuert (siehe KatalogKategorieNav / Ansicht-Umschalter); damit ihre
+ * Auswahl beim Absenden dieses Formulars nicht verloren geht, werden sie
+ * hier als verstecke Felder mitgeführt.
  */
 export function KatalogFilter({
+  sp,
   q,
   selectedKategorien,
   selectedZustaende,
   selectedPreis,
-  kategorieCounts,
+  selectedSort,
+  ansicht,
   totalDocs,
 }: {
+  sp: { [key: string]: string | string[] | undefined }
   q: string
   selectedKategorien: string[]
   selectedZustaende: string[]
   selectedPreis: string
-  kategorieCounts: Record<string, number>
+  selectedSort: string
+  ansicht: Ansicht
   totalDocs: number
 }) {
-  const [offen, setOffen] = React.useState(false)
+  const zustandLabel =
+    selectedZustaende.length === 0
+      ? 'Zustand'
+      : selectedZustaende.length === 1
+        ? ZUSTAND_LABELS[selectedZustaende[0] as keyof typeof ZUSTAND_LABELS]
+        : `Zustand (${selectedZustaende.length})`
 
-  // Gemeinsame Klassen für ausreichend große Touch-Zielflächen (~44px auf Mobile)
-  const optionKlasse =
-    'flex min-h-11 items-center gap-3 text-sm text-foreground lg:min-h-0 lg:py-0.5'
+  const preisLabel = selectedPreis
+    ? PREIS_RANGES.find((r) => r.key === selectedPreis)?.label ?? 'Preis'
+    : 'Preis'
 
   return (
-    <div className="border border-border lg:sticky lg:top-24 lg:self-start lg:border-0">
-      {/* Mobiler Umschalter – zeigt aktuelle Trefferzahl, ab lg ausgeblendet */}
-      <button
-        type="button"
-        onClick={() => setOffen((v) => !v)}
-        aria-expanded={offen}
-        aria-controls="katalog-filter-panel"
-        className="flex min-h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 lg:hidden"
-      >
-        <span className="flex items-center gap-2.5 text-sm font-medium text-foreground">
-          <SlidersHorizontal className="h-4 w-4 text-accent" aria-hidden="true" />
-          Filter &amp; Suche
-        </span>
-        <span className="flex items-center gap-3">
-          <span className="text-xs tabular-nums text-muted-foreground">{totalDocs} Treffer</span>
-          <ChevronDown
-            className={`h-4 w-4 text-muted-foreground transition-transform ${
-              offen ? 'rotate-180' : ''
-            }`}
+    <div className="flex flex-col gap-4 border border-border bg-card p-4 md:p-5">
+      {/* Kategorie + Ansicht bleiben beim Absenden dieses Formulars erhalten */}
+      {selectedKategorien.map((k) => (
+        <input key={k} type="hidden" name="kategorie" value={k} />
+      ))}
+      <input type="hidden" name="ansicht" value={ansicht} />
+
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+        {/* Prominente Suche */}
+        <label className="relative block w-full min-w-0 lg:min-w-[220px] lg:flex-1">
+          <span className="sr-only">Suche</span>
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
           />
-        </span>
-      </button>
-
-      <div
-        id="katalog-filter-panel"
-        className={`flex-col gap-9 border-t border-border p-4 lg:flex lg:border-0 lg:p-0 ${
-          offen ? 'flex' : 'hidden'
-        }`}
-      >
-        {/* Freitextsuche über den Titel */}
-        <div>
-          <label
-            htmlFor="q"
-            className="mb-3 block text-xs font-medium uppercase tracking-[0.2em] text-accent"
-          >
-            Suche
-          </label>
           <input
-            id="q"
             name="q"
             type="search"
             defaultValue={q}
-            placeholder="Titel durchsuchen …"
-            className="h-11 w-full border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+            placeholder="Position, Aktenzeichen oder Detail suchen …"
+            className="h-11 w-full border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
           />
-        </div>
+        </label>
 
-        {/* Kategorie – Mehrfachauswahl mit Trefferzahl je Kategorie */}
-        <fieldset className="border-0 p-0">
-          <legend className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Kategorie
-          </legend>
-          <div className="flex flex-col gap-1 lg:gap-2">
-            {KATEGORIE_REIHENFOLGE.map((kategorie) => (
-              <label
-                key={kategorie}
-                className="flex min-h-11 items-center justify-between gap-3 text-sm text-foreground lg:min-h-0 lg:py-0.5"
-              >
-                <span className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Zustand – kompakter Aufklapper, native <details> ohne Client-JS */}
+          <details className="group relative">
+            <summary className="flex h-11 min-w-0 cursor-pointer list-none items-center gap-2 border border-border bg-background px-4 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+              {zustandLabel}
+              <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-10 flex w-56 flex-col gap-3 border border-border bg-card p-4 shadow-sm">
+              {ZUSTAND_REIHENFOLGE.map((zustand) => (
+                <label key={zustand} className="flex min-h-6 items-center gap-3 text-sm text-foreground">
                   <input
                     type="checkbox"
-                    name="kategorie"
-                    value={kategorie}
-                    defaultChecked={selectedKategorien.includes(kategorie)}
+                    name="zustand"
+                    value={zustand}
+                    defaultChecked={selectedZustaende.includes(zustand)}
                     className="h-4 w-4 shrink-0 accent-accent"
                   />
-                  {KATEGORIE_LABELS[kategorie]}
-                </span>
-                <span className="text-xs tabular-nums text-muted-foreground">
-                  {kategorieCounts[kategorie] ?? 0}
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
+                  {ZUSTAND_LABELS[zustand]}
+                </label>
+              ))}
+            </div>
+          </details>
 
-        {/* Zustand – Mehrfachauswahl */}
-        <fieldset className="border-0 p-0">
-          <legend className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Zustand
-          </legend>
-          <div className="flex flex-col gap-1 lg:gap-2">
-            {ZUSTAND_REIHENFOLGE.map((zustand) => (
-              <label key={zustand} className={optionKlasse}>
-                <input
-                  type="checkbox"
-                  name="zustand"
-                  value={zustand}
-                  defaultChecked={selectedZustaende.includes(zustand)}
-                  className="h-4 w-4 shrink-0 accent-accent"
-                />
-                {ZUSTAND_LABELS[zustand]}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Preisspanne – Einfachauswahl */}
-        <fieldset className="border-0 p-0">
-          <legend className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Preisspanne
-          </legend>
-          <div className="flex flex-col gap-1 lg:gap-2">
-            <label className={optionKlasse}>
-              <input
-                type="radio"
-                name="preis"
-                value=""
-                defaultChecked={selectedPreis === ''}
-                className="h-4 w-4 shrink-0 accent-accent"
-              />
-              Alle Preise
-            </label>
-            {PREIS_RANGES.map((range) => (
-              <label key={range.key} className={optionKlasse}>
+          {/* Preis – kompakter Aufklapper */}
+          <details className="group relative">
+            <summary className="flex h-11 min-w-0 cursor-pointer list-none items-center gap-2 border border-border bg-background px-4 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+              {preisLabel}
+              <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-10 flex w-56 flex-col gap-3 border border-border bg-card p-4 shadow-sm">
+              <label className="flex min-h-6 items-center gap-3 text-sm text-foreground">
                 <input
                   type="radio"
                   name="preis"
-                  value={range.key}
-                  defaultChecked={selectedPreis === range.key}
+                  value=""
+                  defaultChecked={selectedPreis === ''}
                   className="h-4 w-4 shrink-0 accent-accent"
                 />
-                {range.label}
+                Alle Preise
               </label>
-            ))}
-          </div>
-        </fieldset>
+              {PREIS_RANGES.map((range) => (
+                <label key={range.key} className="flex min-h-6 items-center gap-3 text-sm text-foreground">
+                  <input
+                    type="radio"
+                    name="preis"
+                    value={range.key}
+                    defaultChecked={selectedPreis === range.key}
+                    className="h-4 w-4 shrink-0 accent-accent"
+                  />
+                  {range.label}
+                </label>
+              ))}
+            </div>
+          </details>
 
-        {/* Aktionen */}
-        <div className="flex flex-col gap-3 border-t border-border pt-6">
+          {/* Sortierung */}
+          <label className="relative">
+            <span className="sr-only">Sortierung</span>
+            <select
+              name="sort"
+              defaultValue={selectedSort}
+              className="h-11 border border-border bg-background px-3 text-sm text-foreground focus:border-accent focus:outline-none"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.key} value={option.key}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
           <button
             type="submit"
-            className="inline-flex min-h-11 items-center justify-center bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            className="inline-flex h-11 items-center justify-center bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
           >
-            Filter anwenden
+            Anwenden
           </button>
-          <a
+
+          <Link
             href="/katalog"
-            className="inline-flex min-h-11 items-center justify-center text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline"
+            className="inline-flex h-11 items-center justify-center px-2 text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline"
           >
             Zurücksetzen
-          </a>
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">{totalDocs}</span>{' '}
+          {totalDocs === 1 ? 'Position' : 'Positionen'}
+        </p>
+
+        {/* Karten-/Listenansicht – reine Präsentation, per Link gesteuert */}
+        <div className="inline-flex border border-border" role="group" aria-label="Ansicht">
+          {ANSICHT_REIHENFOLGE.map((option) => {
+            const aktiv = ansicht === option
+            const Icon = option === 'liste' ? List : LayoutGrid
+            return (
+              <Link
+                key={option}
+                href={`/katalog?${buildKatalogQuery(sp, { ansicht: option })}`}
+                aria-current={aktiv}
+                className={`inline-flex h-9 items-center gap-2 px-3 text-sm transition-colors ${
+                  aktiv
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:text-accent'
+                }`}
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                {ANSICHT_LABELS[option]}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </div>

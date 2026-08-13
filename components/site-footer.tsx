@@ -1,5 +1,8 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
+import { openCookieSettings } from '@/components/cookie-consent'
 
 import { KANZLEI, KANZLEI_ORT } from '@/lib/kanzlei-daten'
 
@@ -38,6 +41,7 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     links: [
       { href: '/impressum', label: 'Impressum' },
       { href: '/datenschutz', label: 'Datenschutz' },
+      { href: '/agb', label: 'AGB' },
     ],
   },
 ]
@@ -45,18 +49,17 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
 export function SiteFooter() {
   return (
     <footer className="mt-24 border-t border-border bg-muted">
-      <div className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+      <div className="mx-auto w-full max-w-6xl px-6 py-16 md:px-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
           {/* Unternehmensidentität & Kontaktdaten */}
           <div className="max-w-xs">
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">
-                {KANZLEI.kuerzel}
-              </span>
-              <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-                {KANZLEI.name}
-              </span>
-            </div>
+            <Image
+              src="/dpss-logo-horizontal.svg"
+              alt="DPSS Management GmbH"
+              width={800}
+              height={400}
+              className="h-auto w-36 object-contain lg:w-48"
+            />
             <address className="mt-5 flex flex-col gap-1 text-sm not-italic leading-relaxed text-muted-foreground">
               <span>{KANZLEI.adresse.strasse}</span>
               <span>{KANZLEI_ORT}</span>
@@ -94,6 +97,11 @@ export function SiteFooter() {
               </ul>
             </nav>
           ))}
+          <div className="md:col-span-2 lg:col-span-1">
+            <button type="button" onClick={openCookieSettings} className="text-left text-sm text-muted-foreground transition-colors hover:text-accent">
+              Cookie-Einstellungen
+            </button>
+          </div>
         </div>
 
         <div className="mt-14 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">

@@ -1,11 +1,10 @@
 'use client'
 
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-
-import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const NAV_LINKS = [
   { href: '/unternehmen', label: 'Unternehmen' },
@@ -23,23 +22,15 @@ function istAktiv(pathname: string, href: string): boolean {
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
-    <Link
-      href="/"
-      onClick={onClick}
-      className="flex items-center gap-3"
-      aria-label="Zur Startseite"
-    >
-      <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">
-        {KANZLEI.kuerzel}
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-          {KANZLEI.name}
-        </span>
-        <span className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          {KANZLEI.zusatz}
-        </span>
-      </span>
+    <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
+      <Image
+        src="/dpss-logo-horizontal.svg"
+        alt="DPSS Management GmbH – Verwertungsdienstleister"
+        width={800}
+        height={400}
+        priority
+        className="h-auto w-36 object-contain lg:w-48"
+      />
     </Link>
   )
 }
@@ -76,8 +67,8 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
-          kompakt ? 'py-3' : 'py-5'
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
+          kompakt ? 'py-3' : 'py-4'
         }`}
       >
         <Logo />
