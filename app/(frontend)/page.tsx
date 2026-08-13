@@ -8,7 +8,7 @@ import { EditorialProzess } from '@/components/editorial-prozess'
 import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
-import { ProzessSchritte, type Schritt } from '@/components/prozess-schritte'
+import type { Schritt } from '@/components/prozess-schritte'
 import config from '@/payload.config'
 import './styles.css'
 
@@ -17,34 +17,6 @@ export const metadata = {
   description:
     'DPSS Management GmbH verwertet Vermögenswerte im Auftrag von Insolvenzverwaltern und bietet Käufern einen transparenten Katalog aktueller Positionen.',
 }
-
-const LEISTUNGEN: readonly Schritt[] = [
-  {
-    schritt: '01',
-    titel: 'Beauftragung',
-    beschreibung: 'Wir klären Bestand, Zielsetzung und Ablauf gemeinsam mit dem Auftraggeber.',
-  },
-  {
-    schritt: '02',
-    titel: 'Erfassung & Bewertung',
-    beschreibung: 'Vermögenswerte werden aufgenommen, eingeordnet und marktgerecht bewertet.',
-  },
-  {
-    schritt: '03',
-    titel: 'Vermarktung',
-    beschreibung: 'Positionen werden zielgerichtet über passende Kanäle und den Katalog angeboten.',
-  },
-  {
-    schritt: '04',
-    titel: 'Verkauf',
-    beschreibung: 'Wir koordinieren Interessenten, Angebote und die nachvollziehbare Abwicklung.',
-  },
-  {
-    schritt: '05',
-    titel: 'Abrechnung & Dokumentation',
-    beschreibung: 'Erlöse, Vorgänge und Abrechnung werden transparent dokumentiert.',
-  },
-] as const
 
 const ABLAUF: readonly Schritt[] = [
   {
@@ -197,21 +169,6 @@ export default async function Startseite() {
               realistische Marktansprache und belastbare Berichte.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* LEISTUNGEN */}
-      <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Leistungen
-            </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Von der Erfassung bis zur Abrechnung.
-            </h2>
-          </div>
-          <ProzessSchritte schritte={LEISTUNGEN} />
         </div>
       </section>
 
