@@ -36,7 +36,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
         width={800}
         height={400}
         priority
-        className="h-auto w-[156px] object-contain md:w-[196px]"
+        className="h-auto w-[184px] object-contain md:w-[232px]"
       />
     </Link>
   )
@@ -45,7 +45,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
 // Feste Header-Höhe. Der Header ist durchgängig sehr hell/transparent und
 // liegt daher im normalen Seitenfluss über dem Hero (kein Overlay-Trick
 // nötig, da das Logo immer auf hellem Grund steht).
-export const HEADER_HOEHE_KLASSE = 'h-20 md:h-24'
+export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[104px]'
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -85,7 +85,7 @@ export function SiteHeader() {
         <Logo />
 
         <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
-          <ul className="flex items-center gap-12">
+          <ul className="flex items-center gap-14">
             {NAV_LINKS.map((link) => {
               const aktiv = istAktiv(pathname, link.href)
               return (

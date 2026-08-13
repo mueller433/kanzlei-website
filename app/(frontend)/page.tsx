@@ -75,9 +75,9 @@ export default async function Startseite() {
         />
         {/* Deutlich dunklerer, aber transparenter Verlauf: links hoher
             Kontrast für den Text, rechts bleibt die Halle erkennbar. */}
-        <div className="absolute inset-0 bg-[#0c0a08]/25" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[#0c0a08]/30" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/90 from-0% via-[#0c0a08]/55 via-42% to-[#0c0a08]/10 to-82%"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/95 from-0% via-[#0c0a08]/65 via-42% to-[#0c0a08]/12 to-82%"
           aria-hidden="true"
         />
         <div
@@ -85,23 +85,23 @@ export default async function Startseite() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full px-6 pb-14 md:px-16 md:pb-20 lg:px-24">
-          <div className="max-w-[620px]">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+        <div className="relative z-10 w-full px-6 pb-8 md:px-16 md:pb-12 lg:px-24">
+          <div className="max-w-[560px]">
+            <p className="mb-8 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.75rem] font-semibold leading-[1.1] tracking-tight text-[#f7f5f0] text-balance md:text-[4.5rem] lg:text-[5.5rem]">
+            <h1 className="font-serif text-[2.4rem] font-semibold leading-[1.08] tracking-tight text-[#f7f5f0] text-balance md:text-[4.5rem] lg:text-[5.25rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-7 max-w-[500px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-9 max-w-[450px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-11 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
