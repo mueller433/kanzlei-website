@@ -51,10 +51,10 @@ export function SiteFooter() {
           {/* Unternehmensidentität & Kontaktdaten */}
           <div className="max-w-xs">
             <Image
-              src="/dpss-logo.svg"
+              src="/dpss-logo-horizontal.svg"
               alt="DPSS Management GmbH"
-              width={1200}
-              height={300}
+              width={1500}
+              height={1000}
               className="h-auto w-48 object-contain lg:w-64"
             />
             <address className="mt-5 flex flex-col gap-1 text-sm not-italic leading-relaxed text-muted-foreground">
