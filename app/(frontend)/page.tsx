@@ -4,9 +4,12 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { AktuelleVerwertungTicker, type TickerEintrag } from '@/components/aktuelle-verwertung-ticker'
 import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
+import { ParallaxBild } from '@/components/parallax-bild'
 import { ProzessSchritte, type Schritt } from '@/components/prozess-schritte'
+import { KATEGORIE_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import './styles.css'
 
@@ -67,19 +70,10 @@ const ABLAUF: readonly Schritt[] = [
   },
 ] as const
 
-const WARUM_DPSS = [
-  {
-    titel: 'Sorgfalt',
-    beschreibung: 'Vermögenswerte werden strukturiert erfasst und nachvollziehbar bewertet.',
-  },
-  {
-    titel: 'Transparenz',
-    beschreibung: 'Vermarktung, Angebote, Verkauf und Abrechnung bleiben nachvollziehbar.',
-  },
-  {
-    titel: 'Verbindlichkeit',
-    beschreibung: 'Wir koordinieren die einzelnen Schritte zuverlässig und halten Auftraggeber informiert.',
-  },
+const WARUM_DPSS_PUNKTE = [
+  'Nachvollziehbare Herkunft',
+  'Transparente Verwertung',
+  'Verbindliche Abwicklung',
 ] as const
 
 export default async function Startseite() {
@@ -90,6 +84,23 @@ export default async function Startseite() {
     sort: '-createdAt',
     depth: 1,
     limit: 3,
+  })
+
+  // Ausschließlich aus echten, veröffentlichten Katalogdaten abgeleitet –
+  // keine erfundenen Beispieleinträge. Ohne veröffentlichte Posten bleibt
+  // der Ticker leer und die Komponente rendert nichts.
+  const tickerEintraege: TickerEintrag[] = docs.map((posten, index) => {
+    const label =
+      posten.status === 'verkauft'
+        ? 'Verwertung abgeschlossen'
+        : posten.status === 'reserviert'
+          ? 'Position reserviert'
+          : index === 0
+            ? 'Neue Position'
+            : 'Position verfügbar'
+    const kategorieLabel = KATEGORIE_LABELS[posten.kategorie]
+    const sub = posten.standort ? `${kategorieLabel} · ${posten.standort}` : kategorieLabel
+    return { label, sub }
   })
 
   return (
@@ -123,6 +134,7 @@ export default async function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
+            <AktuelleVerwertungTicker eintraege={tickerEintraege} />
           </div>
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-[4/5]">
             <Image
@@ -131,7 +143,7 @@ export default async function Startseite() {
               fill
               priority
               sizes="(min-width: 768px) 55vw, 100vw"
-              className="object-cover"
+              className="hero-bild-scale object-cover"
             />
           </div>
         </div>
@@ -154,7 +166,7 @@ export default async function Startseite() {
 
           {docs.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="karten-grid grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {docs.map((posten) => (
                   <KatalogPositionKarte key={posten.id} posten={posten} />
                 ))}
@@ -260,30 +272,42 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* WARUM DPSS */}
-      <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              DPSS Management
+      {/* WARUM DPSS — grosse Editorial-Bildsektion mit sehr dezentem Parallax */}
+      <section className="relative isolate overflow-hidden border-b border-border">
+        <div className="warum-bild-fade absolute inset-0">
+          <ParallaxBild
+            src="/warum-dpss-editorial.png"
+            alt="Industrielagerhalle mit hohen Palettenregalen in warmem Licht"
+          />
+        </div>
+        <div className="warum-overlay-reveal absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/70 to-foreground/40" />
+
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-24 md:grid-cols-[1.3fr_1fr] md:gap-16 md:px-10 md:py-32">
+          <div className="warum-text-reveal">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-background/70">
+              Warum DPSS
             </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Verwertung mit klarer Struktur.
+            <h2 className="max-w-xl font-serif text-3xl leading-tight text-background text-balance md:text-4xl">
+              Keine anonyme Restware, sondern Vermögenswerte mit Herkunft.
             </h2>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-background/80 text-pretty">
+              Jede Position stammt aus einem konkreten Verfahren, ist dokumentiert und bewertet.
+              So bleibt für Auftraggeber und Käufer jederzeit nachvollziehbar, woher ein
+              Vermögenswert stammt und wie mit ihm verfahren wird.
+            </p>
           </div>
-          <div className="grid grid-cols-1 divide-y divide-border border border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-            {WARUM_DPSS.map((punkt, index) => (
-              <div key={punkt.titel} className="flex flex-col gap-4 p-8 md:p-10">
-                <span className="font-serif text-sm text-accent">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <h3 className="font-serif text-2xl text-foreground">{punkt.titel}</h3>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                  {punkt.beschreibung}
-                </p>
-              </div>
+
+          <ul className="warum-punkte flex flex-col gap-6 self-end">
+            {WARUM_DPSS_PUNKTE.map((punkt) => (
+              <li key={punkt} className="flex items-start gap-3">
+                <span
+                  className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
+                  aria-hidden="true"
+                />
+                <span className="text-base font-medium text-background text-pretty">{punkt}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

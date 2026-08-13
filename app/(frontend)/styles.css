@@ -93,6 +93,152 @@ html {
   }
 }
 
+/*
+ * Sehr dezentes Scale-In des Hero-Bilds beim ersten Laden der Seite
+ * (kein Zoom-Effekt im eigentlichen Sinn, nur ein minimaler Übergang
+ * von 1.02 auf 1). Wirkt auf das <img> selbst; der Container schneidet
+ * den minimalen Überstand per overflow-hidden ab.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-bild-scale {
+    animation: hero-bild-scale-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes hero-bild-scale-in {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/*
+ * "Aktuelle Verwertung"-Ticker im Hero: Ein-/Ausblenden eines Eintrags,
+ * zeitlich auf das 6-Sekunden-Wechselintervall der Komponente abgestimmt,
+ * damit der Wechsel nie hektisch wirkt. Der Punkt pulsiert unabhängig
+ * und sehr sanft.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .ticker-eintrag {
+    animation: ticker-einblenden 6s ease both;
+  }
+  .ticker-punkt {
+    animation: ticker-punkt-puls 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes ticker-einblenden {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes ticker-punkt-puls {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/*
+ * Leicht zeitversetztes Einblenden der Katalogkarten und der drei
+ * "Warum DPSS"-Punkte, jeweils über eine minimale animation-delay
+ * innerhalb desselben Scroll-Timeline-Bereichs wie `.reveal`.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .karten-grid > * {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    .karten-grid > *:nth-child(2) {
+      animation-delay: 80ms;
+    }
+    .karten-grid > *:nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    /*
+     * Grosse Bildsektion "Warum DPSS": Hintergrundbild, Overlay, Text und
+     * die drei Punkte blenden in schneller Folge innerhalb desselben
+     * kurzen Eintritts-Bereichs ein – rein über gestaffelte
+     * animation-range-Werte, ohne JavaScript.
+     */
+    .warum-bild-fade {
+      animation: warum-fade-ein linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 32%;
+    }
+    .warum-overlay-reveal {
+      animation: warum-fade-ein linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 40%;
+    }
+    .warum-text-reveal {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 15% entry 47%;
+    }
+    .warum-punkte > *:nth-child(1) {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 20% entry 52%;
+    }
+    .warum-punkte > *:nth-child(2) {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 24% entry 56%;
+    }
+    .warum-punkte > *:nth-child(3) {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 28% entry 60%;
+    }
+  }
+}
+
+@keyframes warum-fade-ein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*
+ * Kontakt-CTA: Der Button erscheint minimal nach dem Container, indem
+ * derselbe Reveal-Bereich etwas später beginnt.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .cta-button-verzoegert {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 6% cover 26%;
+    }
+  }
+}
+
 /* Sicherheitsleine: reduzierte Bewegung hebt jede Animation auf. */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -100,7 +246,16 @@ html {
   }
   .reveal,
   .ergebnis-fade,
-  .hero-einblenden {
+  .hero-einblenden,
+  .hero-bild-scale,
+  .ticker-eintrag,
+  .ticker-punkt,
+  .karten-grid > *,
+  .warum-bild-fade,
+  .warum-overlay-reveal,
+  .warum-text-reveal,
+  .warum-punkte > *,
+  .cta-button-verzoegert {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
