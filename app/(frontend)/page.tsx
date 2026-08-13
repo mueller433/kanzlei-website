@@ -61,29 +61,27 @@ export default async function Startseite() {
     <div>
       {/* HERO */}
       <section className="overflow-hidden border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-10 md:pt-16 md:pb-20">
-          <div className="hero-einblenden">
-            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-[0.45fr_0.55fr] md:items-center md:gap-14 md:px-10 md:py-24">
+          <div className="hero-einblenden order-2 md:order-1">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               DPSS Management GmbH · Verwertung
             </p>
             <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-5xl">
               Vermögenswerte professionell verwerten.
             </h1>
-            <div className="mt-6 flex max-w-xl flex-col gap-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+            <div className="mt-7 flex max-w-lg flex-col gap-4 text-lg leading-relaxed text-muted-foreground text-pretty">
               <p>
-                Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung,
-                Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen
-                übersichtlich in unserem Verwertungskatalog.
+                Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei der Erfassung,
+                Bewertung, Vermarktung und dem Verkauf von Vermögenswerten. Käufer finden aktuelle
+                Positionen übersichtlich in unserem Verwertungskatalog.
               </p>
               <p>
-                DPSS Management unterstützt Insolvenzverwalter, Verfahrensbeteiligte und Unternehmen
-                bei der strukturierten Erfassung, Bewertung, Vermarktung und Verwertung von
-                Vermögenswerten. Von Maschinen und technischen Anlagen bis hin zu Fahrzeugen,
-                Betriebsausstattung und weiteren Vermögenswerten begleiten wir den gesamten
-                Verwertungsprozess.
+                Von Maschinen und technischen Anlagen bis hin zu Fahrzeugen, Betriebsausstattung
+                und weiteren Vermögenswerten begleiten wir den gesamten Verwertungsprozess –
+                strukturiert, transparent und nachvollziehbar.
               </p>
             </div>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -98,15 +96,16 @@ export default async function Startseite() {
               </Link>
             </div>
           </div>
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-[4/5]">
+          <div className="relative order-1 h-[360px] w-full overflow-hidden rounded-md border border-border md:order-2 md:h-[640px]">
             <Image
-              src="/hero-lagerhalle.jpg"
-              alt="Lagerhalle mit Regalsystemen und Gabelstapler bei der Bestandsverwertung"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
+              alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
               fill
               priority
               sizes="(min-width: 768px) 55vw, 100vw"
-              className="hero-bild-scale object-cover"
+              className="hero-bild-scale object-cover contrast-[1.08]"
             />
+            <div className="absolute inset-0 bg-foreground/15" aria-hidden="true" />
           </div>
         </div>
       </section>
