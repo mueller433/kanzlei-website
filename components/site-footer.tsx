@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import { openCookieSettings } from '@/components/cookie-consent'
+
 import { KANZLEI, KANZLEI_ORT } from '@/lib/kanzlei-daten'
 
 type FooterSpalte = {
@@ -94,6 +96,11 @@ export function SiteFooter() {
               </ul>
             </nav>
           ))}
+          <div className="md:col-span-2 lg:col-span-1">
+            <button type="button" onClick={openCookieSettings} className="text-left text-sm text-muted-foreground transition-colors hover:text-accent">
+              Cookie-Einstellungen
+            </button>
+          </div>
         </div>
 
         <div className="mt-14 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
