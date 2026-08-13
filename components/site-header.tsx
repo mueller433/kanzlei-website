@@ -24,12 +24,12 @@ function Logo({ onClick }: { onClick?: () => void }) {
   return (
     <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
       <Image
-        src="/dpss-logo-transparent.png"
-        alt="DPSS Management GmbH"
-        width={1999}
-        height={553}
+        src="/dpss-logo.svg"
+        alt="DPSS Management GmbH – Verwertungsdienstleister"
+        width={1200}
+        height={300}
         priority
-        className="h-9 w-auto object-contain"
+        className="h-auto w-36 object-contain lg:w-52"
       />
     </Link>
   )
