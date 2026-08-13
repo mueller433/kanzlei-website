@@ -67,7 +67,7 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
           kompakt ? 'py-3' : 'py-4'
         }`}
       >

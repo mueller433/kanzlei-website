@@ -46,7 +46,7 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
 export function SiteFooter() {
   return (
     <footer className="mt-24 border-t border-border bg-muted">
-      <div className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+      <div className="mx-auto w-full max-w-6xl px-6 py-16 md:px-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
           {/* Unternehmensidentität & Kontaktdaten */}
           <div className="max-w-xs">
