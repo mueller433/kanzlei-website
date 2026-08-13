@@ -1,6 +1,7 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { ArrowLeft, FileText } from 'lucide-react'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -88,36 +89,50 @@ export default async function AssetDetailSeite({
       ? formatiertePreis(posten.preis)
       : 'Preis auf Anfrage'
 
-  // Dokumentarische Metadaten (Aktenvermerk-Charakter) – nur befüllte Felder
-  const aktenvermerk = [
-    { label: 'Aktenzeichen / Verfahren', wert: posten.insolvenzverfahren },
-    { label: 'Standort', wert: posten.standort },
+  // Kompakte Kerninformationen im Hero – nur befüllte Felder (Sektion 5 der Vorgabe)
+  const kerninfo = [
+    { label: 'Preis', wert: preisText },
+    { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
+    { label: 'Status', wert: STATUS_LABELS[posten.status] },
+    posten.standort ? { label: 'Standort', wert: posten.standort } : null,
+  ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
+
+  // Vollständige Eckdaten-Tabelle (Sektion 9) – nur befüllte Felder, keine leeren Boxen
+  const eckdaten = [
     { label: 'Kategorie', wert: KATEGORIE_LABELS[posten.kategorie] },
     { label: 'Zustand', wert: ZUSTAND_LABELS[posten.zustand] },
-  ].filter((eintrag) => Boolean(eintrag.wert))
+    posten.standort ? { label: 'Standort', wert: posten.standort } : null,
+    posten.insolvenzverfahren
+      ? { label: 'Aktenzeichen / Verfahren', wert: posten.insolvenzverfahren }
+      : null,
+    { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
+    { label: 'Status', wert: STATUS_LABELS[posten.status] },
+  ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
   return (
     <div>
       <section>
         <div className="mx-auto max-w-6xl px-6 pt-12 md:px-10 md:pt-16">
-          <a
+          <Link
             href="/katalog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Zurück zum Katalog
-          </a>
+          </Link>
         </div>
       </section>
 
       <section>
         <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Bildergalerie */}
-            <AssetGalerie bilder={bilder} />
-
-            {/* Kopf-Informationen */}
-            <div className="flex flex-col">
+          {/*
+            Layout: flex-col auf Mobile (DOM-Reihenfolge = visuelle Reihenfolge:
+            Titel/Status vor Bildgalerie), ab lg: 2-spaltiges Grid mit Bild links
+            über die volle Höhe und Titel/Kerninfo rechts gestapelt.
+          */}
+          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-16">
+            {/* Titel-Block */}
+            <div className="order-1 lg:order-2 lg:col-start-2 lg:row-start-1">
               <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
@@ -132,48 +147,55 @@ export default async function AssetDetailSeite({
                 </p>
               )}
 
-              {/* Dezente Badges */}
+              {/* Status + Zustand – Kategorie steht bereits in der Eyebrow-Zeile */}
               <div className="mt-7 flex flex-wrap gap-2">
-                <span className="border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                  {KATEGORIE_LABELS[posten.kategorie]}
+                <span className="border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
+                  {STATUS_LABELS[posten.status]}
                 </span>
                 <span className="border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
                   {ZUSTAND_LABELS[posten.zustand]}
                 </span>
-                <span className="border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
-                  {STATUS_LABELS[posten.status]}
-                </span>
               </div>
+            </div>
 
-              {/* Preis / Stückzahl / Status – ruhig integriert, kein Preisschild */}
-              <dl className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3">
-                <div className="bg-background p-5">
-                  <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Preis</dt>
-                  <dd className="mt-2 font-serif text-2xl text-foreground">{preisText}</dd>
-                </div>
-                <div className="bg-background p-5">
-                  <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                    Stückzahl
-                  </dt>
-                  <dd className="mt-2 font-serif text-2xl text-foreground tabular-nums">
-                    {posten.stueckzahl}
-                  </dd>
-                </div>
-                <div className="bg-background p-5">
-                  <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                    Status
-                  </dt>
-                  <dd className="mt-2 font-serif text-2xl text-foreground">
-                    {STATUS_LABELS[posten.status]}
-                  </dd>
-                </div>
+            {/* Bildergalerie */}
+            <div className="order-2 lg:order-1 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+              <AssetGalerie bilder={bilder} />
+            </div>
+
+            {/* Kerninformationen + Aktenzeichen */}
+            <div className="order-3 lg:order-3 lg:col-start-2 lg:row-start-2">
+              <dl
+                className={`grid grid-cols-2 gap-px overflow-hidden border border-border bg-border ${
+                  kerninfo.length >= 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3'
+                }`}
+              >
+                {kerninfo.map((eintrag) => (
+                  <div key={eintrag.label} className="bg-background p-5">
+                    <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                      {eintrag.label}
+                    </dt>
+                    <dd className="mt-2 break-words font-serif text-lg leading-snug text-foreground text-balance md:text-xl">
+                      {eintrag.wert}
+                    </dd>
+                  </div>
+                ))}
               </dl>
+
+              {posten.insolvenzverfahren && (
+                <div className="mt-6 border-t border-border pt-5">
+                  <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                    Aktenzeichen / Verfahren
+                  </dt>
+                  <dd className="mt-1 text-base text-foreground">{posten.insolvenzverfahren}</dd>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Beschreibung + Aktenvermerk */}
+      {/* Beschreibung + Eckdaten */}
       <section className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
@@ -192,12 +214,12 @@ export default async function AssetDetailSeite({
               )}
             </div>
 
-            {/* Aktenvermerk / dokumentarische Metadaten */}
+            {/* Eckdaten / dokumentarische Metadaten */}
             <aside>
-              <h2 className="mb-6 font-serif text-2xl text-foreground md:text-3xl">Aktenvermerk</h2>
-              {aktenvermerk.length > 0 ? (
+              <h2 className="mb-6 font-serif text-2xl text-foreground md:text-3xl">Eckdaten</h2>
+              {eckdaten.length > 0 ? (
                 <dl className="border-t border-border">
-                  {aktenvermerk.map((eintrag) => (
+                  {eckdaten.map((eintrag) => (
                     <div
                       key={eintrag.label}
                       className="flex flex-col gap-1 border-b border-border py-4"
