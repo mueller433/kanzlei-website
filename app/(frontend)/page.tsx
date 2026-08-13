@@ -60,28 +60,36 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      <section className="overflow-hidden border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-[0.45fr_0.55fr] md:items-center md:gap-14 md:px-10 md:py-24">
-          <div className="hero-einblenden order-2 md:order-1">
+      <section className="relative flex h-[70vh] min-h-[640px] items-center overflow-hidden border-b border-border md:h-[850px]">
+        <Image
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
+          alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-right"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/10"
+          aria-hidden="true"
+        />
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-20">
+          <div className="max-w-[600px]">
             <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              DPSS Management GmbH · Verwertung
+              DPSS Management
             </p>
-            <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-5xl">
-              Vermögenswerte professionell verwerten.
+            <h1 className="font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-6xl">
+              Vermögenswerte
+              <br />
+              professionell
+              <br />
+              verwerten.
             </h1>
-            <div className="mt-7 flex max-w-lg flex-col gap-4 text-lg leading-relaxed text-muted-foreground text-pretty">
-              <p>
-                Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei der Erfassung,
-                Bewertung, Vermarktung und dem Verkauf von Vermögenswerten. Käufer finden aktuelle
-                Positionen übersichtlich in unserem Verwertungskatalog.
-              </p>
-              <p>
-                Von Maschinen und technischen Anlagen bis hin zu Fahrzeugen, Betriebsausstattung
-                und weiteren Vermögenswerten begleiten wir den gesamten Verwertungsprozess –
-                strukturiert, transparent und nachvollziehbar.
-              </p>
-            </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground text-pretty">
+              Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
+              Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -90,22 +98,14 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center justify-center gap-2 border border-foreground/30 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
               >
                 Verwertung anfragen
               </Link>
             </div>
-          </div>
-          <div className="relative order-1 h-[360px] w-full overflow-hidden rounded-md border border-border md:order-2 md:h-[640px]">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
-              alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
-              fill
-              priority
-              sizes="(min-width: 768px) 55vw, 100vw"
-              className="hero-bild-scale object-cover contrast-[1.08]"
-            />
-            <div className="absolute inset-0 bg-foreground/15" aria-hidden="true" />
+            <p className="mt-12 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Erfassung&nbsp;&nbsp;•&nbsp;&nbsp;Bewertung&nbsp;&nbsp;•&nbsp;&nbsp;Vermarktung&nbsp;&nbsp;•&nbsp;&nbsp;Verkauf
+            </p>
           </div>
         </div>
       </section>
