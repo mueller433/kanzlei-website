@@ -1,129 +1,57 @@
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { EditorialProzess } from '@/components/editorial-prozess'
+import { KatalogPositionKarte } from '@/components/katalog-position-karte'
+import { KontaktCta } from '@/components/kontakt-cta'
+import { ParallaxBild } from '@/components/parallax-bild'
+import type { Schritt } from '@/components/prozess-schritte'
 import config from '@/payload.config'
-import type { Posten } from '@/payload-types'
 import './styles.css'
 
-const KATEGORIE_LABELS: Record<Posten['kategorie'], string> = {
-  immobilien: 'Immobilien',
-  maschinen: 'Maschinen',
-  fahrzeuge: 'Fahrzeuge',
-  inventar: 'Inventar',
-  sonstiges: 'Sonstiges',
+export const metadata = {
+  title: 'Verwertung von Vermögenswerten',
+  description:
+    'DPSS Management GmbH verwertet Vermögenswerte im Auftrag von Insolvenzverwaltern und bietet Käufern einen transparenten Katalog aktueller Positionen.',
 }
 
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
-}
-
-const LEISTUNGSBEREICHE = [
-  {
-    titel: 'Insolvenzrecht',
-    href: '/insolvenzrecht',
-    beschreibung:
-      'Begleitung von Regel- und Eigenverwaltungsverfahren – von der Antragstellung über die Verwaltung bis zur geordneten Abwicklung.',
-  },
-  {
-    titel: 'Restrukturierung',
-    href: '/restrukturierung',
-    beschreibung:
-      'Sanierungskonzepte und Restrukturierung außerhalb und innerhalb der Insolvenz, um Unternehmen tragfähig neu aufzustellen.',
-  },
-  {
-    titel: 'Verwertung',
-    href: '/verwertung',
-    beschreibung:
-      'Transparente, marktgerechte Verwertung von Vermögenswerten aus laufenden Verfahren – dokumentiert und nachvollziehbar.',
-  },
-] as const
-
-const ABLAUF_SCHRITTE = [
+const ABLAUF: readonly Schritt[] = [
   {
     schritt: '01',
-    titel: 'Erstkontakt',
-    beschreibung:
-      'Vertrauliches Erstgespräch zur Einordnung der Situation und der kurzfristig notwendigen Schritte.',
+    titel: 'Auftrag & Zielsetzung',
+    beschreibung: 'Gemeinsame Klärung des Bestands, der Zielsetzung und des vorgesehenen Verwertungswegs.',
   },
   {
     schritt: '02',
-    titel: 'Analyse',
-    beschreibung:
-      'Prüfung der wirtschaftlichen und rechtlichen Lage sowie Bewertung der Handlungsoptionen.',
+    titel: 'Erfassung & Einordnung',
+    beschreibung: 'Systematische Aufnahme und marktgerechte Einordnung der vorhandenen Vermögenswerte.',
   },
   {
     schritt: '03',
-    titel: 'Umsetzung',
-    beschreibung:
-      'Einleitung des geeigneten Verfahrens, Sicherung der Masse und Steuerung aller Beteiligten.',
+    titel: 'Verwertung',
+    beschreibung: 'Gezielte Vermarktung und Ansprache geeigneter Interessenten.',
   },
   {
     schritt: '04',
-    titel: 'Abschluss',
-    beschreibung:
-      'Geordnete Verwertung, Verteilung und Abschluss des Verfahrens mit vollständiger Dokumentation.',
+    titel: 'Abwicklung',
+    beschreibung: 'Verkauf, Dokumentation und Abrechnung werden nachvollziehbar abgeschlossen.',
   },
 ] as const
 
-const ANSPRECHPARTNER = [
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Insolvenzverwalter · Rechtsanwalt',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
-  },
-  {
-    initialen: 'NN',
-    name: 'Name folgt',
-    rolle: 'Fachanwältin für Insolvenz- und Sanierungsrecht',
-    beschreibung:
-      'Platzhalterprofil – die tatsächlichen Angaben zu Ausbildung, Schwerpunkten und Werdegang werden zu einem späteren Zeitpunkt ergänzt.',
-  },
+const WARUM_DPSS_PUNKTE = [
+  'Nachvollziehbare Herkunft',
+  'Transparente Verwertung',
+  'Verbindliche Abwicklung',
 ] as const
-
-function KatalogTeaserKarte({ posten }: { posten: Posten }) {
-  return (
-    <Link
-      href="/katalog"
-      className="group flex flex-col justify-between gap-6 border border-border bg-card p-6 transition-colors hover:border-accent"
-    >
-      <div className="flex flex-col gap-3">
-        <span className="text-xs uppercase tracking-[0.16em] text-accent">
-          {KATEGORIE_LABELS[posten.kategorie]}
-        </span>
-        <span className="font-serif text-xl leading-snug text-card-foreground text-balance">
-          {posten.titel}
-        </span>
-      </div>
-      <span className="text-sm text-muted-foreground">
-        {posten.preisAufAnfrage
-          ? 'Preis auf Anfrage'
-          : typeof posten.preis === 'number'
-            ? formatiertePreis(posten.preis)
-            : 'Preis auf Anfrage'}
-      </span>
-    </Link>
-  )
-}
 
 export default async function Startseite() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  const { docs: neuestePosten } = await payload.find({
+  const payload = await getPayload({ config: await config })
+  const { docs } = await payload.find({
     collection: 'posten',
-    where: {
-      veroeffentlicht: {
-        equals: true,
-      },
-    },
+    where: { veroeffentlicht: { equals: true } },
     sort: '-createdAt',
     depth: 1,
     limit: 3,
@@ -131,207 +59,202 @@ export default async function Startseite() {
 
   return (
     <div>
-      {/* 1. HERO */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Insolvenzverwaltung &amp; Restrukturierung
-          </p>
-          <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl lg:text-7xl">
-            Kompetenz im Insolvenzrecht. Werte sichern. Perspektiven schaffen.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Müller &amp; Partner begleitet Unternehmen, Gläubiger und Beteiligte durch Insolvenz-
-            und Sanierungsverfahren. Mit klarer Struktur, wirtschaftlichem Augenmaß und einer
-            geordneten Verwertung schaffen wir tragfähige Lösungen in schwierigen Lagen.
-          </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/leistungen"
-              className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-            >
-              Unsere Leistungen
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/katalog"
-              className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
-            >
-              Zum Verwertungskatalog
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. KANZLEI / KOMPETENZ */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Erfahrung, die in kritischen Situationen Halt gibt
-            </h2>
-            <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-              <p>
-                Seit vielen Jahren betreuen wir Insolvenz- und Sanierungsverfahren jeder
-                Größenordnung. Unsere Arbeit ist geprägt von Sorgfalt, Transparenz und dem
-                Anspruch, auch in wirtschaftlich angespannten Lagen verlässlich zu handeln.
-              </p>
-              <p>
-                Wir verstehen Insolvenzverwaltung nicht als reine Abwicklung, sondern als Chance,
-                Werte zu erhalten, Gläubigerinteressen zu wahren und – wo möglich – Unternehmen und
-                Arbeitsplätze zu sichern. Dabei begegnen wir allen Beteiligten mit derselben
-                Verbindlichkeit.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. LEISTUNGSBEREICHE */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Leistungsbereiche
+      {/* HERO */}
+      <section className="overflow-hidden border-b border-border">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-10 md:pt-16 md:pb-20">
+          <div className="hero-einblenden">
+            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              DPSS Management GmbH · Verwertung
             </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Drei Schwerpunkte, ein Anspruch
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-            {LEISTUNGSBEREICHE.map((bereich) => (
-              <Link
-                key={bereich.href}
-                href={bereich.href}
-                className="group flex flex-col gap-4 bg-background p-8 transition-colors hover:bg-card md:p-10"
-              >
-                <h3 className="font-serif text-2xl text-foreground">{bereich.titel}</h3>
-                <p className="flex-1 text-base leading-relaxed text-muted-foreground text-pretty">
-                  {bereich.beschreibung}
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-accent">
-                  Mehr erfahren
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. KATALOG-TEASER */}
-      {neuestePosten.length > 0 && (
-        <section className="border-b border-border">
-          <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-              <div className="max-w-2xl">
-                <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                  Verwertungskatalog
-                </p>
-                <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                  Aktuelle Positionen aus laufenden Verfahren
-                </h2>
-              </div>
+            <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-5xl">
+              Vermögenswerte professionell verwerten.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
+              Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung,
+              Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen
+              übersichtlich in unserem Verwertungskatalog.
+            </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
-                className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-opacity hover:opacity-80"
+                className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
               >
-                Zum vollständigen Katalog
-                <ArrowRight className="h-4 w-4" />
+                Aktuelle Positionen <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/kontakt"
+                className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+              >
+                Verwertung anfragen
               </Link>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {neuestePosten.map((posten) => (
-                <KatalogTeaserKarte key={posten.id} posten={posten} />
-              ))}
-            </div>
           </div>
-        </section>
-      )}
-
-      {/* 5. ARBEITSWEISE / ABLAUF */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Arbeitsweise
-            </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              So verläuft die Zusammenarbeit
-            </h2>
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-[4/5]">
+            <Image
+              src="/hero-lagerhalle.jpg"
+              alt="Lagerhalle mit Regalsystemen und Gabelstapler bei der Bestandsverwertung"
+              fill
+              priority
+              sizes="(min-width: 768px) 55vw, 100vw"
+              className="hero-bild-scale object-cover"
+            />
           </div>
-          <ol className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {ABLAUF_SCHRITTE.map((schritt) => (
-              <li key={schritt.schritt} className="flex flex-col gap-3">
-                <span className="font-serif text-2xl text-accent">{schritt.schritt}</span>
-                <span className="border-t border-border pt-4 font-serif text-xl text-foreground">
-                  {schritt.titel}
-                </span>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                  {schritt.beschreibung}
-                </p>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
-      {/* 6. ANSPRECHPARTNER */}
+      {/* AKTUELLE POSITIONEN / KATALOG — direkt unter dem Hero */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
+        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+          <div className="mb-10 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Ansprechpartner
+              Verwertung · Katalog
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Persönliche Betreuung
+              Aktuelle Positionen
             </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+              Aktuelle Vermögenswerte aus laufenden Verwertungs- und Auflösungsverfahren.
+            </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {ANSPRECHPARTNER.map((person, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-5 border border-dashed border-border bg-card p-6 md:p-8"
-              >
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center bg-muted font-serif text-lg text-muted-foreground">
-                  {person.initialen}
-                </span>
-                <div className="flex flex-col gap-1">
-                  <span className="font-serif text-xl text-card-foreground">{person.name}</span>
-                  <span className="text-sm text-accent">{person.rolle}</span>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
-                    {person.beschreibung}
-                  </p>
-                </div>
+
+          {docs.length > 0 ? (
+            <>
+              <div className="karten-grid grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {docs.map((posten) => (
+                  <KatalogPositionKarte key={posten.id} posten={posten} />
+                ))}
               </div>
-            ))}
+              <div className="mt-12">
+                <Link
+                  href="/katalog"
+                  className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+                >
+                  Alle Positionen ansehen
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="border border-border bg-card p-10 md:p-12">
+              <p className="font-serif text-xl text-card-foreground">
+                Derzeit keine Positionen verfügbar.
+              </p>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
+                Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
+              </p>
+              <Link
+                href="/kontakt"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent"
+              >
+                Kontakt aufnehmen <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* VERWERTUNG AUS EINER HAND */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:px-10 md:py-28">
+          <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+            Verwertung aus einer Hand
+          </h2>
+          <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p>
+              DPSS übernimmt die operative Verwertung von Vermögenswerten im Auftrag von
+              Insolvenzverwaltern und anderen Verfahrensbeteiligten.
+            </p>
+            <p>
+              Von der Bestandsaufnahme bis zur Abrechnung schaffen wir einen geordneten Ablauf,
+              realistische Marktansprache und belastbare Berichte.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* 7. KONTAKT-CTA */}
-      <section>
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-2xl">
-              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                Sie stehen vor einer schwierigen wirtschaftlichen Entscheidung?
-              </h2>
-              <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-                Sprechen Sie uns an. Wir ordnen Ihre Situation ein und zeigen Ihnen die möglichen
-                nächsten Schritte – vertraulich und unverbindlich.
-              </p>
-            </div>
+      {/* UNSER ABLAUF */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Unser Ablauf
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Strukturiert von der Beauftragung bis zum Abschluss.
+            </h2>
+          </div>
+          <EditorialProzess schritte={ABLAUF} />
+        </div>
+      </section>
+
+      {/* EDITORIAL / INDUSTRIE */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:px-10 md:py-28">
+          <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+            Vermögenswerte gezielt in den Markt bringen.
+          </h2>
+          <div className="flex flex-col gap-5">
+            <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
+              Wir verbinden strukturierte Erfassung und Bewertung mit einer zielgerichteten
+              Vermarktung. So werden Vermögenswerte dort angeboten, wo sie die passenden
+              Interessenten erreichen.
+            </p>
             <Link
-              href="/kontakt"
-              className="inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              href="/verwertung"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-accent"
             >
-              Kontakt aufnehmen
-              <ArrowRight className="h-4 w-4" />
+              Mehr über die Verwertung
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>
       </section>
+
+      {/* WARUM DPSS — grosse Editorial-Bildsektion mit sehr dezentem Parallax */}
+      <section className="relative isolate overflow-hidden border-b border-border">
+        <div className="warum-bild-fade absolute inset-0">
+          <ParallaxBild
+            src="/warum-dpss-editorial.png"
+            alt="Industrielagerhalle mit hohen Palettenregalen in warmem Licht"
+          />
+        </div>
+        <div className="warum-overlay-reveal absolute inset-0 bg-gradient-to-t from-foreground/95 via-foreground/75 to-foreground/50" />
+
+        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[1.3fr_1fr] md:gap-16 md:px-10 md:py-32">
+          <div className="warum-text-reveal">
+            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-background/70">
+              Warum DPSS
+            </p>
+            <h2 className="max-w-xl font-serif text-3xl leading-tight text-background text-balance md:text-4xl">
+              Keine anonyme Restware, sondern Vermögenswerte mit Herkunft.
+            </h2>
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-background/85 text-pretty">
+              Jede Position stammt aus einem konkreten Verfahren, ist dokumentiert und bewertet.
+              So bleibt für Auftraggeber und Käufer jederzeit nachvollziehbar, woher ein
+              Vermögenswert stammt und wie mit ihm verfahren wird.
+            </p>
+          </div>
+
+          <ul className="warum-punkte flex flex-col gap-7 self-end">
+            {WARUM_DPSS_PUNKTE.map((punkt) => (
+              <li key={punkt} className="flex items-start gap-3">
+                <span
+                  className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
+                  aria-hidden="true"
+                />
+                <span className="text-base font-medium text-background text-pretty">{punkt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* KONTAKT-CTA */}
+      <KontaktCta
+        titel="Sie möchten Vermögenswerte verwerten lassen?"
+        text="Sprechen Sie uns an, wenn Sie eine Verwertung beauftragen oder eine Position aus dem Katalog näher prüfen möchten."
+        buttonLabel="Kontakt aufnehmen"
+      />
     </div>
   )
 }

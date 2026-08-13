@@ -5,8 +5,12 @@ import type { Where } from 'payload'
 import React from 'react'
 
 import { KatalogFilter } from '@/components/katalog-filter'
+import { KatalogKategorieNav } from '@/components/katalog-kategorie-nav'
+import { KatalogPositionKarte } from '@/components/katalog-position-karte'
+import { KatalogPositionZeile } from '@/components/katalog-position-zeile'
 import { KontaktCta } from '@/components/kontakt-cta'
 import {
+  type Ansicht,
   KATEGORIE_LABELS,
   KATEGORIE_REIHENFOLGE,
   PREIS_RANGES,
@@ -65,42 +69,6 @@ function formatiertePreis(preis: number): string {
   }).format(preis)
 }
 
-/**
- * Platzhalter für die Karten-Komponente einer einzelnen Position.
- * Wird in Prompt 4 durch die eigentliche Karten-Komponente ersetzt.
- */
-function PostenKartePlatzhalter({ posten }: { posten: Posten }) {
-  return (
-    <Link
-      href={`/katalog/${posten.id}`}
-      className="group flex min-h-44 flex-col justify-between gap-6 border border-border bg-background p-6 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent"
-      data-posten-id={posten.id}
-    >
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-          {KATEGORIE_LABELS[posten.kategorie]}
-        </span>
-        <h3 className="font-serif text-xl leading-snug text-foreground text-balance">
-          {posten.titel}
-        </h3>
-      </div>
-      <div className="flex items-baseline justify-between border-t border-border pt-4">
-        <span className="text-base text-foreground">
-          {posten.preisAufAnfrage
-            ? 'Preis auf Anfrage'
-            : typeof posten.preis === 'number'
-              ? formatiertePreis(posten.preis)
-              : '—'}
-        </span>
-        <ArrowRight
-          className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-accent"
-          aria-hidden="true"
-        />
-      </div>
-    </Link>
-  )
-}
-
 export default async function KatalogSeite({
   searchParams,
 }: {
@@ -118,10 +86,7 @@ export default async function KatalogSeite({
   const preisRange = PREIS_RANGES.find((r) => r.key === selectedPreis) ?? null
   const selectedSort = typeof sp.sort === 'string' ? sp.sort : SORT_OPTIONS[0].key
   const sortOption = SORT_OPTIONS.find((s) => s.key === selectedSort) ?? SORT_OPTIONS[0]
-
-  const filterAktiv = Boolean(
-    q || selectedKategorien.length || selectedZustaende.length || preisRange,
-  )
+  const ansicht: Ansicht = sp.ansicht === 'karten' ? 'karten' : 'liste'
 
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
@@ -154,6 +119,7 @@ export default async function KatalogSeite({
   for (const doc of facetDocs) {
     if (doc.kategorie in kategorieCounts) kategorieCounts[doc.kategorie] += 1
   }
+  const alleAnzahl = facetDocs.length
 
   // Endgültige Ergebnis-Abfrage: Basis-where + Kategorie-Auswahl, sortiert
   const finalWhere: Where = selectedKategorien.length
@@ -172,145 +138,111 @@ export default async function KatalogSeite({
 
   return (
     <div>
-      {/* HERO – gleiche full-width Kopf-Konvention wie die übrigen Unterseiten */}
+      {/* INTRO – kompakter Katalog-Einstieg mit dynamischer Bestandsanzeige */}
       <section className="border-b border-border">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 py-24 md:grid-cols-[1.15fr_1fr] md:gap-16 md:px-10 md:py-32">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10 md:py-12">
           <div>
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
             </p>
-            <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl">
-              {totalDocs} {totalDocs === 1 ? 'Position' : 'Positionen'}{' '}
-              {filterAktiv
-                ? totalDocs === 1
-                  ? 'entspricht Ihrer Auswahl'
-                  : 'entsprechen Ihrer Auswahl'
-                : 'im aktuellen Bestand'}
+            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-4xl">
+              Aktuelle Vermögenswerte
             </h1>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-              Der Katalog ist Teil unserer Verwertungsarbeit: Jede Position stammt aus einem von
-              der Kanzlei betreuten Insolvenz- oder Auflösungsverfahren und wird sorgfältig
-              bewertet, dokumentiert und nachvollziehbar zur Verwertung angeboten. Interessenten
-              erhalten so einen transparenten Überblick über den verfügbaren Bestand.
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
+              Aktuell{' '}
+              <span className="font-medium text-foreground tabular-nums">
+                {totalDocs} veröffentlichte {totalDocs === 1 ? 'Position' : 'Positionen'}
+              </span>{' '}
+              aus laufenden Insolvenz- und Auflösungsverfahren.
             </p>
           </div>
 
-          <div
-            aria-hidden="true"
-            className="relative aspect-[4/5] w-full overflow-hidden border border-border bg-card md:aspect-[3/4]"
+          <Link
+            href="/verwertung"
+            className="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
           >
-            {/* Ruhige, neutrale Fläche: Bordeaux nur als kleiner Akzent */}
-            <div className="absolute inset-4 border border-border" />
-            <div className="absolute inset-0 flex flex-col justify-between p-8 text-foreground md:p-10">
-              <span className="flex h-10 w-10 items-center justify-center bg-accent font-serif text-xl leading-none text-accent-foreground">
-                §
-              </span>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs uppercase tracking-[0.2em] text-accent">
-                  Geordnete Verwertung
-                </span>
-                <span className="font-serif text-2xl leading-tight text-foreground text-balance">
-                  Assets aus Insolvenz- &amp; Auflösungsverfahren
-                </span>
-              </div>
-            </div>
-          </div>
+            So funktioniert die Verwertung
+            <ArrowRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
       </section>
 
-      {/* BESTAND – Filter/Suche/Sortierung als GET-Formular (kombinierbar & teilbar) */}
+      {/* BESTAND – Kategorien, Filterleiste, Ergebnisse */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <form
-            method="get"
-            className="grid grid-cols-1 gap-12 lg:grid-cols-[260px_1fr] lg:gap-16"
-          >
+        <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-12">
+          <KatalogKategorieNav
+            sp={sp}
+            selectedKategorien={selectedKategorien}
+            kategorieCounts={kategorieCounts}
+            alleAnzahl={alleAnzahl}
+          />
+
+          <form method="get" className="mt-5">
             <KatalogFilter
+              sp={sp}
               q={q}
               selectedKategorien={selectedKategorien}
               selectedZustaende={selectedZustaende}
               selectedPreis={selectedPreis}
-              kategorieCounts={kategorieCounts}
+              selectedSort={selectedSort}
+              ansicht={ansicht}
               totalDocs={totalDocs}
             />
+          </form>
 
-            <div>
-              {/* Ergebniszähler + Sortierung */}
-              <div className="mb-10 flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">{totalDocs}</span>{' '}
-                  {totalDocs === 1 ? 'Position' : 'Positionen'}
+          <div className="mt-8">
+            {totalDocs === 0 ? (
+              <div className="ergebnis-fade border border-border bg-card px-6 py-16 text-center">
+                <p className="text-base text-foreground">
+                  Keine Positionen entsprechen Ihrer Auswahl.
                 </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <label
-                    htmlFor="sort"
-                    className="text-xs uppercase tracking-[0.15em] text-muted-foreground"
-                  >
-                    Sortierung
-                  </label>
-                  <select
-                    id="sort"
-                    name="sort"
-                    defaultValue={selectedSort}
-                    className="min-w-0 flex-1 border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:border-accent focus:outline-none sm:flex-none"
-                  >
-                    {SORT_OPTIONS.map((option) => (
-                      <option key={option.key} value={option.key}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="submit"
-                    className="shrink-0 border border-border px-4 py-2.5 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
-                  >
-                    Anwenden
-                  </button>
-                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Passen Sie die Filter an oder{' '}
+                  <Link href="/katalog" className="text-accent underline underline-offset-4">
+                    setzen Sie sie zurück
+                  </Link>
+                  .
+                </p>
               </div>
-
-              {totalDocs === 0 ? (
-                <div className="border border-border bg-card px-6 py-16 text-center">
-                  <p className="text-base text-foreground">
-                    Keine Positionen entsprechen Ihrer Auswahl.
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Passen Sie die Filter an oder{' '}
-                    <a href="/katalog" className="text-accent underline underline-offset-4">
-                      setzen Sie sie zurück
-                    </a>
-                    .
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-16 md:gap-20">
-                  {kategorieGruppen.map((gruppe) => (
-                    <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
-                      <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-border pb-5">
-                        <h2 className="font-serif text-3xl text-foreground">{gruppe.label}</h2>
-                        <div className="flex items-baseline gap-5 text-sm">
-                          <span className="text-muted-foreground">
-                            {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
+            ) : (
+              <div className="ergebnis-fade flex flex-col gap-8 md:gap-9">
+                {kategorieGruppen.map((gruppe) => (
+                  <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
+                    <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-3">
+                      <h2 className="font-serif text-2xl text-foreground">{gruppe.label}</h2>
+                      <div className="flex items-baseline gap-5 text-sm">
+                        <span className="text-muted-foreground">
+                          {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
+                        </span>
+                        {gruppe.minimalpreis !== null && (
+                          <span className="font-medium text-accent">
+                            ab {formatiertePreis(gruppe.minimalpreis)}
                           </span>
-                          {gruppe.minimalpreis !== null && (
-                            <span className="font-medium text-accent">
-                              ab {formatiertePreis(gruppe.minimalpreis)}
-                            </span>
-                          )}
-                        </div>
+                        )}
                       </div>
+                    </div>
 
-                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {ansicht === 'liste' ? (
+                      <div className="flex flex-col border-t border-border">
                         {gruppe.posten.map((eintrag) => (
-                          <PostenKartePlatzhalter key={eintrag.id} posten={eintrag} />
+                          <KatalogPositionZeile key={eintrag.id} posten={eintrag} />
                         ))}
                       </div>
-                    </section>
-                  ))}
-                </div>
-              )}
-            </div>
-          </form>
+                    ) : (
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                        {gruppe.posten.map((eintrag) => (
+                          <KatalogPositionKarte key={eintrag.id} posten={eintrag} />
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 

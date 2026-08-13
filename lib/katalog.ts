@@ -1,3 +1,5 @@
+import type { Media, Posten } from '@/payload-types'
+
 /**
  * Gemeinsame Konstanten und Helfer für die Katalog-Filterung.
  * Bewusst ohne neue Felder/DB – alle Werte entsprechen den bestehenden
@@ -68,4 +70,62 @@ export const SORT_OPTIONS: SortOption[] = [
 export function toArray(value: string | string[] | undefined): string[] {
   if (!value) return []
   return Array.isArray(value) ? value : [value]
+}
+
+export type Status = 'verfuegbar' | 'reserviert' | 'verkauft'
+
+export const STATUS_LABELS: Record<Status, string> = {
+  verfuegbar: 'Verfügbar',
+  reserviert: 'Reserviert',
+  verkauft: 'Verkauft',
+}
+
+/** Darstellungsvariante der Ergebnisliste. Rein clientseitige Präsentation – keine Datenlogik. */
+export const ANSICHT_REIHENFOLGE = ['liste', 'karten'] as const
+export type Ansicht = (typeof ANSICHT_REIHENFOLGE)[number]
+
+export const ANSICHT_LABELS: Record<Ansicht, string> = {
+  liste: 'Liste',
+  karten: 'Karten',
+}
+
+/**
+ * Baut einen Katalog-Query-String aus den aktuellen searchParams, wobei
+ * einzelne Schlüssel gezielt überschrieben werden können. `null` entfernt
+ * den Schlüssel vollständig (z. B. Kategorie-Pill "Alle"), `undefined`
+ * übernimmt den bestehenden Wert unverändert. Dient ausschließlich der
+ * Navigation zwischen Filterzuständen – die Filterlogik selbst bleibt in
+ * der Katalogseite unverändert.
+ */
+/**
+ * Liefert die URL des ersten hinterlegten Bildes eines Postens, sofern
+ * vorhanden und als aufgelöstes Media-Objekt vorliegt (erfordert `depth: 1`
+ * in der Payload-Abfrage). Verwendet ausschließlich das bestehende
+ * Upload-Feld `bilder` der Collection `posten` – keine neue Datenstruktur.
+ */
+export function ersteBildUrl(bilder: Posten['bilder']): string | null {
+  const erste = bilder?.find(
+    (eintrag): eintrag is Media => typeof eintrag === 'object' && eintrag !== null,
+  )
+  return typeof erste?.url === 'string' ? erste.url : null
+}
+
+export function buildKatalogQuery(
+  sp: { [key: string]: string | string[] | undefined },
+  overrides: Record<string, string | string[] | null | undefined> = {},
+): string {
+  const params = new URLSearchParams()
+  const schluessel = ['q', 'kategorie', 'zustand', 'preis', 'sort', 'ansicht']
+
+  for (const key of schluessel) {
+    const override = overrides[key]
+    const wert = key in overrides ? override : sp[key]
+    if (wert === null || wert === undefined) continue
+    const liste = Array.isArray(wert) ? wert : [wert]
+    for (const eintrag of liste) {
+      if (eintrag) params.append(key, eintrag)
+    }
+  }
+
+  return params.toString()
 }

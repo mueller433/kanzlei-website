@@ -18,8 +18,8 @@ export function KontaktCta({
 }) {
   return (
     <section className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+      <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-16">
           <div className="max-w-2xl">
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               {titel}
@@ -28,10 +28,10 @@ export function KontaktCta({
           </div>
           <Link
             href="/kontakt"
-            className="inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            className="cta-button-verzoegert group inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
           >
             {buttonLabel}
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

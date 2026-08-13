@@ -1,13 +1,13 @@
 'use client'
 
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
 export const NAV_LINKS = [
-  { href: '/kanzlei', label: 'Kanzlei' },
-  { href: '/insolvenzrecht', label: 'Insolvenzrecht' },
+  { href: '/unternehmen', label: 'Unternehmen' },
   { href: '/leistungen', label: 'Leistungen' },
   { href: '/verwertung', label: 'Verwertung' },
   { href: '/katalog', label: 'Katalog' },
@@ -22,23 +22,15 @@ function istAktiv(pathname: string, href: string): boolean {
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
-    <Link
-      href="/"
-      onClick={onClick}
-      className="flex items-center gap-3"
-      aria-label="Zur Startseite"
-    >
-      <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">
-        MP
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-          Müller &amp; Partner
-        </span>
-        <span className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          Insolvenzverwaltung
-        </span>
-      </span>
+    <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
+      <Image
+        src="/dpss-logo-horizontal.svg"
+        alt="DPSS Management GmbH – Verwertungsdienstleister"
+        width={800}
+        height={400}
+        priority
+        className="h-auto w-36 object-contain lg:w-48"
+      />
     </Link>
   )
 }
@@ -46,15 +38,39 @@ function Logo({ onClick }: { onClick?: () => void }) {
 export function SiteHeader() {
   const pathname = usePathname()
   const [offen, setOffen] = React.useState(false)
+  const [gescrollt, setGescrollt] = React.useState(false)
 
   // Menü bei Navigationswechsel schließen
   React.useEffect(() => {
     setOffen(false)
   }, [pathname])
 
+  // Ruhiges Scrollverhalten: am Seitenanfang transparent & ohne Trennlinie,
+  // ab einer kleinen Scrolldistanz kompakter mit dezenter Border/Backdrop.
+  // Kein Ein-/Ausblenden je nach Richtung – nur ein sanfter Zustandswechsel.
+  React.useEffect(() => {
+    const onScroll = () => setGescrollt(window.scrollY > 16)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Sobald das mobile Menü offen ist, braucht der Header eine deckende Fläche.
+  const kompakt = gescrollt || offen
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 md:px-10">
+    <header
+      className={`sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
+        kompakt
+          ? 'border-b border-border bg-background/90 shadow-sm backdrop-blur'
+          : 'border-b border-transparent bg-background/0'
+      }`}
+    >
+      <div
+        className={`mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 transition-[padding] duration-300 md:px-10 ${
+          kompakt ? 'py-3' : 'py-4'
+        }`}
+      >
         <Logo />
 
         <nav aria-label="Hauptnavigation" className="hidden lg:block">
