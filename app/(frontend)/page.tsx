@@ -60,11 +60,9 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Der Header liegt im normalen Seitenfluss über dem Hero (kein
-          Overlay-Trick) – das Bild bleibt hell und hochwertig sichtbar,
-          nur ein dezenter Verlauf von links nach rechts sorgt für lesbaren
-          Text im unteren linken Bereich. */}
-      <section className="relative flex min-h-[720px] items-end overflow-hidden md:min-h-[90vh]">
+      {/* Der Hero bleibt eigenständig und nutzt das bestehende Lagerhallenbild;
+          der Inhalt sitzt bewusst im oberen linken Bereich unterhalb des Headers. */}
+      <section className="relative flex min-h-[720px] items-start overflow-hidden md:min-h-[90vh]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
@@ -73,36 +71,36 @@ export default async function Startseite() {
           sizes="100vw"
           className="object-cover saturate-[0.86]"
         />
-        {/* Deutlich dunklerer, aber transparenter Verlauf: links hoher
-            Kontrast für den Text, rechts bleibt die Halle erkennbar. */}
-        <div className="absolute inset-0 bg-[#0c0a08]/30" aria-hidden="true" />
+        {/* Eleganter Verlauf: links stärker für Lesbarkeit, rechts bleibt das
+            industrielle Bild deutlich sichtbar. */}
+        <div className="absolute inset-0 bg-[#0c0a08]/22" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08] from-0% via-[#0c0a08]/70 via-42% to-[#0c0a08]/12 to-82%"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/90 from-0% via-[#0c0a08]/50 via-42% to-transparent to-78%"
           aria-hidden="true"
         />
 
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/45 via-transparent to-transparent"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full px-6 pb-8 md:px-16 md:pb-32 lg:px-24">
-          <div className="max-w-[560px]">
-            <p className="mb-8 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+        <div className="relative z-10 w-full px-6 pt-16 md:px-16 md:pt-20 lg:px-20">
+          <div className="max-w-[600px]">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.2rem] font-semibold leading-[1.08] tracking-tight text-[#f7f5f0] text-balance md:text-[4.05rem] lg:text-[4.75rem]">
+            <h1 className="font-serif text-[2.2rem] font-semibold leading-[1.02] tracking-tight text-[#f7f5f0] text-balance md:text-[4.05rem] lg:text-[4.75rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-9 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-5 max-w-[450px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-11 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -116,7 +114,7 @@ export default async function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
-            <p className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
+            <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
               <span>Erfassung</span>
               <span className="text-accent" aria-hidden="true">
                 •
