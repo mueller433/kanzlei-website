@@ -18,8 +18,8 @@ export function KontaktCta({
 }) {
   return (
     <section className="border-t border-border">
-      <div className="reveal mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+      <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-16">
           <div className="max-w-2xl">
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               {titel}

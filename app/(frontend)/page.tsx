@@ -107,7 +107,7 @@ export default async function Startseite() {
     <div>
       {/* HERO */}
       <section className="overflow-hidden border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-10 md:py-20">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-10 md:pt-16 md:pb-20">
           <div className="hero-einblenden">
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               DPSS Management GmbH · Verwertung
@@ -120,7 +120,7 @@ export default async function Startseite() {
               Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen
               übersichtlich in unserem Verwertungskatalog.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -151,8 +151,8 @@ export default async function Startseite() {
 
       {/* AKTUELLE POSITIONEN / KATALOG — direkt unter dem Hero */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
+        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+          <div className="mb-10 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
             </p>
@@ -280,24 +280,24 @@ export default async function Startseite() {
             alt="Industrielagerhalle mit hohen Palettenregalen in warmem Licht"
           />
         </div>
-        <div className="warum-overlay-reveal absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/70 to-foreground/40" />
+        <div className="warum-overlay-reveal absolute inset-0 bg-gradient-to-t from-foreground/95 via-foreground/75 to-foreground/50" />
 
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-24 md:grid-cols-[1.3fr_1fr] md:gap-16 md:px-10 md:py-32">
+        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[1.3fr_1fr] md:gap-16 md:px-10 md:py-32">
           <div className="warum-text-reveal">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-background/70">
+            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-background/70">
               Warum DPSS
             </p>
             <h2 className="max-w-xl font-serif text-3xl leading-tight text-background text-balance md:text-4xl">
               Keine anonyme Restware, sondern Vermögenswerte mit Herkunft.
             </h2>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-background/80 text-pretty">
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-background/85 text-pretty">
               Jede Position stammt aus einem konkreten Verfahren, ist dokumentiert und bewertet.
               So bleibt für Auftraggeber und Käufer jederzeit nachvollziehbar, woher ein
               Vermögenswert stammt und wie mit ihm verfahren wird.
             </p>
           </div>
 
-          <ul className="warum-punkte flex flex-col gap-6 self-end">
+          <ul className="warum-punkte flex flex-col gap-7 self-end">
             {WARUM_DPSS_PUNKTE.map((punkt) => (
               <li key={punkt} className="flex items-start gap-3">
                 <span

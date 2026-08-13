@@ -30,14 +30,14 @@ export function AktuelleVerwertungTicker({ eintraege }: { eintraege: TickerEintr
   const aktuelle = eintraege[index]
 
   return (
-    <div className="mt-10 border-t border-border pt-6" aria-live="polite">
-      <p className="mb-4 flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-        <span className="ticker-punkt inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-        Aktuelle Verwertung
-      </p>
-      <div key={index} className="ticker-eintrag min-h-[2.75rem]">
-        <p className="text-sm font-medium text-foreground">{aktuelle.label}</p>
-        <p className="text-sm text-muted-foreground">{aktuelle.sub}</p>
+    <div className="mt-9 flex items-center gap-4" aria-live="polite">
+      <span className="ticker-punkt inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+      <div key={index} className="ticker-eintrag flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          Aktuelle Verwertung
+        </span>
+        <span className="text-sm font-medium text-foreground">{aktuelle.label}</span>
+        <span className="text-sm text-muted-foreground">· {aktuelle.sub}</span>
       </div>
     </div>
   )
