@@ -20,7 +20,7 @@ export function KontaktCta({
 }) {
   return (
     <section className="border-t border-border">
-      <div className="reveal mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
+      <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
         <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16">
           <div className="max-w-2xl">
             {eyebrow ? (
