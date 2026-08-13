@@ -1,3 +1,5 @@
+import type { Media, Posten } from '@/payload-types'
+
 /**
  * Gemeinsame Konstanten und Helfer für die Katalog-Filterung.
  * Bewusst ohne neue Felder/DB – alle Werte entsprechen den bestehenden
@@ -95,6 +97,19 @@ export const ANSICHT_LABELS: Record<Ansicht, string> = {
  * Navigation zwischen Filterzuständen – die Filterlogik selbst bleibt in
  * der Katalogseite unverändert.
  */
+/**
+ * Liefert die URL des ersten hinterlegten Bildes eines Postens, sofern
+ * vorhanden und als aufgelöstes Media-Objekt vorliegt (erfordert `depth: 1`
+ * in der Payload-Abfrage). Verwendet ausschließlich das bestehende
+ * Upload-Feld `bilder` der Collection `posten` – keine neue Datenstruktur.
+ */
+export function ersteBildUrl(bilder: Posten['bilder']): string | null {
+  const erste = bilder?.find(
+    (eintrag): eintrag is Media => typeof eintrag === 'object' && eintrag !== null,
+  )
+  return typeof erste?.url === 'string' ? erste.url : null
+}
+
 export function buildKatalogQuery(
   sp: { [key: string]: string | string[] | undefined },
   overrides: Record<string, string | string[] | null | undefined> = {},

@@ -2,8 +2,8 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-import { KATEGORIE_LABELS, STATUS_LABELS } from '@/lib/katalog'
-import type { Media, Posten } from '@/payload-types'
+import { ersteBildUrl, KATEGORIE_LABELS, STATUS_LABELS } from '@/lib/katalog'
+import type { Posten } from '@/payload-types'
 
 function formatiertePreis(preis: number): string {
   return new Intl.NumberFormat('de-DE', {
@@ -17,12 +17,6 @@ const STATUS_BADGE_KLASSE: Record<Posten['status'], string> = {
   verfuegbar: 'border-accent text-accent',
   reserviert: 'border-border text-muted-foreground',
   verkauft: 'border-border text-muted-foreground',
-}
-
-/** Erstes Bild als vollständiges Media-Objekt, falls vorhanden (depth: 1 in der Abfrage). */
-function ersteBildUrl(bilder: Posten['bilder']): string | null {
-  const erste = bilder?.find((eintrag): eintrag is Media => typeof eintrag === 'object' && eintrag !== null)
-  return typeof erste?.url === 'string' ? erste.url : null
 }
 
 /**

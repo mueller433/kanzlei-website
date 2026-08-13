@@ -138,56 +138,41 @@ export default async function KatalogSeite({
 
   return (
     <div>
-      {/* HERO – Katalog-Kopfzeile mit dynamischer Bestandsanzeige */}
+      {/* INTRO – kompakter Katalog-Einstieg mit dynamischer Bestandsanzeige */}
       <section className="border-b border-border">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 px-6 py-20 md:grid-cols-[1.2fr_1fr] md:gap-16 md:px-10 md:py-28">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10 md:py-12">
           <div>
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
             </p>
-            <h1 className="font-serif text-4xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-5xl">
-              Aktueller Bestand:{' '}
-              <span className="tabular-nums">
-                {totalDocs} {totalDocs === 1 ? 'Position' : 'Positionen'}
-              </span>
+            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-4xl">
+              Aktuelle Vermögenswerte
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-              Der Katalog zeigt aktuell verfügbare Vermögenswerte aus laufenden Insolvenz- und
-              Auflösungsverfahren. Alle Positionen werden strukturiert erfasst, dokumentiert und
-              nachvollziehbar zur Verwertung angeboten.
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
+              Aktuell{' '}
+              <span className="font-medium text-foreground tabular-nums">
+                {totalDocs} veröffentlichte {totalDocs === 1 ? 'Position' : 'Positionen'}
+              </span>{' '}
+              aus laufenden Insolvenz- und Auflösungsverfahren.
             </p>
           </div>
 
-          {/* Kompakte Informations-/CTA-Fläche */}
-          <div className="flex flex-col justify-between gap-8 border border-border bg-card p-8">
-            <div className="flex flex-col gap-1">
-              <span className="flex h-10 w-10 items-center justify-center bg-accent font-serif text-xl leading-none text-accent-foreground">
-                §
-              </span>
-              <span className="mt-4 text-xs uppercase tracking-[0.2em] text-accent">
-                Geordnete Verwertung
-              </span>
-              <span className="font-serif text-2xl leading-tight text-foreground text-balance">
-                Assets aus Insolvenz- &amp; Auflösungsverfahren
-              </span>
-            </div>
-            <Link
-              href="/verwertung"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
-            >
-              So funktioniert die Verwertung
-              <ArrowRight
-                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          </div>
+          <Link
+            href="/verwertung"
+            className="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+          >
+            So funktioniert die Verwertung
+            <ArrowRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
       </section>
 
       {/* BESTAND – Kategorien, Filterleiste, Ergebnisse */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+        <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-12">
           <KatalogKategorieNav
             sp={sp}
             selectedKategorien={selectedKategorien}
@@ -195,7 +180,7 @@ export default async function KatalogSeite({
             alleAnzahl={alleAnzahl}
           />
 
-          <form method="get" className="mt-6">
+          <form method="get" className="mt-5">
             <KatalogFilter
               sp={sp}
               q={q}
@@ -208,7 +193,7 @@ export default async function KatalogSeite({
             />
           </form>
 
-          <div className="mt-12">
+          <div className="mt-8">
             {totalDocs === 0 ? (
               <div className="ergebnis-fade border border-border bg-card px-6 py-16 text-center">
                 <p className="text-base text-foreground">
@@ -223,16 +208,11 @@ export default async function KatalogSeite({
                 </p>
               </div>
             ) : (
-              <div className="ergebnis-fade flex flex-col gap-16 md:gap-20">
-                {kategorieGruppen.map((gruppe, index) => (
+              <div className="ergebnis-fade flex flex-col gap-10 md:gap-12">
+                {kategorieGruppen.map((gruppe) => (
                   <section key={gruppe.kategorie} data-kategorie={gruppe.kategorie}>
-                    <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-border pb-5">
-                      <div>
-                        <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                          {String(index + 1).padStart(2, '0')}
-                        </p>
-                        <h2 className="font-serif text-3xl text-foreground">{gruppe.label}</h2>
-                      </div>
+                    <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-border pb-4">
+                      <h2 className="font-serif text-2xl text-foreground">{gruppe.label}</h2>
                       <div className="flex items-baseline gap-5 text-sm">
                         <span className="text-muted-foreground">
                           {gruppe.anzahl} {gruppe.anzahl === 1 ? 'Position' : 'Positionen'}
