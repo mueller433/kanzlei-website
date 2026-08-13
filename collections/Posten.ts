@@ -9,7 +9,7 @@ export const Posten: CollectionConfig = {
   access: {
     // Öffentlich lesbar, aber nur veröffentlichte Posten anzeigen
     read: ({ req }) => {
-      // Eingeloggte Nutzer (Kanzlei-Mitarbeiter) sehen alles, auch Entwürfe
+      // Eingeloggte Nutzer (DPSS-Mitarbeiter) sehen alles, auch Entwürfe
       if (req.user) return true
       // Öffentliche Besucher sehen nur veröffentlichte Posten
       return {

@@ -19,11 +19,11 @@ const grotesk = Public_Sans({
 
 export const metadata = {
   title: {
-    default: 'Müller & Partner – Insolvenzverwaltung & Restrukturierung',
-    template: '%s | Müller & Partner',
+    default: 'DPSS Management GmbH – Verwertung von Vermögenswerten',
+    template: '%s | DPSS Management GmbH',
   },
   description:
-    'Müller & Partner ist eine spezialisierte Kanzlei für Insolvenzrecht, Sanierung und Restrukturierung. Zusätzlich betreiben wir einen Verwertungskatalog für Vermögenswerte aus laufenden Verfahren.',
+    'DPSS Management GmbH ist Verwertungsdienstleister für Insolvenzverwalter, Verfahrensbeteiligte und Käufer. Wir erfassen, bewerten, vermarkten und dokumentieren Vermögenswerte transparent.',
 }
 
 export const viewport = {

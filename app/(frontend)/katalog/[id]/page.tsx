@@ -62,7 +62,7 @@ export async function generateMetadata({
     title: posten.titel,
     description:
       posten.kurzspezifikation ||
-      `${KATEGORIE_LABELS[posten.kategorie]} aus einem Verwertungsverfahren der Kanzlei.`,
+      `${KATEGORIE_LABELS[posten.kategorie]} aus einem laufenden Verwertungsverfahren.`,
   }
 }
 

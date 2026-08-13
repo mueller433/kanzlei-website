@@ -19,6 +19,92 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+/*
+ * Zurückhaltendes Einblenden von Abschnitten beim Scrollen.
+ * Bewusst rein per CSS über Scroll-driven Animations (animation-timeline: view()):
+ * keine JS-Abhängigkeit, keine Animationsbibliothek. Browser ohne Unterstützung
+ * (@supports schlägt fehl) zeigen die Inhalte einfach sofort – kein Flackern.
+ * prefers-reduced-motion deaktiviert die Bewegung vollständig.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+@keyframes reveal-einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Dezentes Einblenden des Hero-Inhalts beim Laden der Startseite – bewusst
+ * einmalig und ohne Scroll-Bezug (der Hero ist beim Laden bereits sichtbar).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-einblenden {
+    animation: hero-einblenden 0.7s ease both;
+  }
+}
+
+@keyframes hero-einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Weicher Übergang der Katalog-Ergebnisse: Da jede Filteränderung eine
+ * vollständige GET-Navigation auslöst, genügt ein einmaliges, kurzes
+ * Einblenden beim Laden der (neu gefilterten) Ergebnisliste.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .ergebnis-fade {
+    animation: ergebnis-einblenden 0.35s ease both;
+  }
+}
+
+@keyframes ergebnis-einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sicherheitsleine: reduzierte Bewegung hebt jede Animation auf. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .ergebnis-fade,
+  .hero-einblenden {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /*
