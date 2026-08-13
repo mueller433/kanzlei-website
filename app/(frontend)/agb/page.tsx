@@ -1,4 +1,5 @@
-import React from 'react'
+import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
+
 
 export const metadata = {
   title: 'AGB | DPSS Management GmbH',
@@ -127,44 +128,28 @@ const sections = [
 
 export default function AGBPage() {
   return (
-    <main>
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Rechtliches · DPSS Management GmbH
-          </p>
-          <h1 className="max-w-3xl font-serif text-4xl leading-tight text-foreground text-balance md:text-6xl">
-            Allgemeine Geschäftsbedingungen
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Für die Verwertung und den Verkauf von Vermögenswerten.
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div className="mx-auto max-w-4xl px-6 py-16 md:px-10 md:py-24">
-          <div className="flex flex-col gap-12">
-            {sections.map((section) => (
-              <section key={section.title} className="flex flex-col gap-5 border-t border-border pt-10 first:border-t-0 first:pt-0">
-                <h2 className="font-serif text-2xl leading-tight text-foreground md:text-3xl">
-                  {section.title}
-                </h2>
-                <div className="flex flex-col gap-4 text-base leading-relaxed text-foreground text-pretty">
-                  {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-                {'link' in section && section.link ? (
-                  <a href={section.link.href} className="text-sm font-medium text-accent underline-offset-4 hover:underline">
-                    {section.link.label}
-                  </a>
-                ) : null}
-              </section>
+    <LegalPageLayout
+      titel="Allgemeine Geschäftsbedingungen"
+      beschreibung="Für die Verwertung und den Verkauf von Vermögenswerten."
+    >
+      <LegalSections>
+        {sections.map((section, index) => (
+          <LegalSection
+            key={section.title}
+            nummer={String(index + 1).padStart(2, '0')}
+            titel={section.title.replace(/^§ \d+ /, '')}
+          >
+            {section.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
-          </div>
-        </div>
-      </section>
-    </main>
+            {'link' in section && section.link ? (
+              <a href={section.link.href} className="underline decoration-border underline-offset-4 hover:text-accent">
+                {section.link.label}
+              </a>
+            ) : null}
+          </LegalSection>
+        ))}
+      </LegalSections>
+    </LegalPageLayout>
   )
 }
