@@ -60,47 +60,26 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Der Hero bleibt eigenständig und nutzt das bestehende Lagerhallenbild;
-          der Inhalt sitzt bewusst im oberen linken Bereich unterhalb des Headers. */}
-      <section className="relative flex min-h-[680px] items-start overflow-hidden md:h-[760px] md:min-h-0">
-        <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
-          alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover saturate-[0.86]"
-        />
-        {/* Eleganter Verlauf: links stärker für Lesbarkeit, rechts bleibt das
-            industrielle Bild deutlich sichtbar. */}
-        <div className="absolute inset-0 bg-[#0c0a08]/22" aria-hidden="true" />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/90 from-0% via-[#0c0a08]/50 via-42% to-transparent to-78%"
-          aria-hidden="true"
-        />
-
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/45 via-transparent to-transparent"
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 w-full px-6 pb-[100px] pt-20 md:px-16 lg:px-20">
-          <div className="max-w-[600px]">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+      {/* Ruhiges zweispaltiges Beratungs-Layout: Text links, hochwertiger
+          Asset-/Industrieausschnitt rechts. Kein Vollbild-Overlay. */}
+      <section className="mx-auto grid h-auto min-h-[680px] w-full max-w-7xl grid-cols-1 md:h-[750px] md:min-h-0 md:grid-cols-[1.1fr_0.9fr]">
+        <div className="flex min-w-0 flex-col justify-center px-6 py-16 md:px-12 lg:px-16">
+          <div className="min-w-0 max-w-[600px]">
+            <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.2rem] font-semibold leading-[1.02] tracking-tight text-[#f7f5f0] text-balance md:text-[4.05rem] lg:text-[4.75rem]">
+            <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-[4.2rem] lg:text-[4.75rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-5 max-w-[450px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-muted-foreground text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -109,27 +88,23 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/45 bg-[#f7f5f0]/10 px-6 py-3 text-sm font-medium text-[#f7f5f0] backdrop-blur-sm transition-colors hover:border-[#f7f5f0]/70 hover:bg-[#f7f5f0]/18"
+                className="inline-flex items-center justify-center gap-2 border border-accent/40 bg-accent/5 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/10"
               >
                 Verwertung anfragen
               </Link>
             </div>
-            <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
-              <span>Erfassung</span>
-              <span className="text-accent" aria-hidden="true">
-                •
-              </span>
-              <span>Bewertung</span>
-              <span className="text-accent" aria-hidden="true">
-                •
-              </span>
-              <span>Vermarktung</span>
-              <span className="text-accent" aria-hidden="true">
-                •
-              </span>
-              <span>Verkauf</span>
-            </p>
           </div>
+        </div>
+
+        <div className="relative min-h-[420px] overflow-hidden md:min-h-0">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
+            alt="Moderne Industriehalle mit Palettenregalen und professioneller Betriebsausstattung"
+            fill
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover saturate-[0.88]"
+          />
         </div>
       </section>
 
