@@ -60,22 +60,17 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative flex h-[85vh] min-h-[680px] items-center overflow-hidden md:h-screen">
+      <section className="relative flex h-[560px] items-center overflow-hidden md:h-[760px]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right brightness-[0.55]"
-        />
-        <div className="absolute inset-0 bg-[#0c0a08]/55" aria-hidden="true" />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08] via-[#0c0a08]/85 to-transparent"
-          aria-hidden="true"
+          className="object-cover object-right"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/70 from-10% via-[#0c0a08]/25 via-45% to-transparent to-70%"
           aria-hidden="true"
         />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-20">
@@ -83,16 +78,16 @@ export default async function Startseite() {
             <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[4.75rem] lg:text-[5.25rem]">
+            <h1 className="font-serif text-[2.75rem] font-semibold leading-[0.95] tracking-tight text-[#f7f5f0] text-balance md:text-[4.75rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-8 max-w-[480px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
-              Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
+              Vermögenswerten – nachvollziehbar und professionell.
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -103,7 +98,7 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/60 bg-transparent px-6 py-3 text-sm font-medium text-[#f7f5f0] transition-colors hover:border-[#f7f5f0] hover:bg-[#f7f5f0]/10"
+                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/70 bg-transparent px-6 py-3 text-sm font-medium text-[#f7f5f0] transition-colors hover:border-[#f7f5f0] hover:bg-[#f7f5f0]/10"
               >
                 Verwertung anfragen
               </Link>
