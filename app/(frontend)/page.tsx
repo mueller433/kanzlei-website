@@ -1,15 +1,12 @@
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getPayload } from 'payload'
 import React from 'react'
 
 import { EditorialProzess } from '@/components/editorial-prozess'
-import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import type { Schritt } from '@/components/prozess-schritte'
-import config from '@/payload.config'
 import './styles.css'
 
 export const metadata = {
@@ -47,50 +44,66 @@ const WARUM_DPSS_PUNKTE = [
   'Verbindliche Abwicklung',
 ] as const
 
-export default async function Startseite() {
-  const payload = await getPayload({ config: await config })
-  const { docs } = await payload.find({
-    collection: 'posten',
-    where: { veroeffentlicht: { equals: true } },
-    sort: '-createdAt',
-    depth: 1,
-    limit: 3,
-  })
+const POSITIONEN_KATEGORIEN = [
+  {
+    titel: 'Maschinen',
+    beschreibung: 'Produktions-, Fertigungs- und Sondermaschinen aus laufenden Verfahren.',
+    bild: '/kategorie-maschinen.png',
+    href: '/katalog?kategorie=maschinen',
+  },
+  {
+    titel: 'Fahrzeuge',
+    beschreibung: 'Nutzfahrzeuge, Fuhrparks und Spezialfahrzeuge in unterschiedlichen Zuständen.',
+    bild: '/kategorie-fahrzeuge.png',
+    href: '/katalog?kategorie=fahrzeuge',
+  },
+  {
+    titel: 'Betriebsausstattung',
+    beschreibung: 'Inventar, Lagertechnik und weitere Ausstattung aus Betriebsauflösungen.',
+    bild: '/kategorie-betriebsausstattung.png',
+    href: '/katalog?kategorie=inventar',
+  },
+] as const
 
+export default function Startseite() {
   return (
     <div>
       {/* HERO */}
       {/* Negativer Abstand entspricht der festen Header-Höhe (h-20 md:h-24),
-          damit der transparente Header direkt über dem Bild liegt. */}
-      <section className="relative -mt-20 flex min-h-[560px] items-start overflow-hidden pb-16 pt-28 md:-mt-24 md:h-[760px] md:min-h-0 md:items-center md:pb-0 md:pt-16">
+          damit der transparente Header direkt über dem Bild liegt. Das Bild
+          füllt die gesamte Hero-Fläche (kein zweispaltiges Layout). */}
+      <section className="relative -mt-20 flex min-h-[680px] items-end overflow-hidden md:-mt-24 md:min-h-[880px]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right brightness-[0.4]"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-[#080706]/45" aria-hidden="true" />
+        {/* Leichte, gleichmäßige Abdunklung – Bilddetails bleiben sichtbar */}
+        <div className="absolute inset-0 bg-[#0c0a08]/30" aria-hidden="true" />
+        {/* Zusätzlicher Kontrast unten links, wo der Text steht */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#080706]/85 from-15% via-[#080706]/50 via-50% to-[#080706]/10 to-90%"
+          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/80 via-[#0c0a08]/15 to-transparent"
           aria-hidden="true"
         />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-20">
-          <div className="max-w-[520px]">
+
+        <div className="relative z-10 w-full pb-16 pl-6 pr-6 pt-16 md:pb-[160px] md:pl-[120px] md:pr-16 md:pt-16">
+          <div className="max-w-[650px]">
             <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.75rem] font-semibold leading-[0.95] tracking-tight text-[#f7f5f0] text-balance md:text-[4.75rem]">
+            <h1 className="font-serif text-[3rem] font-semibold leading-[0.95] tracking-tight text-[#f7f5f0] text-balance md:text-[5.5rem] lg:text-[6.5rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-8 max-w-[480px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
-              Vermögenswerten – nachvollziehbar und professionell.
+              Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -128,54 +141,62 @@ export default async function Startseite() {
       {/* AKTUELLE POSITIONEN / KATALOG — direkt unter dem Hero */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-          <div className="mb-10 max-w-2xl">
+          <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
             </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
               Aktuelle Positionen
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
               In unserem Katalog finden Sie ausgewählte Vermögenswerte aus laufenden Verwertungs- und
               Auflösungsverfahren. Die Positionen werden erfasst, eingeordnet und gezielt über
               geeignete Kanäle angeboten. So schaffen wir einen übersichtlichen Zugang zu Maschinen,
-              Anlagen, Fahrzeugen, Betriebsausstattung und weiteren Vermögenswerten.
+              Fahrzeugen, Betriebsausstattung und weiteren Vermögenswerten.
             </p>
           </div>
 
-          {docs.length > 0 ? (
-            <>
-              <div className="karten-grid grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {docs.map((posten) => (
-                  <KatalogPositionKarte key={posten.id} posten={posten} />
-                ))}
-              </div>
-              <div className="mt-12">
-                <Link
-                  href="/katalog"
-                  className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
-                >
-                  Alle Positionen ansehen
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </div>
-            </>
-          ) : (
-            <div className="border border-border bg-card p-10 md:p-12">
-              <p className="font-serif text-xl text-card-foreground">
-                Derzeit keine Positionen verfügbar.
-              </p>
-              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
-                Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
-              </p>
+          <div className="karten-grid grid grid-cols-1 gap-6 md:grid-cols-3">
+            {POSITIONEN_KATEGORIEN.map((kategorie) => (
               <Link
-                href="/kontakt"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent"
+                key={kategorie.titel}
+                href={kategorie.href}
+                className="group relative flex h-[420px] flex-col justify-end overflow-hidden border border-border"
               >
-                Kontakt aufnehmen <ArrowRight className="h-4 w-4" />
+                <Image
+                  src={kategorie.bild}
+                  alt={kategorie.titel}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/25 to-transparent"
+                  aria-hidden="true"
+                />
+                <div className="relative z-10 flex flex-col gap-2 p-7">
+                  <h3 className="font-serif text-2xl text-background">{kategorie.titel}</h3>
+                  <p className="text-sm leading-relaxed text-background/80 text-pretty">
+                    {kategorie.beschreibung}
+                  </p>
+                  <span className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-background">
+                    Positionen ansehen
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
               </Link>
-            </div>
-          )}
+            ))}
+          </div>
+
+          <div className="mt-12">
+            <Link
+              href="/katalog"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+            >
+              Alle Positionen ansehen
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
         </div>
       </section>
 

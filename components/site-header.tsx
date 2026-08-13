@@ -79,11 +79,11 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex ${HEADER_HOEHE_KLASSE} w-full max-w-7xl items-center justify-between gap-8 px-6 md:px-12 lg:px-16`}
+        className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-6 md:px-12 lg:px-16`}
       >
         <Logo aufHellemGrund={!aufDunklemHero} />
 
-        <nav aria-label="Hauptnavigation" className="hidden lg:block">
+        <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
           <ul className="flex items-center gap-10">
             {NAV_LINKS.map((link) => {
               const aktiv = istAktiv(pathname, link.href)
@@ -110,10 +110,10 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <Link
             href="/kontakt"
-            className="hidden bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-block"
+            className="hidden bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-block"
           >
             Anfrage stellen
           </Link>
