@@ -6,9 +6,9 @@
  * DPSS Management GmbH ist ein Verwertungsdienstleister für
  * Insolvenzverwalter und Verfahrensbeteiligte.
  *
- * Telefon und E-Mail liegen noch nicht vor und bleiben bis zur Bestätigung
- * ausdrücklich als Platzhalter markiert. Keine erfundenen Kontaktdaten ergänzen.
- * Die Teamnamen und Porträtfotos sind bereitgestellte echte Daten.
+ * Die E-Mail-Adresse ist zentral hinterlegt und wird von allen Kontaktflächen
+ * und dem Footer verwendet. Die Teamnamen und Porträtfotos sind bereitgestellte
+ * echte Daten.
  * ============================================================================
  */
 
@@ -30,9 +30,8 @@ export const KANZLEI = {
     href: '#kontakt-telefon-folgt',
   },
   email: {
-    /** Noch zu ersetzen – echte E-Mail-Adresse liegt nicht vor. */
-    anzeige: 'E-Mail folgt',
-    href: '#kontakt-email-folgt',
+    anzeige: 'kontakt@dpss-management.com',
+    href: 'mailto:kontakt@dpss-management.com',
   },
 } as const
 

@@ -7,13 +7,13 @@
 
 @theme {
   --color-background: #f7f5f0;
-  --color-foreground: #23201b;
+  --color-foreground: #1a1a1a;
   --color-card: #ffffff;
-  --color-card-foreground: #23201b;
+  --color-card-foreground: #1a1a1a;
   --color-muted: #edeae2;
   --color-muted-foreground: #6d675e;
   --color-border: #e4e0d6;
-  --color-accent: #6e2230;
+  --color-accent: #7a1f32;
   --color-accent-foreground: #f7f5f0;
 }
 

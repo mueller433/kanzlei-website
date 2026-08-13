@@ -11,20 +11,27 @@ export function KontaktCta({
   titel = 'Sprechen Sie mit uns',
   text = 'Wir ordnen Ihre Situation ein und zeigen Ihnen die möglichen nächsten Schritte – vertraulich und unverbindlich.',
   buttonLabel = 'Kontakt aufnehmen',
+  eyebrow,
 }: {
   titel?: string
   text?: string
   buttonLabel?: string
+  eyebrow?: string
 }) {
   return (
     <section className="border-t border-border">
-      <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-        <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-16">
+      <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16">
           <div className="max-w-2xl">
+            {eyebrow ? (
+              <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                {eyebrow}
+              </p>
+            ) : null}
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               {titel}
             </h2>
-            <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">{text}</p>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-pretty">{text}</p>
           </div>
           <Link
             href="/kontakt"
