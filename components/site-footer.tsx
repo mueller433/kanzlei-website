@@ -41,6 +41,7 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     links: [
       { href: '/impressum', label: 'Impressum' },
       { href: '/datenschutz', label: 'Datenschutz' },
+      { href: '/agb', label: 'AGB' },
     ],
   },
 ]
