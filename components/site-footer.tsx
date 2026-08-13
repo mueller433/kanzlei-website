@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -49,14 +50,13 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
           {/* Unternehmensidentität & Kontaktdaten */}
           <div className="max-w-xs">
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">
-                {KANZLEI.kuerzel}
-              </span>
-              <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-                {KANZLEI.name}
-              </span>
-            </div>
+            <Image
+              src="/dpss-logo-transparent.png"
+              alt="DPSS Management GmbH"
+              width={1999}
+              height={553}
+              className="h-9 w-auto object-contain"
+            />
             <address className="mt-5 flex flex-col gap-1 text-sm not-italic leading-relaxed text-muted-foreground">
               <span>{KANZLEI.adresse.strasse}</span>
               <span>{KANZLEI_ORT}</span>

@@ -24,6 +24,10 @@ export const metadata = {
   },
   description:
     'DPSS Management GmbH ist Verwertungsdienstleister für Insolvenzverwalter, Verfahrensbeteiligte und Käufer. Wir erfassen, bewerten, vermarkten und dokumentieren Vermögenswerte transparent.',
+  icons: {
+    icon: '/dpss-icon.png',
+    apple: '/dpss-icon.png',
+  },
 }
 
 export const viewport = {

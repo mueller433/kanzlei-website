@@ -1,11 +1,10 @@
 'use client'
 
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-
-import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const NAV_LINKS = [
   { href: '/unternehmen', label: 'Unternehmen' },
@@ -23,23 +22,15 @@ function istAktiv(pathname: string, href: string): boolean {
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
-    <Link
-      href="/"
-      onClick={onClick}
-      className="flex items-center gap-3"
-      aria-label="Zur Startseite"
-    >
-      <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">
-        {KANZLEI.kuerzel}
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-          {KANZLEI.name}
-        </span>
-        <span className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          {KANZLEI.zusatz}
-        </span>
-      </span>
+    <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
+      <Image
+        src="/dpss-logo-transparent.png"
+        alt="DPSS Management GmbH"
+        width={1999}
+        height={553}
+        priority
+        className="h-9 w-auto object-contain"
+      />
     </Link>
   )
 }
