@@ -56,23 +56,23 @@ export default async function Startseite() {
   return (
     <div>
       <section className="overflow-hidden border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[1.1fr_0.9fr] md:items-center md:px-10 md:py-32">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1fr_1fr] md:items-center md:px-10 md:py-20">
           <div className="hero-einblenden">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">DPSS Management GmbH · Verwertung</p>
-            <h1 className="max-w-3xl font-serif text-4xl font-semibold leading-[1.08] tracking-tight text-foreground text-balance md:text-6xl">Vermögenswerte professionell verwerten. Ergebnisse transparent dokumentieren.</h1>
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung, Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen übersichtlich in unserem Verwertungskatalog.</p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">DPSS Management GmbH · Verwertung</p>
+            <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-5xl">Vermögenswerte professionell verwerten.</h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung, Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen übersichtlich in unserem Verwertungskatalog.</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/katalog" className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90">Aktuelle Positionen <ArrowRight className="h-4 w-4" /></Link>
               <Link href="/kontakt" className="inline-flex items-center justify-center gap-2 border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent">Verwertung anfragen</Link>
             </div>
           </div>
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-square">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border md:aspect-[4/5]">
             <Image
               src="/hero-lagerhalle.jpg"
               alt="Lagerhalle mit Regalsystemen und Gabelstapler bei der Bestandsverwertung"
               fill
               priority
-              sizes="(min-width: 768px) 45vw, 100vw"
+              sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
             />
           </div>
