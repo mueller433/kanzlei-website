@@ -2,28 +2,22 @@ import { ClipboardCheck, Eye, Route, Phone } from 'lucide-react'
 import React from 'react'
 
 /**
- * Vertrauensbereich der Startseite (zwischen Leistungsbereichen und
- * Katalog-Teaser). Trägt bewusst OHNE Zahlen, Jahres- oder Mandatsangaben,
- * Referenzen oder Auszeichnungen – ausschließlich qualitative Aussagen zur
- * Arbeitsweise, umgesetzt im bestehenden Bordered-Tile-System.
- *
- * HINWEIS FÜR SPÄTER: Sollen hier echte Kennzahlen (z. B. Jahre am Markt,
- * Anzahl begleiteter Verfahren) ergänzt werden, sind diese zuerst von der
- * Kanzlei zu verifizieren. Es werden bewusst KEINE Platzhalterzahlen
- * gerendert, damit nichts versehentlich als belegte Angabe gelesen wird.
+ * Vertrauensbereich der Startseite. Trägt bewusst OHNE Zahlen, Jahres- oder
+ * Auftragsangaben, Referenzen oder Auszeichnungen – ausschließlich qualitative
+ * Aussagen zur Arbeitsweise im bestehenden Bordered-Tile-System.
  */
 const VERTRAUENSPUNKTE = [
   {
     Icon: Route,
-    titel: 'Verfahrensbegleitung',
+    titel: 'Klare Abläufe',
     beschreibung:
-      'Wir begleiten jedes Verfahren von der ersten Einordnung bis zum Abschluss – mit klarer Struktur und verlässlicher Steuerung aller Beteiligten.',
+      'Von der Beauftragung bis zur Abrechnung sorgen wir für klare Zuständigkeiten und einen verlässlichen Ablauf.',
   },
   {
     Icon: Eye,
     titel: 'Transparenz',
     beschreibung:
-      'Entscheidungen und Verwertungsschritte machen wir nachvollziehbar. Gläubiger, Gerichte und Beteiligte wissen jederzeit, woran sie sind.',
+      'Bewertungen, Angebote, Verkäufe und Erlöse machen wir für Auftraggeber und Beteiligte nachvollziehbar.',
   },
   {
     Icon: ClipboardCheck,
@@ -35,7 +29,7 @@ const VERTRAUENSPUNKTE = [
     Icon: Phone,
     titel: 'Erreichbarkeit',
     beschreibung:
-      'Feste Ansprechpartner und kurze Wege: Auf Anfragen reagieren wir zeitnah und verbindlich, gerade in kritischen Phasen.',
+      'Feste Ansprechpartner und kurze Wege: Auf Anfragen zu Aufträgen und Positionen reagieren wir verbindlich.',
   },
 ] as const
 

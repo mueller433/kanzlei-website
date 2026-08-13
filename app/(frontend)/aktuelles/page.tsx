@@ -5,7 +5,7 @@ import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 export const metadata = {
   title: 'Aktuelles',
   description:
-    'Fachbeiträge, Meldungen und Entwicklungen aus dem Insolvenz- und Sanierungsrecht von Müller & Partner.',
+    'Meldungen und Einblicke rund um Verwertung, Vermögenswerte und den Verwertungskatalog der DPSS Management GmbH.',
 }
 
 export default function AktuellesSeite() {
@@ -21,8 +21,8 @@ export default function AktuellesSeite() {
             Neuigkeiten &amp; Fachbeiträge
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Hier informieren wir künftig über aktuelle Verfahren, neue Verwertungsangebote und
-            Entwicklungen im Insolvenz- und Sanierungsrecht. Die folgenden Einträge sind
+            Hier informieren wir künftig über neue Verwertungsangebote, Unternehmensmeldungen und
+            Entwicklungen rund um die professionelle Verwertung. Die folgenden Einträge sind
             Beispielinhalte und werden durch echte Beiträge ersetzt.
           </p>
         </div>

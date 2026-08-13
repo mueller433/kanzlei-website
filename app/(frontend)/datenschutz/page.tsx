@@ -4,7 +4,7 @@ import { PlatzhalterSeite } from '@/components/platzhalter-seite'
 
 export const metadata = {
   title: 'Datenschutz',
-  description: 'Datenschutzhinweise von Müller & Partner.',
+  description: 'Datenschutzhinweise der DPSS Management GmbH.',
 }
 
 export default function DatenschutzSeite() {

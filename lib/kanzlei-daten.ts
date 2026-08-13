@@ -1,48 +1,38 @@
 /**
  * ============================================================================
- *  ZENTRALE PLATZHALTERDATEN – VOR VERÖFFENTLICHUNG ERSETZEN
+ *  ZENTRALE FIRMENDATEN – VOR VERÖFFENTLICHUNG PRÜFEN
  * ============================================================================
  *
- * ACHTUNG: Kanzleiname, Anschrift, Telefon, E-Mail sowie die Beispiel-
- * Beiträge auf /aktuelles sind FREI ERFUNDENE PLATZHALTER.
+ * DPSS Management GmbH ist ein Verwertungsdienstleister für
+ * Insolvenzverwalter und Verfahrensbeteiligte.
  *
- * Sie sind bewusst an genau EINER Stelle gebündelt, damit sie später an
- * einem einzigen Ort durch die echten, verifizierten Kanzleidaten ersetzt
- * werden können. Header, Footer, Startseite, /kontakt und /aktuelles beziehen
- * ihre Angaben ausschließlich aus dieser Datei.
- *
- * NICHT durch andere erfundene Daten ersetzen – ausschließlich durch echte,
- * von der Kanzlei bestätigte Angaben.
- *
- * Das TEAM (siehe unten) ist davon ausgenommen: Namen, Rollen und
- * Porträtfotos sind ECHTE, bereitgestellte Daten – keine Platzhalter.
+ * Telefon und E-Mail liegen noch nicht vor und bleiben bis zur Bestätigung
+ * ausdrücklich als Platzhalter markiert. Keine erfundenen Kontaktdaten ergänzen.
+ * Die Teamnamen und Porträtfotos sind bereitgestellte echte Daten.
  * ============================================================================
  */
 
-/** Stammdaten der Kanzlei (Platzhalter). */
+/** Stammdaten der DPSS Management GmbH. */
 export const KANZLEI = {
-  /** Vollständiger Kanzleiname. */
-  name: 'Müller & Partner',
-  /** Kürzel für das Logo-Signet. */
-  kuerzel: 'MP',
-  /** Ergänzender Tätigkeitszusatz unter dem Namen. */
-  zusatz: 'Insolvenzverwaltung',
-  /** Kurzbeschreibung der Tätigkeitsfelder (für Footer-Zeile). */
-  taetigkeit: 'Rechtsanwaltskanzlei · Insolvenzverwaltung · Restrukturierung',
+  name: 'DPSS Management GmbH',
+  kuerzel: 'DPSS',
+  zusatz: 'Verwertungsdienstleister',
+  taetigkeit: 'Vermögensbewertung · Verwertung · transparente Abwicklung',
+  register: 'Amtsgericht Göttingen, HRB 207736',
   adresse: {
-    strasse: 'Musterstraße 12',
-    plz: '10115',
-    ort: 'Berlin',
+    strasse: 'Herzberger Landstr. 63',
+    plz: 'D-37085',
+    ort: 'Göttingen',
   },
   telefon: {
-    /** Anzeigeform der Telefonnummer. */
-    anzeige: '+49 30 000 000 00',
-    /** tel:-Link (ohne Leerzeichen). */
-    href: 'tel:+493000000000',
+    /** Noch zu ersetzen – echte Telefonnummer liegt nicht vor. */
+    anzeige: 'Telefon folgt',
+    href: '#kontakt-telefon-folgt',
   },
   email: {
-    anzeige: 'kontakt@mueller-partner.de',
-    href: 'mailto:kontakt@mueller-partner.de',
+    /** Noch zu ersetzen – echte E-Mail-Adresse liegt nicht vor. */
+    anzeige: 'E-Mail folgt',
+    href: '#kontakt-email-folgt',
   },
 } as const
 
@@ -51,7 +41,7 @@ export const KANZLEI = {
  *
  * Name und Rolle sind unverändert aus den Dateinamen der bereitgestellten
  * Porträtfotos übernommen. Es werden bewusst KEINE zusätzlichen Titel,
- * Fachanwaltsbezeichnungen oder Werdegänge/Biografien ergänzt.
+ * Zusätzliche Qualifikationen oder Werdegänge/Biografien ergänzt.
  *
  * `bild` verweist auf das freigestellte Porträt unter public/team/.
  * Fehlt bei einem Eintrag der Bildpfad, greift in den Anzeige-Komponenten
@@ -72,13 +62,13 @@ export const TEAM = [
   },
   {
     name: 'Andreas Schmidt',
-    rolle: 'Rechtsanwalt Insolvenzverfahren',
+    rolle: 'Insolvenzsachbearbeiter',
     bild: '/team/andreas-schmidt.jpg',
     initialen: 'AS',
   },
   {
     name: 'Andrea Kloser',
-    rolle: 'Rechtsanwältin',
+    rolle: 'Insolvenzsachbearbeiterin',
     bild: '/team/andrea-kloser.jpg',
     initialen: 'AK',
   },

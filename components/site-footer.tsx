@@ -10,12 +10,11 @@ type FooterSpalte = {
 
 const FOOTER_SPALTEN: FooterSpalte[] = [
   {
-    titel: 'Kanzlei',
+    titel: 'Unternehmen',
     links: [
-      { href: '/kanzlei', label: 'Über uns' },
+      { href: '/unternehmen', label: 'Über DPSS' },
       { href: '/leistungen', label: 'Leistungen' },
-      { href: '/insolvenzrecht', label: 'Insolvenzrecht' },
-      { href: '/restrukturierung', label: 'Restrukturierung' },
+      { href: '/verwertung', label: 'Verwertung' },
     ],
   },
   {
@@ -48,7 +47,7 @@ export function SiteFooter() {
     <footer className="mt-24 border-t border-border bg-muted">
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-          {/* Kanzlei-Identität & Kontaktdaten */}
+          {/* Unternehmensidentität & Kontaktdaten */}
           <div className="max-w-xs">
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center bg-accent font-serif text-sm font-semibold text-accent-foreground">

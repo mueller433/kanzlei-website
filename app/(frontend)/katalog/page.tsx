@@ -188,10 +188,10 @@ export default async function KatalogSeite({
                 : 'im aktuellen Bestand'}
             </h1>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-              Der Katalog ist Teil unserer Verwertungsarbeit: Jede Position stammt aus einem von
-              der Kanzlei betreuten Insolvenz- oder Auflösungsverfahren und wird sorgfältig
-              bewertet, dokumentiert und nachvollziehbar zur Verwertung angeboten. Interessenten
-              erhalten so einen transparenten Überblick über den verfügbaren Bestand.
+              Der Katalog ist Teil unserer Verwertungsarbeit: Jede Position stammt aus einem
+              laufenden Insolvenz- oder Auflösungsverfahren und wird sorgfältig bewertet,
+              dokumentiert und nachvollziehbar zur Verwertung angeboten. Interessenten erhalten so
+              einen transparenten Überblick über den verfügbaren Bestand.
             </p>
           </div>
 

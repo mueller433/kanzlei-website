@@ -8,8 +8,7 @@ import React from 'react'
 import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const NAV_LINKS = [
-  { href: '/kanzlei', label: 'Kanzlei' },
-  { href: '/insolvenzrecht', label: 'Insolvenzrecht' },
+  { href: '/unternehmen', label: 'Unternehmen' },
   { href: '/leistungen', label: 'Leistungen' },
   { href: '/verwertung', label: 'Verwertung' },
   { href: '/katalog', label: 'Katalog' },

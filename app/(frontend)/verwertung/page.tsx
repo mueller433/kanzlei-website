@@ -9,7 +9,7 @@ import { SeitenHero } from '@/components/seiten-hero'
 export const metadata = {
   title: 'Verwertung',
   description:
-    'Der Verwertungsprozess bei Müller & Partner: wie Vermögenswerte identifiziert, geprüft und marktgerecht verwertet werden – transparent und dokumentiert.',
+    'Der Verwertungsprozess der DPSS Management GmbH: Vermögenswerte werden identifiziert, bewertet, marktgerecht verwertet und transparent dokumentiert.',
 }
 
 const KATEGORIEN = [
@@ -78,7 +78,7 @@ export default function VerwertungSeite() {
       <SeitenHero
         eyebrow="Verwertung"
         titel="Geordnete Verwertung von Vermögenswerten"
-        lead="Aus laufenden Insolvenz- und Auflösungsverfahren verwerten wir Immobilien, Maschinen, Fahrzeuge und Inventar – strukturiert, marktgerecht und für alle Beteiligten nachvollziehbar."
+        lead="Im Auftrag von Insolvenzverwaltern und Verfahrensbeteiligten verwerten wir Immobilien, Maschinen, Fahrzeuge und Inventar – strukturiert, marktgerecht und nachvollziehbar."
       />
 
       {/* EINORDNUNG – Transparenz als Kernversprechen, zweispaltig */}

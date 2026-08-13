@@ -7,7 +7,7 @@ import { KANZLEI, KANZLEI_ORT, TEAM } from '@/lib/kanzlei-daten'
 export const metadata = {
   title: 'Kontakt',
   description:
-    'Kontaktieren Sie Müller & Partner – Insolvenzverwaltung und Restrukturierung. Adresse, Telefon, E-Mail und Anfrageformular.',
+    'Kontaktieren Sie DPSS Management GmbH zu einer Verwertungsposition, einem Auftrag oder einer allgemeinen Frage.',
 }
 
 // Kontaktkanäle – Werte stammen zentral aus lib/kanzlei-daten.ts (Platzhalter),
@@ -46,7 +46,7 @@ export default function KontaktSeite() {
             Sprechen Sie uns an
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Ob Anfrage zu einer Verwertungsposition, Mandatsanbahnung oder allgemeine Frage – wir
+            Ob Anfrage zu einer Verwertungsposition, einem Verwertungsauftrag oder allgemeine Frage – wir
             sind für Sie erreichbar und melden uns kurzfristig zurück.
           </p>
         </div>
