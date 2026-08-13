@@ -22,14 +22,14 @@ function istAktiv(pathname: string, href: string): boolean {
 
 function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrund: boolean }) {
   return (
-    <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
+    <Link href="/" onClick={onClick} className="flex shrink-0 items-center" aria-label="Zur Startseite">
       <Image
         src="/dpss-logo-horizontal.svg"
         alt="DPSS Management GmbH – Verwertungsdienstleister"
         width={800}
         height={400}
         priority
-        className={`h-10 w-auto object-contain transition-[filter] duration-300 md:h-12 ${
+        className={`h-auto w-[130px] object-contain transition-[filter] duration-300 md:w-[180px] ${
           aufHellemGrund ? '' : 'brightness-0 invert'
         }`}
       />
@@ -41,6 +41,7 @@ function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrun
 // Hero-Bereich exakt um diesen Wert nach oben ziehen und den Header
 // transparent darüberlegen kann.
 export const HEADER_HOEHE_KLASSE = 'h-20 md:h-24'
+// Referenzhöhe für den negativen Hero-Abstand: 96px auf Desktop (md:h-24).
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -78,12 +79,12 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex ${HEADER_HOEHE_KLASSE} w-full max-w-6xl items-center justify-between gap-6 px-6 md:px-10`}
+        className={`mx-auto flex ${HEADER_HOEHE_KLASSE} w-full max-w-7xl items-center justify-between gap-8 px-6 md:px-12 lg:px-16`}
       >
         <Logo aufHellemGrund={!aufDunklemHero} />
 
         <nav aria-label="Hauptnavigation" className="hidden lg:block">
-          <ul className="flex items-center gap-7">
+          <ul className="flex items-center gap-10">
             {NAV_LINKS.map((link) => {
               const aktiv = istAktiv(pathname, link.href)
               return (

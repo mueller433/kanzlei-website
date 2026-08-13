@@ -62,7 +62,7 @@ export default async function Startseite() {
       {/* HERO */}
       {/* Negativer Abstand entspricht der festen Header-Höhe (h-20 md:h-24),
           damit der transparente Header direkt über dem Bild liegt. */}
-      <section className="relative -mt-20 flex min-h-[560px] items-start overflow-hidden pb-16 pt-28 md:-mt-24 md:h-[760px] md:min-h-0 md:items-center md:pb-0 md:pt-0">
+      <section className="relative -mt-20 flex min-h-[560px] items-start overflow-hidden pb-16 pt-28 md:-mt-24 md:h-[760px] md:min-h-0 md:items-center md:pb-0 md:pt-16">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
