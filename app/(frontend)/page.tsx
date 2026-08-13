@@ -71,33 +71,34 @@ export default async function Startseite() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover saturate-[0.86]"
         />
         {/* Deutlich dunklerer, aber transparenter Verlauf: links hoher
             Kontrast für den Text, rechts bleibt die Halle erkennbar. */}
         <div className="absolute inset-0 bg-[#0c0a08]/30" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/95 from-0% via-[#0c0a08]/65 via-42% to-[#0c0a08]/12 to-82%"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08] from-0% via-[#0c0a08]/70 via-42% to-[#0c0a08]/12 to-82%"
           aria-hidden="true"
         />
+
         <div
           className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full px-6 pb-8 md:px-16 md:pb-12 lg:px-24">
+        <div className="relative z-10 w-full px-6 pb-8 md:px-16 md:pb-32 lg:px-24">
           <div className="max-w-[560px]">
             <p className="mb-8 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.4rem] font-semibold leading-[1.08] tracking-tight text-[#f7f5f0] text-balance md:text-[4.5rem] lg:text-[5.25rem]">
+            <h1 className="font-serif text-[2.2rem] font-semibold leading-[1.08] tracking-tight text-[#f7f5f0] text-balance md:text-[4.05rem] lg:text-[4.75rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-9 max-w-[450px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-9 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
@@ -110,7 +111,7 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/70 bg-transparent px-6 py-3 text-sm font-medium text-[#f7f5f0] transition-colors hover:border-[#f7f5f0] hover:bg-[#f7f5f0]/10"
+                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/45 bg-[#f7f5f0]/10 px-6 py-3 text-sm font-medium text-[#f7f5f0] backdrop-blur-sm transition-colors hover:border-[#f7f5f0]/70 hover:bg-[#f7f5f0]/18"
               >
                 Verwertung anfragen
               </Link>
