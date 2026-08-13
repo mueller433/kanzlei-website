@@ -69,3 +69,48 @@ export function toArray(value: string | string[] | undefined): string[] {
   if (!value) return []
   return Array.isArray(value) ? value : [value]
 }
+
+export type Status = 'verfuegbar' | 'reserviert' | 'verkauft'
+
+export const STATUS_LABELS: Record<Status, string> = {
+  verfuegbar: 'Verfügbar',
+  reserviert: 'Reserviert',
+  verkauft: 'Verkauft',
+}
+
+/** Darstellungsvariante der Ergebnisliste. Rein clientseitige Präsentation – keine Datenlogik. */
+export const ANSICHT_REIHENFOLGE = ['liste', 'karten'] as const
+export type Ansicht = (typeof ANSICHT_REIHENFOLGE)[number]
+
+export const ANSICHT_LABELS: Record<Ansicht, string> = {
+  liste: 'Liste',
+  karten: 'Karten',
+}
+
+/**
+ * Baut einen Katalog-Query-String aus den aktuellen searchParams, wobei
+ * einzelne Schlüssel gezielt überschrieben werden können. `null` entfernt
+ * den Schlüssel vollständig (z. B. Kategorie-Pill "Alle"), `undefined`
+ * übernimmt den bestehenden Wert unverändert. Dient ausschließlich der
+ * Navigation zwischen Filterzuständen – die Filterlogik selbst bleibt in
+ * der Katalogseite unverändert.
+ */
+export function buildKatalogQuery(
+  sp: { [key: string]: string | string[] | undefined },
+  overrides: Record<string, string | string[] | null | undefined> = {},
+): string {
+  const params = new URLSearchParams()
+  const schluessel = ['q', 'kategorie', 'zustand', 'preis', 'sort', 'ansicht']
+
+  for (const key of schluessel) {
+    const override = overrides[key]
+    const wert = key in overrides ? override : sp[key]
+    if (wert === null || wert === undefined) continue
+    const liste = Array.isArray(wert) ? wert : [wert]
+    for (const eintrag of liste) {
+      if (eintrag) params.append(key, eintrag)
+    }
+  }
+
+  return params.toString()
+}
