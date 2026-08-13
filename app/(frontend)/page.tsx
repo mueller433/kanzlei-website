@@ -62,7 +62,7 @@ export default async function Startseite() {
       {/* HERO */}
       {/* Der Hero bleibt eigenständig und nutzt das bestehende Lagerhallenbild;
           der Inhalt sitzt bewusst im oberen linken Bereich unterhalb des Headers. */}
-      <section className="relative flex min-h-[720px] items-start overflow-hidden md:min-h-[90vh]">
+      <section className="relative flex min-h-[680px] items-start overflow-hidden md:h-[760px] md:min-h-0">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
@@ -84,7 +84,7 @@ export default async function Startseite() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full px-6 pt-16 md:px-16 md:pt-20 lg:px-20">
+        <div className="relative z-10 w-full px-6 pb-[100px] pt-20 md:px-16 lg:px-20">
           <div className="max-w-[600px]">
             <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
