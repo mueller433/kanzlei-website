@@ -60,36 +60,41 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative flex h-[70vh] min-h-[640px] items-center overflow-hidden border-b border-border md:h-[850px]">
+      <section className="relative flex h-[85vh] min-h-[680px] items-center overflow-hidden md:h-screen">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right"
+          className="object-cover object-right brightness-[0.55]"
+        />
+        <div className="absolute inset-0 bg-[#0c0a08]/55" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08] via-[#0c0a08]/85 to-transparent"
+          aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/10"
+          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent"
           aria-hidden="true"
         />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-20">
-          <div className="max-w-[600px]">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              DPSS Management
+          <div className="max-w-[520px]">
+            <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+              DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-6xl">
+            <h1 className="font-serif text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[4.75rem] lg:text-[5.25rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -98,14 +103,11 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-foreground/30 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/60 bg-transparent px-6 py-3 text-sm font-medium text-[#f7f5f0] transition-colors hover:border-[#f7f5f0] hover:bg-[#f7f5f0]/10"
               >
                 Verwertung anfragen
               </Link>
             </div>
-            <p className="mt-12 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Erfassung&nbsp;&nbsp;•&nbsp;&nbsp;Bewertung&nbsp;&nbsp;•&nbsp;&nbsp;Vermarktung&nbsp;&nbsp;•&nbsp;&nbsp;Verkauf
-            </p>
           </div>
         </div>
       </section>

@@ -20,7 +20,7 @@ function istAktiv(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function Logo({ onClick }: { onClick?: () => void }) {
+function Logo({ onClick, aufHellemGrund }: { onClick?: () => void; aufHellemGrund: boolean }) {
   return (
     <Link href="/" onClick={onClick} className="flex items-center" aria-label="Zur Startseite">
       <Image
@@ -29,7 +29,9 @@ function Logo({ onClick }: { onClick?: () => void }) {
         width={800}
         height={400}
         priority
-        className="h-auto w-36 object-contain lg:w-48"
+        className={`h-auto w-36 object-contain transition-[filter] duration-300 lg:w-48 ${
+          aufHellemGrund ? '' : 'brightness-0 invert'
+        }`}
       />
     </Link>
   )
@@ -58,6 +60,10 @@ export function SiteHeader() {
   // Sobald das mobile Menü offen ist, braucht der Header eine deckende Fläche.
   const kompakt = gescrollt || offen
 
+  // Auf der Startseite liegt der Header eingangs über dem dunklen Hero-Bild
+  // und braucht daher helle Schrift, solange er transparent ist.
+  const aufDunklemHero = pathname === '/' && !kompakt
+
   return (
     <header
       className={`sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
@@ -71,7 +77,7 @@ export function SiteHeader() {
           kompakt ? 'py-3' : 'py-4'
         }`}
       >
-        <Logo />
+        <Logo aufHellemGrund={!aufDunklemHero} />
 
         <nav aria-label="Hauptnavigation" className="hidden lg:block">
           <ul className="flex items-center gap-7">
@@ -82,8 +88,14 @@ export function SiteHeader() {
                   <Link
                     href={link.href}
                     aria-current={aktiv ? 'page' : undefined}
-                    className={`text-sm transition-colors hover:text-accent ${
-                      aktiv ? 'text-accent' : 'text-foreground'
+                    className={`text-sm transition-colors ${
+                      aufDunklemHero
+                        ? aktiv
+                          ? 'text-accent'
+                          : 'text-[#f7f5f0] hover:text-accent'
+                        : aktiv
+                          ? 'text-accent'
+                          : 'text-foreground hover:text-accent'
                     }`}
                   >
                     {link.label}
@@ -108,7 +120,9 @@ export function SiteHeader() {
             aria-expanded={offen}
             aria-controls="mobile-navigation"
             aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
-            className="inline-flex h-10 w-10 items-center justify-center border border-border text-foreground lg:hidden"
+            className={`inline-flex h-10 w-10 items-center justify-center border lg:hidden ${
+              aufDunklemHero ? 'border-[#f7f5f0]/40 text-[#f7f5f0]' : 'border-border text-foreground'
+            }`}
           >
             {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
