@@ -69,10 +69,11 @@ export default function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Negativer Abstand entspricht der festen Header-Höhe (h-20 md:h-24),
-          damit der transparente Header direkt über dem Bild liegt. Das Bild
-          füllt die gesamte Hero-Fläche (kein zweispaltiges Layout). */}
-      <section className="relative -mt-20 flex min-h-[680px] items-end overflow-hidden md:-mt-[100px] md:min-h-[920px]">
+      {/* Der Header liegt im normalen Seitenfluss über dem Hero (kein
+          Overlay-Trick) – das Bild bleibt hell und hochwertig sichtbar,
+          nur ein dezenter Verlauf von links nach rechts sorgt für lesbaren
+          Text im unteren linken Bereich. */}
+      <section className="relative flex h-[560px] items-end overflow-hidden md:h-[780px]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
@@ -81,35 +82,30 @@ export default function Startseite() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Dezente Grundabdunklung – rechte Bildhälfte bleibt deutlich sichtbar */}
-        <div className="absolute inset-0 bg-[#0c0a08]/20" aria-hidden="true" />
-        {/* Stärkerer Verlauf links, wo der Text steht; klingt vor der Bildmitte aus */}
+        {/* Ausschließlich ein dezenter Verlauf von links nach rechts – kein
+            starkes Overlay, das Bild bleibt hell und hochwertig sichtbar. */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/95 from-0% via-[#0c0a08]/55 via-40% to-transparent to-72%"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/85 via-[#0c0a08]/10 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/80 from-0% via-[#1a1a1a]/35 via-45% to-transparent to-75%"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full pb-16 pl-6 pr-6 pt-16 md:pb-[280px] md:pl-[120px] md:pr-16 md:pt-16">
-          <div className="max-w-[650px]">
-            <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+        <div className="relative z-10 w-full px-6 pb-14 md:px-16 md:pb-20 lg:px-24">
+          <div className="max-w-[620px]">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[3rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[5.625rem]">
+            <h1 className="font-serif text-[2.75rem] font-semibold leading-[1.1] tracking-tight text-[#f7f5f0] text-balance md:text-[4.5rem] lg:text-[5.5rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+            <p className="mt-7 max-w-[500px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -123,7 +119,7 @@ export default function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
-            <p className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
+            <p className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/80">
               <span>Erfassung</span>
               <span className="text-accent" aria-hidden="true">
                 •
@@ -142,10 +138,10 @@ export default function Startseite() {
         </div>
       </section>
 
-      {/* AKTUELLE POSITIONEN / KATALOG — direkt unter dem Hero */}
+      {/* AKTUELLE POSITIONEN / KATALOG — ruhiger, hochwertiger Katalog-Stil */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-          <div className="mb-12 max-w-2xl">
+        <div className="reveal mx-auto max-w-[1100px] px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
             </p>
@@ -153,32 +149,39 @@ export default function Startseite() {
               Aktuelle Positionen
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-              In unserem Katalog finden Sie ausgewählte Vermögenswerte aus laufenden Verwertungs- und
-              Auflösungsverfahren. Die Positionen werden erfasst, eingeordnet und gezielt über
-              geeignete Kanäle angeboten. So schaffen wir einen übersichtlichen Zugang zu Maschinen,
-              Fahrzeugen, Betriebsausstattung und weiteren Vermögenswerten.
+              In unserem Katalog finden Sie ausgewählte Vermögenswerte aus laufenden
+              Verwertungs- und Auflösungsverfahren – erfasst, eingeordnet und über geeignete
+              Kanäle gezielt angeboten.
             </p>
           </div>
 
-          <div className="karten-grid grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-3">
+          <div className="karten-grid flex flex-col border-t border-border">
             {POSITIONEN_KATEGORIEN.map((kategorie) => (
-              <Link key={kategorie.titel} href={kategorie.href} className="group flex flex-col">
-                <div className="relative h-[300px] overflow-hidden md:h-[520px]">
+              <Link
+                key={kategorie.titel}
+                href={kategorie.href}
+                className="group flex items-center gap-6 border-b border-border py-7 transition-colors md:gap-10 md:py-9"
+              >
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden md:h-28 md:w-28">
                   <Image
                     src={kategorie.bild}
                     alt={kategorie.titel}
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    sizes="112px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="flex flex-col gap-2 pt-6">
-                  <h3 className="font-serif text-2xl text-foreground">{kategorie.titel}</h3>
-                  <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                    {kategorie.beschreibung}
-                  </p>
-                  <span className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
-                    Positionen ansehen
+                <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-8">
+                  <div>
+                    <h3 className="font-serif text-xl text-foreground md:text-2xl">
+                      {kategorie.titel}
+                    </h3>
+                    <p className="mt-1 max-w-md text-sm leading-relaxed text-muted-foreground text-pretty md:text-base">
+                      {kategorie.beschreibung}
+                    </p>
+                  </div>
+                  <span className="inline-flex shrink-0 items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                    Ansehen
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
@@ -186,7 +189,7 @@ export default function Startseite() {
             ))}
           </div>
 
-          <div className="mt-12">
+          <div className="mt-10">
             <Link
               href="/katalog"
               className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"

@@ -20,7 +20,7 @@ function istAktiv(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function Logo({ onClick, aufDunklemHero }: { onClick?: () => void; aufDunklemHero: boolean }) {
+function Logo({ onClick }: { onClick?: () => void }) {
   return (
     <Link
       href="/"
@@ -28,33 +28,24 @@ function Logo({ onClick, aufDunklemHero }: { onClick?: () => void; aufDunklemHer
       className="flex shrink-0 items-center"
       aria-label="Zur Startseite"
     >
-      {/* Das Logo behält immer seine Originalfarben (schwarze Schrift/Symbol,
-          roter GMBH-Akzent). Auf dem dunklen Hero sorgt eine dezente
-          cremefarbene Fläche für ausreichenden Kontrast, statt das Logo
-          selbst einzufärben oder zu invertieren. */}
-      <span
-        className={`inline-flex items-center rounded-sm transition-colors duration-300 ${
-          aufDunklemHero ? 'bg-[#f7f5f0]/95 px-3 py-2' : ''
-        }`}
-      >
-        <Image
-          src="/dpss-logo-horizontal.svg"
-          alt="DPSS Management GmbH – Verwertungsdienstleister"
-          width={800}
-          height={400}
-          priority
-          className="h-auto w-[156px] object-contain md:w-[216px]"
-        />
-      </span>
+      {/* Ausschließlich das originale Logo – schwarze Schrift/Symbol, roter
+          "GMBH"-Akzent. Keine Filter, keine Invertierung, kein Hintergrund. */}
+      <Image
+        src="/dpss-logo-horizontal.svg"
+        alt="DPSS Management GmbH – Verwertungsdienstleister"
+        width={800}
+        height={400}
+        priority
+        className="h-auto w-[156px] object-contain md:w-[196px]"
+      />
     </Link>
   )
 }
 
-// Feste Header-Höhe (unabhängig vom Scrollzustand), damit die Startseite den
-// Hero-Bereich exakt um diesen Wert nach oben ziehen und den Header
-// transparent darüberlegen kann.
-export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[100px]'
-// Referenzhöhe für den negativen Hero-Abstand: 100px auf Desktop (md:h-[100px]).
+// Feste Header-Höhe. Der Header ist durchgängig sehr hell/transparent und
+// liegt daher im normalen Seitenfluss über dem Hero (kein Overlay-Trick
+// nötig, da das Logo immer auf hellem Grund steht).
+export const HEADER_HOEHE_KLASSE = 'h-20 md:h-24'
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -79,22 +70,19 @@ export function SiteHeader() {
   // Sobald das mobile Menü offen ist, braucht der Header eine deckende Fläche.
   const kompakt = gescrollt || offen
 
-  // Auf der Startseite liegt der Header eingangs über dem dunklen Hero-Bild
-  // und braucht daher helle Schrift, solange er transparent ist.
-  const aufDunklemHero = pathname === '/' && !kompakt
-
+  // Der Header ist durchgängig sehr hell/cremefarben (nie dunkel eingefärbt),
+  // damit Logo und Navigation immer in ihren Originalfarben lesbar bleiben –
+  // unabhängig davon, ob er über dem Hero-Bild oder über hellem Inhalt liegt.
   return (
     <header
-      className={`sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300 ${
-        kompakt
-          ? 'border-b border-border bg-background/90 shadow-sm backdrop-blur'
-          : 'border-b border-transparent bg-background/0'
+      className={`sticky top-0 z-50 bg-background/85 backdrop-blur transition-[border-color,box-shadow] duration-300 ${
+        kompakt ? 'border-b border-border shadow-sm' : 'border-b border-transparent'
       }`}
     >
       <div
         className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-8 md:px-16 lg:px-24`}
       >
-        <Logo aufDunklemHero={aufDunklemHero} />
+        <Logo />
 
         <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
           <ul className="flex items-center gap-12">
@@ -106,13 +94,7 @@ export function SiteHeader() {
                     href={link.href}
                     aria-current={aktiv ? 'page' : undefined}
                     className={`text-[15px] transition-colors ${
-                      aufDunklemHero
-                        ? aktiv
-                          ? 'text-accent'
-                          : 'text-[#f7f5f0] hover:text-accent'
-                        : aktiv
-                          ? 'text-accent'
-                          : 'text-foreground hover:text-accent'
+                      aktiv ? 'text-accent' : 'text-foreground hover:text-accent'
                     }`}
                   >
                     {link.label}
@@ -137,9 +119,7 @@ export function SiteHeader() {
             aria-expanded={offen}
             aria-controls="mobile-navigation"
             aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
-            className={`inline-flex h-10 w-10 items-center justify-center border lg:hidden ${
-              aufDunklemHero ? 'border-[#f7f5f0]/40 text-[#f7f5f0]' : 'border-border text-foreground'
-            }`}
+            className="inline-flex h-10 w-10 items-center justify-center border border-border text-foreground lg:hidden"
           >
             {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
