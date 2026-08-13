@@ -64,7 +64,7 @@ export default async function Startseite() {
           Overlay-Trick) – das Bild bleibt hell und hochwertig sichtbar,
           nur ein dezenter Verlauf von links nach rechts sorgt für lesbaren
           Text im unteren linken Bereich. */}
-      <section className="relative flex h-[560px] items-end overflow-hidden md:h-[780px]">
+      <section className="relative flex min-h-[720px] items-end overflow-hidden md:min-h-[90vh]">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
           alt="Industrielagerhalle mit hohen Palettenregalen, eingelagerten Positionen und Gabelstapler"
@@ -73,11 +73,15 @@ export default async function Startseite() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Dezente Grundabdunklung von ca. 25%: Das Hallenbild bleibt klar
-            sichtbar und erhält nur links zusätzlichen Textkontrast. */}
-        <div className="absolute inset-0 bg-[#1a1a1a]/25" aria-hidden="true" />
+        {/* Deutlich dunklerer, aber transparenter Verlauf: links hoher
+            Kontrast für den Text, rechts bleibt die Halle erkennbar. */}
+        <div className="absolute inset-0 bg-[#0c0a08]/25" aria-hidden="true" />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/55 from-0% via-[#1a1a1a]/20 via-42% to-transparent to-72%"
+          className="absolute inset-0 bg-gradient-to-r from-[#0c0a08]/90 from-0% via-[#0c0a08]/55 via-42% to-[#0c0a08]/10 to-82%"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent"
           aria-hidden="true"
         />
 
@@ -148,7 +152,7 @@ export default async function Startseite() {
           </div>
 
           {docs.length > 0 ? (
-            <div className="karten-grid grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="karten-grid flex flex-col border-t border-border">
               {docs.map((posten) => (
                 <KatalogPositionKarte key={posten.id} posten={posten} />
               ))}
