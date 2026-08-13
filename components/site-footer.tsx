@@ -53,9 +53,9 @@ export function SiteFooter() {
             <Image
               src="/dpss-logo-horizontal.svg"
               alt="DPSS Management GmbH"
-              width={1500}
-              height={1000}
-              className="h-auto w-48 object-contain lg:w-64"
+              width={800}
+              height={400}
+              className="h-auto w-36 object-contain lg:w-48"
             />
             <address className="mt-5 flex flex-col gap-1 text-sm not-italic leading-relaxed text-muted-foreground">
               <span>{KANZLEI.adresse.strasse}</span>

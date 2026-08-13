@@ -26,10 +26,10 @@ function Logo({ onClick }: { onClick?: () => void }) {
       <Image
         src="/dpss-logo-horizontal.svg"
         alt="DPSS Management GmbH – Verwertungsdienstleister"
-        width={1500}
-        height={1000}
+        width={800}
+        height={400}
         priority
-        className="h-auto w-48 object-contain lg:w-64"
+        className="h-auto w-36 object-contain lg:w-48"
       />
     </Link>
   )
