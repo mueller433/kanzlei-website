@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { EditorialProzess } from '@/components/editorial-prozess'
 import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
@@ -48,22 +49,22 @@ const LEISTUNGEN: readonly Schritt[] = [
 const ABLAUF: readonly Schritt[] = [
   {
     schritt: '01',
-    titel: 'Bestand erfassen',
-    beschreibung: 'Wir verschaffen uns einen vollständigen Überblick über die vorhandenen Vermögenswerte.',
+    titel: 'Auftrag & Zielsetzung',
+    beschreibung: 'Gemeinsame Klärung des Bestands, der Zielsetzung und des vorgesehenen Verwertungswegs.',
   },
   {
     schritt: '02',
-    titel: 'Bewerten',
-    beschreibung: 'Wir ordnen die Positionen ein und schaffen eine realistische Grundlage für die Vermarktung.',
+    titel: 'Erfassung & Einordnung',
+    beschreibung: 'Systematische Aufnahme und marktgerechte Einordnung der vorhandenen Vermögenswerte.',
   },
   {
     schritt: '03',
-    titel: 'Vermarkten',
-    beschreibung: 'Geeignete Vermögenswerte werden gezielt angeboten und Interessenten angesprochen.',
+    titel: 'Verwertung',
+    beschreibung: 'Gezielte Vermarktung und Ansprache geeigneter Interessenten.',
   },
   {
     schritt: '04',
-    titel: 'Abwickeln',
+    titel: 'Abwicklung',
     beschreibung: 'Verkauf, Dokumentation und Abrechnung werden nachvollziehbar abgeschlossen.',
   },
 ] as const
@@ -217,15 +218,15 @@ export default async function Startseite() {
       {/* UNSER ABLAUF */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-12 max-w-2xl">
+          <div className="mb-14 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Unser Ablauf
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Strukturiert. Nachvollziehbar. Transparent.
+              Strukturiert von der Beauftragung bis zum Abschluss.
             </h2>
           </div>
-          <ProzessSchritte schritte={ABLAUF} />
+          <EditorialProzess schritte={ABLAUF} />
         </div>
       </section>
 
