@@ -304,6 +304,7 @@ export default async function Startseite() {
 
       {/* KONTAKT-CTA */}
       <KontaktCta
+        eyebrow="Kontakt"
         titel="Sie möchten Vermögenswerte verwerten lassen?"
         text="Sprechen Sie uns an, wenn Sie eine Verwertung beauftragen oder eine Position aus dem Katalog näher prüfen möchten."
         buttonLabel="Kontakt aufnehmen"
