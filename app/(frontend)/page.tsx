@@ -69,11 +69,20 @@ export default async function Startseite() {
             <h1 className="max-w-xl font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground text-balance md:text-5xl">
               Vermögenswerte professionell verwerten.
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-              Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung,
-              Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen
-              übersichtlich in unserem Verwertungskatalog.
-            </p>
+            <div className="mt-6 flex max-w-xl flex-col gap-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                Wir unterstützen Insolvenzverwalter und Verfahrensbeteiligte bei Erfassung, Bewertung,
+                Vermarktung und Verkauf von Vermögenswerten. Käufer finden aktuelle Positionen
+                übersichtlich in unserem Verwertungskatalog.
+              </p>
+              <p>
+                DPSS Management unterstützt Insolvenzverwalter, Verfahrensbeteiligte und Unternehmen
+                bei der strukturierten Erfassung, Bewertung, Vermarktung und Verwertung von
+                Vermögenswerten. Von Maschinen und technischen Anlagen bis hin zu Fahrzeugen,
+                Betriebsausstattung und weiteren Vermögenswerten begleiten wir den gesamten
+                Verwertungsprozess.
+              </p>
+            </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
@@ -113,7 +122,10 @@ export default async function Startseite() {
               Aktuelle Positionen
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
-              Aktuelle Vermögenswerte aus laufenden Verwertungs- und Auflösungsverfahren.
+              In unserem Katalog finden Sie ausgewählte Vermögenswerte aus laufenden Verwertungs- und
+              Auflösungsverfahren. Die Positionen werden erfasst, eingeordnet und gezielt über
+              geeignete Kanäle angeboten. So schaffen wir einen übersichtlichen Zugang zu Maschinen,
+              Anlagen, Fahrzeugen, Betriebsausstattung und weiteren Vermögenswerten.
             </p>
           </div>
 
@@ -155,19 +167,54 @@ export default async function Startseite() {
 
       {/* VERWERTUNG AUS EINER HAND */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:px-10 md:py-28">
-          <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-            Verwertung aus einer Hand
-          </h2>
-          <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-            <p>
-              DPSS übernimmt die operative Verwertung von Vermögenswerten im Auftrag von
-              Insolvenzverwaltern und anderen Verfahrensbeteiligten.
-            </p>
-            <p>
-              Von der Bestandsaufnahme bis zur Abrechnung schaffen wir einen geordneten Ablauf,
-              realistische Marktansprache und belastbare Berichte.
-            </p>
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-24">
+          <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Verwertung aus einer Hand
+            </h2>
+            <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                DPSS Management übernimmt die operative Verwertung von Vermögenswerten im Auftrag
+                von Insolvenzverwaltern, Unternehmen und weiteren Verfahrensbeteiligten.
+              </p>
+              <p>
+                Dabei verbinden wir eine strukturierte Bestandsaufnahme und Bewertung mit einer
+                zielgerichteten Vermarktung. Vermögenswerte werden erfasst, dokumentiert,
+                marktgerecht eingeordnet und über passende Kanäle potenziellen Interessenten
+                angeboten.
+              </p>
+              <p>
+                Von der ersten Aufnahme bis zur erfolgreichen Abwicklung behalten wir den gesamten
+                Prozess im Blick. Dadurch entstehen nachvollziehbare Abläufe, klare Zuständigkeiten
+                und eine transparente Dokumentation.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 grid border-t border-border md:grid-cols-3 md:divide-x md:divide-border">
+            {[
+              {
+                nummer: '01',
+                titel: 'Erfassung & Bewertung',
+                text: 'Vermögenswerte werden strukturiert aufgenommen, dokumentiert und marktgerecht eingeordnet.',
+              },
+              {
+                nummer: '02',
+                titel: 'Vermarktung & Verkauf',
+                text: 'Geeignete Vermögenswerte werden gezielt angeboten und potenziellen Interessenten zugänglich gemacht.',
+              },
+              {
+                nummer: '03',
+                titel: 'Abrechnung & Dokumentation',
+                text: 'Vorgänge, Verkäufe und Abrechnungen werden nachvollziehbar dokumentiert.',
+              },
+            ].map((kompetenz) => (
+              <div key={kompetenz.nummer} className="flex flex-col gap-3 border-b border-border py-7 last:border-b-0 md:border-b-0 md:px-8 md:first:pl-0 md:last:pr-0">
+                <span className="font-serif text-sm text-accent">{kompetenz.nummer}</span>
+                <h3 className="font-serif text-xl text-foreground">{kompetenz.titel}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground text-pretty">{kompetenz.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -194,11 +241,17 @@ export default async function Startseite() {
             Vermögenswerte gezielt in den Markt bringen.
           </h2>
           <div className="flex flex-col gap-5">
-            <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
-              Wir verbinden strukturierte Erfassung und Bewertung mit einer zielgerichteten
-              Vermarktung. So werden Vermögenswerte dort angeboten, wo sie die passenden
-              Interessenten erreichen.
-            </p>
+            <div className="flex flex-col gap-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+              <p>
+                Nicht jeder Vermögenswert erreicht seinen passenden Käufer über denselben Weg.
+                Deshalb verbinden wir eine strukturierte Erfassung mit einer gezielten
+                Vermarktungsstrategie.
+              </p>
+              <p>
+                Wir analysieren die vorhandenen Positionen, bereiten relevante Informationen auf
+                und wählen geeignete Kanäle für die Ansprache potenzieller Interessenten.
+              </p>
+            </div>
             <Link
               href="/verwertung"
               className="group inline-flex items-center gap-2 text-sm font-medium text-accent"
