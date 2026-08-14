@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     posten: Posten;
+    kaufanfragen: Kaufanfrage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posten: PostenSelect<false> | PostenSelect<true>;
+    kaufanfragen: KaufanfragenSelect<false> | KaufanfragenSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -224,6 +226,91 @@ export interface PostenSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kaufanfragen".
+ */
+export interface Kaufanfrage {
+  id: string;
+  produkt: string | Posten;
+  produktTitel: string;
+  produktKategorie?: string | null;
+  produktStandort?: string | null;
+  preis?: number | null;
+  kaeuferTyp: 'privatperson' | 'unternehmen';
+  vorname: string;
+  nachname: string;
+  email: string;
+  telefon: string;
+  adresse: {
+    strasse: string;
+    hausnummer: string;
+    plz: string;
+    ort: string;
+    land: string;
+  };
+  firma?: string | null;
+  firmenname?: string | null;
+  handelsregisternummer?: string | null;
+  ustIdNr?: string | null;
+  dokumente?:
+    | {
+        bezeichnung: string;
+        dateiname: string;
+        pfad: string;
+        groesse?: number | null;
+        typ?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  identifikationsstatus: 'eingegangen' | 'unvollstaendig' | 'geprueft';
+  status: 'neu' | 'identifikation_ausstehend' | 'geprueft' | 'abgelehnt' | 'abgeschlossen';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kaufanfragen_select".
+ */
+export interface KaufanfragenSelect<T extends boolean = true> {
+  produkt?: T;
+  produktTitel?: T;
+  produktKategorie?: T;
+  produktStandort?: T;
+  preis?: T;
+  kaeuferTyp?: T;
+  vorname?: T;
+  nachname?: T;
+  email?: T;
+  telefon?: T;
+  adresse?:
+    | T
+    | {
+        strasse?: T;
+        hausnummer?: T;
+        plz?: T;
+        ort?: T;
+        land?: T;
+      };
+  firma?: T;
+  firmenname?: T;
+  handelsregisternummer?: T;
+  ustIdNr?: T;
+  dokumente?:
+    | T
+    | {
+        bezeichnung?: T;
+        dateiname?: T;
+        pfad?: T;
+        groesse?: T;
+        typ?: T;
+        id?: T;
+      };
+  identifikationsstatus?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -253,6 +340,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'posten';
+        value: string | Posten;
+      } | null)
+    | ({
+        relationTo: 'kaufanfragen';
+        value: string | Kaufanfrage;
       } | null);
   globalSlug?: string | null;
   user: {
