@@ -19,7 +19,7 @@ function resendClient(): Resend {
 // Ohne verifizierte eigene Domain in Resend kann optional über
 // RESEND_FROM_EMAIL eine geprüfte Absenderadresse gesetzt werden. Standard
 // ist Resends Test-Absender, der ohne Domain-Verifizierung funktioniert.
-const ABSENDER = process.env.RESEND_FROM_EMAIL || 'DPSS Sofortkauf <onboarding@resend.dev>'
+const ABSENDER = 'DPSS Sofortkauf <kontakt@dpss-management.com>'
 
 function escapeHtml(wert: string): string {
   return String(wert)
