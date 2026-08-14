@@ -8,6 +8,8 @@ export type TeamMitglied = {
   bild?: string
   /** Fallback-Kürzel, falls (noch) kein Bildpfad hinterlegt ist. */
   initialen: string
+  /** Direkte E-Mail-Adresse der Person, optional in der Listenansicht angezeigt. */
+  email?: string
 }
 
 /**
@@ -49,11 +51,19 @@ function TeamPortraet({
 /** Team-Karte im Grid-Format (Startseite, Abschnitt "Team"). */
 export function TeamKarte({ person }: { person: TeamMitglied }) {
   return (
-    <div className="flex flex-col gap-4 border border-border bg-card p-6 transition-colors hover:border-accent">
+    <div className="flex flex-col gap-4 border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:border-accent hover:shadow-md">
       <TeamPortraet person={person} groesse="karte" />
       <div className="flex flex-col gap-1">
         <span className="font-serif text-lg leading-snug text-card-foreground">{person.name}</span>
         <span className="text-sm text-accent">{person.rolle}</span>
+        {person.email && (
+          <a
+            href={`mailto:${person.email}`}
+            className="text-sm text-muted-foreground/80 transition-colors hover:text-accent"
+          >
+            {person.email}
+          </a>
+        )}
       </div>
     </div>
   )
@@ -67,6 +77,14 @@ export function TeamZeile({ person }: { person: TeamMitglied }) {
       <div className="flex flex-col">
         <span className="font-serif text-lg text-foreground">{person.name}</span>
         <span className="text-sm text-muted-foreground">{person.rolle}</span>
+        {person.email && (
+          <a
+            href={`mailto:${person.email}`}
+            className="text-sm text-muted-foreground/80 transition-colors hover:text-accent"
+          >
+            {person.email}
+          </a>
+        )}
       </div>
     </div>
   )

@@ -1,13 +1,12 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Check, ScaleIcon, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { EditorialProzess } from '@/components/editorial-prozess'
-import { KatalogPositionKarte } from '@/components/katalog-position-karte'
+import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
-import type { Schritt } from '@/components/prozess-schritte'
+import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
 import './styles.css'
@@ -18,28 +17,26 @@ export const metadata = {
     'DPSS Management GmbH verwertet Vermögenswerte im Auftrag von Insolvenzverwaltern und bietet Käufern einen transparenten Katalog aktueller Positionen.',
 }
 
-const ABLAUF: readonly Schritt[] = [
+const ABLAUF = [
   {
-    schritt: '01',
-    titel: 'Auftrag & Zielsetzung',
-    beschreibung: 'Gemeinsame Klärung des Bestands, der Zielsetzung und des vorgesehenen Verwertungswegs.',
+    nummer: '01',
+    titel: 'Erfassung & Bewertung',
+    beschreibung: 'Vermögenswerte werden strukturiert aufgenommen und marktgerecht bewertet.',
   },
   {
-    schritt: '02',
-    titel: 'Erfassung & Einordnung',
-    beschreibung: 'Systematische Aufnahme und marktgerechte Einordnung der vorhandenen Vermögenswerte.',
+    nummer: '02',
+    titel: 'Vermarktung & Verkauf',
+    beschreibung: 'Gezielte Ansprache passender Interessenten über geeignete Kanäle.',
   },
   {
-    schritt: '03',
-    titel: 'Verwertung',
-    beschreibung: 'Gezielte Vermarktung und Ansprache geeigneter Interessenten.',
-  },
-  {
-    schritt: '04',
-    titel: 'Abwicklung',
-    beschreibung: 'Verkauf, Dokumentation und Abrechnung werden nachvollziehbar abgeschlossen.',
+    nummer: '03',
+    titel: 'Abwicklung & Bericht',
+    beschreibung: 'Verkauf, Übergabe und Abrechnung werden nachvollziehbar dokumentiert.',
   },
 ] as const
+
+const AUFTRAGGEBER_PUNKTE = ['Erfassungs-Service', 'Erlösoptimierung', 'Transparenz'] as const
+const KAEUFER_PUNKTE = ['Transparente Preise', 'Geprüfte Qualität', 'Direkte Abwicklung'] as const
 
 const WARUM_DPSS_PUNKTE = [
   'Nachvollziehbare Herkunft',
@@ -60,26 +57,40 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Ruhiges zweispaltiges Beratungs-Layout: Text links, hochwertiger
-          Asset-/Industrieausschnitt rechts. Kein Vollbild-Overlay. */}
-      <section className="mx-auto grid h-auto min-h-[680px] w-full max-w-7xl grid-cols-1 md:h-[750px] md:min-h-0 md:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex min-w-0 flex-col justify-center px-6 py-16 md:px-12 lg:px-16">
-          <div className="min-w-0 max-w-[600px]">
-            <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+      {/* Full-Width Hintergrundbild über die gesamte Sektion, mit subtilem
+          dunklem Verlauf von links für Lesbarkeit. Text in Off-White links
+          platziert, Bild rechts bleibt ruhig sichtbar. */}
+      <section className="relative flex min-h-[720px] items-center overflow-hidden md:min-h-[680px]">
+        <Image
+          src="/images/hero-industrie-modern.png"
+          alt="Moderne, helle Industriehalle mit Präzisionsmaschinen und klarer, aufgeräumter Struktur"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-[#141110]/88 from-0% via-[#141110]/45 via-48% to-[#141110]/5 to-85%"
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-8 py-16 md:px-16 lg:px-24">
+          <div className="max-w-[560px]">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[#f7f5f0]">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-[4.2rem] lg:text-[4.75rem]">
+            <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[3.6rem] lg:text-[4.1rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p className="mt-6 max-w-[460px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -88,29 +99,18 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/kontakt"
-                className="inline-flex items-center justify-center gap-2 border border-accent/40 bg-accent/5 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/10"
+                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/45 bg-[#f7f5f0]/10 px-6 py-3 text-sm font-medium text-[#f7f5f0] backdrop-blur-sm transition-colors hover:border-[#f7f5f0]/70 hover:bg-[#f7f5f0]/18"
               >
                 Verwertung anfragen
               </Link>
             </div>
           </div>
         </div>
-
-        <div className="relative min-h-[420px] overflow-hidden md:min-h-0">
-          <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
-            alt="Moderne Industriehalle mit Palettenregalen und professioneller Betriebsausstattung"
-            fill
-            priority
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover saturate-[0.88]"
-          />
-        </div>
       </section>
 
-      {/* AKTUELLE POSITIONEN / KATALOG — ruhiger, hochwertiger Katalog-Stil */}
-      <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-[1100px] px-6 py-20 md:px-10 md:py-28">
+      {/* AKTUELLE POSITIONEN / KATALOG — edles 3-spaltiges Card-Grid */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-14 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
@@ -126,9 +126,9 @@ export default async function Startseite() {
           </div>
 
           {docs.length > 0 ? (
-            <div className="karten-grid flex flex-col border-t border-border">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {docs.map((posten) => (
-                <KatalogPositionKarte key={posten.id} posten={posten} />
+                <KatalogPositionGridKarte key={posten.id} posten={posten} />
               ))}
             </div>
           ) : (
@@ -140,16 +140,85 @@ export default async function Startseite() {
             </div>
           )}
 
-          <div className="mt-10">
+          <div className="mt-14 flex justify-center">
             <Link
               href="/katalog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="group inline-flex items-center justify-center gap-2 border border-accent/40 bg-accent/5 px-8 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/10"
             >
-              Alle Positionen ansehen
+              Gesamten Katalog ansehen
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
+        </div>
+      </section>
 
+      {/* ZWEI WEGE, EIN PARTNER — Zielgruppen-Split direkt nach dem Produkt-Grid */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Zwei Wege, ein Partner
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
+              Für Auftraggeber und Käufer
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* Card 1: Für Auftraggeber */}
+            <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
+              <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
+                <ScaleIcon className="h-5 w-5 text-accent" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
+                  Für Insolvenzverwalter &amp; Verwalter
+                </h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {AUFTRAGGEBER_PUNKTE.map((punkt) => (
+                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
+                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      {punkt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href="/kontakt?betreff=Verwertungsauftrag"
+                className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Verwertungsauftrag anfragen
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            {/* Card 2: Für Käufer */}
+            <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
+              <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
+                <Search className="h-5 w-5 text-accent" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
+                  Für Käufer &amp; Investoren
+                </h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {KAEUFER_PUNKTE.map((punkt) => (
+                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
+                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      {punkt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href="/katalog"
+                className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Gesamten Katalog ansehen
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -207,7 +276,7 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* UNSER ABLAUF */}
+      {/* UNSER ABLAUF — kompaktes, horizontales 3-Spalten-Grid statt langer vertikaler Zeilen */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-14 max-w-2xl">
@@ -218,7 +287,18 @@ export default async function Startseite() {
               Strukturiert von der Beauftragung bis zum Abschluss.
             </h2>
           </div>
-          <EditorialProzess schritte={ABLAUF} />
+
+          <div className="grid grid-cols-1 gap-6 border-t border-border pt-10 md:grid-cols-3 md:gap-8">
+            {ABLAUF.map((schritt) => (
+              <div key={schritt.nummer} className="flex flex-col gap-3 border border-border bg-card p-7">
+                <span className="font-serif text-3xl leading-none text-accent">{schritt.nummer}</span>
+                <h3 className="font-serif text-xl text-card-foreground">{schritt.titel}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                  {schritt.beschreibung}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -276,17 +356,79 @@ export default async function Startseite() {
             </p>
           </div>
 
-          <ul className="warum-punkte flex flex-col gap-7 self-end">
-            {WARUM_DPSS_PUNKTE.map((punkt) => (
-              <li key={punkt} className="flex items-start gap-3">
-                <span
-                  className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
-                  aria-hidden="true"
-                />
-                <span className="text-base font-medium text-background text-pretty">{punkt}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="warum-punkte flex flex-col gap-7 self-end">
+            <ul className="flex flex-col gap-7">
+              {WARUM_DPSS_PUNKTE.map((punkt) => (
+                <li key={punkt} className="flex items-start gap-3">
+                  <span
+                    className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
+                    aria-hidden="true"
+                  />
+                  <span className="text-base font-medium text-background text-pretty">{punkt}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/kontakt"
+              className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            >
+              Jetzt Kontakt aufnehmen
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FACHBEITRÄGE / AKTUELLES */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Aktuelles
+              </p>
+              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
+                Fachbeiträge &amp; Einblicke
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+                Fundierte Einordnungen zu Wertermittlung, Standortmanagement, Fremdrechten und
+                übertragender Sanierung – aus der Praxis für Verfahrensbeteiligte.
+              </p>
+            </div>
+            <Link
+              href="/aktuelles"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent md:shrink-0"
+            >
+              Alle Fachbeiträge
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {NEWS_BEITRAEGE.slice(-3)
+              .reverse()
+              .map((beitrag) => (
+                <Link
+                  key={beitrag.slug}
+                  href={`/aktuelles/${beitrag.slug}`}
+                  className="group flex h-full flex-col gap-4 border border-border bg-card p-7 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
+                    <span className="text-accent">{beitrag.kategorie}</span>
+                    <span className="text-muted-foreground">{beitrag.datum}</span>
+                  </div>
+                  <h3 className="font-serif text-xl leading-snug text-card-foreground text-balance">
+                    {beitrag.titel}
+                  </h3>
+                  <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                    {beitrag.anriss}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                    Beitrag lesen <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              ))}
+          </div>
         </div>
       </section>
 

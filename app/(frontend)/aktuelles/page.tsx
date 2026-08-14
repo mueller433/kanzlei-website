@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
@@ -21,9 +22,8 @@ export default function AktuellesSeite() {
             Neuigkeiten &amp; Fachbeiträge
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Hier informieren wir künftig über neue Verwertungsangebote, Unternehmensmeldungen und
-            Entwicklungen rund um die professionelle Verwertung. Die folgenden Einträge sind
-            Beispielinhalte und werden durch echte Beiträge ersetzt.
+            Fachliche Einblicke und aktuelle Meldungen rund um Insolvenzverfahren, Restrukturierung
+            und die strukturierte Verwertung von Vermögenswerten.
           </p>
         </div>
       </section>
@@ -32,10 +32,11 @@ export default function AktuellesSeite() {
       <section>
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {NEWS_BEITRAEGE.map((beitrag, i) => (
-              <article
-                key={i}
-                className="flex flex-col gap-4 border border-dashed border-border bg-card p-8 md:p-10"
+            {NEWS_BEITRAEGE.map((beitrag) => (
+              <Link
+                key={beitrag.slug}
+                href={`/aktuelles/${beitrag.slug}`}
+                className="group flex h-full flex-col gap-5 border border-border bg-card p-8 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:p-10"
               >
                 <div className="flex items-center gap-4 text-xs uppercase tracking-[0.16em]">
                   <span className="text-accent">{beitrag.kategorie}</span>
@@ -47,8 +48,10 @@ export default function AktuellesSeite() {
                 <p className="text-base leading-relaxed text-muted-foreground text-pretty">
                   {beitrag.anriss}
                 </p>
-                <span className="mt-2 text-sm text-muted-foreground">Beispielinhalt</span>
-              </article>
+                <span className="mt-auto inline-flex items-center gap-2 pt-3 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                  Beitrag lesen <span aria-hidden="true">→</span>
+                </span>
+              </Link>
             ))}
           </div>
         </div>

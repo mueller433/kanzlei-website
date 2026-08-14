@@ -1,5 +1,5 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { ArrowLeft, FileText } from 'lucide-react'
+import { ArrowLeft, ArrowRight, FileText } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -8,6 +8,7 @@ import React from 'react'
 
 import { AssetGalerie, type GalerieBild } from '@/components/asset-galerie'
 import { KontaktCta } from '@/components/kontakt-cta'
+import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
 import { KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import type { Media, Posten } from '@/payload-types'
@@ -83,6 +84,8 @@ export default async function AssetDetailSeite({
 
   const dokumente = medienObjekte(posten.dokumente).filter((m) => typeof m.url === 'string')
 
+  const hatNettoPreis = !posten.preisAufAnfrage && typeof posten.preis === 'number'
+
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
@@ -93,20 +96,27 @@ export default async function AssetDetailSeite({
   const kerninfo = [
     { label: 'Preis', wert: preisText },
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'Status', wert: STATUS_LABELS[posten.status] },
+    { label: 'MwSt.', wert: '19 % netto' },
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
-  // Vollständige Eckdaten-Tabelle (Sektion 9) – nur befüllte Felder, keine leeren Boxen
+  // Eckdaten-Tabelle: echte Verwertungs-Details ohne Dopplungen zu Titel-Block/Kacheln
   const eckdaten = [
-    { label: 'Kategorie', wert: KATEGORIE_LABELS[posten.kategorie] },
-    { label: 'Zustand', wert: ZUSTAND_LABELS[posten.zustand] },
-    posten.standort ? { label: 'Standort', wert: posten.standort } : null,
     posten.insolvenzverfahren
       ? { label: 'Aktenzeichen / Verfahren', wert: posten.insolvenzverfahren }
       : null,
+    { label: 'MwSt.-Satz', wert: '19 % (zzgl. USt.)' },
+    hatNettoPreis
+      ? { label: 'Preis (netto)', wert: formatiertePreis(posten.preis as number) }
+      : null,
+    hatNettoPreis
+      ? {
+          label: 'Preis (brutto, inkl. 19 % USt.)',
+          wert: formatiertePreis(Math.round((posten.preis as number) * 1.19)),
+        }
+      : null,
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'Status', wert: STATUS_LABELS[posten.status] },
+    { label: 'Objekt-ID', wert: posten.id },
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
   return (
@@ -149,12 +159,31 @@ export default async function AssetDetailSeite({
 
               {/* Status + Zustand – Kategorie steht bereits in der Eyebrow-Zeile */}
               <div className="mt-5 flex flex-wrap gap-2">
-                <span className="border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
+                <span className="whitespace-nowrap border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
                   {STATUS_LABELS[posten.status]}
                 </span>
-                <span className="border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                <span className="whitespace-nowrap border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
                   {ZUSTAND_LABELS[posten.zustand]}
                 </span>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/kontakt"
+                  className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+                >
+                  Position anfragen
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+
+                {posten.status === 'verfuegbar' && (
+                  <SofortkaufDialog
+                    produktId={String(posten.id)}
+                    produktTitel={posten.titel}
+                    preisText={preisText}
+                    standort={posten.standort}
+                  />
+                )}
               </div>
             </div>
 
@@ -181,15 +210,6 @@ export default async function AssetDetailSeite({
                   </div>
                 ))}
               </dl>
-
-              {posten.insolvenzverfahren && (
-                <div className="mt-4 border-t border-border pt-4">
-                  <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                    Aktenzeichen / Verfahren
-                  </dt>
-                  <dd className="mt-1 text-base text-foreground">{posten.insolvenzverfahren}</dd>
-                </div>
-              )}
             </div>
           </div>
         </div>

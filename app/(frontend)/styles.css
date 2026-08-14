@@ -15,6 +15,13 @@
   --color-border: #e4e0d6;
   --color-accent: #7a1f32;
   --color-accent-foreground: #f7f5f0;
+
+  /* Schlanke Utility-Bar oberhalb der Hauptnavigation: exakt die Logo-Farben
+     (dunkles Schriftschwarz + bordeauxroter "GMBH"-Akzent), kein separates
+     Nachtblau. */
+  --color-topbar: #23201b;
+  --color-topbar-foreground: #f2efe9;
+  --color-topbar-highlight: #b8546d;
 }
 
 html {
@@ -170,20 +177,25 @@ html {
       animation-timeline: view();
       animation-range: entry 15% entry 47%;
     }
-    .warum-punkte > *:nth-child(1) {
+    .warum-punkte ul > *:nth-child(1) {
       animation: reveal-einblenden linear both;
       animation-timeline: view();
       animation-range: entry 20% entry 52%;
     }
-    .warum-punkte > *:nth-child(2) {
+    .warum-punkte ul > *:nth-child(2) {
       animation: reveal-einblenden linear both;
       animation-timeline: view();
       animation-range: entry 24% entry 56%;
     }
-    .warum-punkte > *:nth-child(3) {
+    .warum-punkte ul > *:nth-child(3) {
       animation: reveal-einblenden linear both;
       animation-timeline: view();
       animation-range: entry 28% entry 60%;
+    }
+    .warum-punkte > a {
+      animation: reveal-einblenden linear both;
+      animation-timeline: view();
+      animation-range: entry 32% entry 64%;
     }
   }
 }
@@ -225,7 +237,8 @@ html {
   .warum-bild-fade,
   .warum-overlay-reveal,
   .warum-text-reveal,
-  .warum-punkte > *,
+  .warum-punkte ul > *,
+  .warum-punkte > a,
   .cta-button-verzoegert {
     animation: none !important;
     opacity: 1 !important;

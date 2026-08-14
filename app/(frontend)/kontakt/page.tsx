@@ -33,12 +33,21 @@ const KONTAKTDATEN = [
   },
 ] as const
 
-export default function KontaktSeite() {
+export default async function KontaktSeite({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const sp = await searchParams
+  const betreffVorbelegung = typeof sp.betreff === 'string' ? sp.betreff : ''
+
   return (
     <div>
       {/* HERO */}
+      {/* Großzügiges pt sorgt dafür, dass die Headline unter dem sticky Header
+          immer vollständig sichtbar ist und nicht angeschnitten wirkt. */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-6xl px-6 pb-24 pt-16 md:px-10 md:pb-32 md:pt-24">
           <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
             Kontakt
           </p>
@@ -117,30 +126,83 @@ export default function KontaktSeite() {
                     htmlFor="name"
                     className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
                   >
-                    Name
+                    Name <span className="text-accent">*</span>
                   </label>
                   <input
                     id="name"
                     name="name"
                     type="text"
                     autoComplete="name"
+                    required
                     placeholder="Ihr Name"
+                    className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="email"
+                      className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
+                    >
+                      E-Mail <span className="text-accent">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      placeholder="ihre@email.de"
+                      className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="telefon"
+                      className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
+                    >
+                      Telefonnummer <span className="text-accent">*</span>
+                    </label>
+                    <input
+                      id="telefon"
+                      name="telefon"
+                      type="tel"
+                      autoComplete="tel"
+                      required
+                      placeholder="+49 (0) 551 000 0000"
+                      className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="firma"
+                    className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
+                  >
+                    Firma / Kanzlei
+                  </label>
+                  <input
+                    id="firma"
+                    name="firma"
+                    type="text"
+                    autoComplete="organization"
+                    placeholder="Firma oder Kanzlei"
                     className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="email"
+                    htmlFor="betreff"
                     className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
                   >
-                    E-Mail
+                    Betreff / Aktenzeichen
                   </label>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="ihre@email.de"
+                    id="betreff"
+                    name="betreff"
+                    type="text"
+                    defaultValue={betreffVorbelegung}
+                    placeholder="z. B. Aktenzeichen oder Betreff Ihrer Anfrage"
                     className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                   />
                 </div>
@@ -149,12 +211,13 @@ export default function KontaktSeite() {
                     htmlFor="nachricht"
                     className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
                   >
-                    Nachricht
+                    Nachricht <span className="text-accent">*</span>
                   </label>
                   <textarea
                     id="nachricht"
                     name="nachricht"
                     rows={5}
+                    required
                     placeholder="Ihre Nachricht an uns"
                     className="resize-y border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                   />
@@ -166,8 +229,8 @@ export default function KontaktSeite() {
                   Nachricht senden
                 </button>
                 <p className="text-xs leading-relaxed text-muted-foreground">
-                  Dieses Formular dient aktuell nur der Darstellung und versendet noch keine
-                  Nachrichten.
+                  <span className="text-accent">*</span> Pflichtfelder. Dieses Formular dient
+                  aktuell nur der Darstellung und versendet noch keine Nachrichten.
                 </p>
               </form>
             </div>

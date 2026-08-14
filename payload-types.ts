@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     posten: Posten;
+    kaufanfragen: Kaufanfragen;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posten: PostenSelect<false> | PostenSelect<true>;
+    kaufanfragen: KaufanfragenSelect<false> | KaufanfragenSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -219,6 +221,65 @@ export interface Posten {
   createdAt: string;
 }
 /**
+ * Eingehende Sofortkauf-Anfragen aus dem öffentlichen Katalog.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kaufanfragen".
+ */
+export interface Kaufanfragen {
+  id: number;
+  produkt: number | Posten;
+  /**
+   * Schnappschuss des Produkttitels zum Zeitpunkt der Anfrage.
+   */
+  produktTitel: string;
+  produktKategorie?: string | null;
+  produktStandort?: string | null;
+  /**
+   * Server-seitig geprüfter Preis zum Zeitpunkt der Anfrage. Leer = Preis auf Anfrage.
+   */
+  preis?: number | null;
+  kaeuferTyp: 'privatperson' | 'unternehmen';
+  vorname: string;
+  nachname: string;
+  email: string;
+  telefon: string;
+  adresse: {
+    strasse: string;
+    hausnummer: string;
+    plz: string;
+    ort: string;
+    land: string;
+  };
+  /**
+   * Optionale, allgemeine Firmenangabe (unabhängig vom Käufertyp).
+   */
+  firma?: string | null;
+  /**
+   * Nur bei Käufertyp "Unternehmen / Gewerbe".
+   */
+  firmenname?: string | null;
+  handelsregisternummer?: string | null;
+  ustIdNr?: string | null;
+  /**
+   * Nur die Bezeichnung der eingereichten Dokumente zur Nachverfolgung. Die eigentlichen Dateien wurden ausschließlich per E-Mail an DPSS Management gesendet und nirgends gespeichert.
+   */
+  eingereichteDokumente?:
+    | {
+        bezeichnung: string;
+        dateiname: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Die Dokumente selbst liegen nur als E-Mail-Anhang bei DPSS Management vor, nicht im Admin.
+   */
+  identifikationsstatus: 'eingegangen' | 'unvollstaendig' | 'geprueft';
+  status: 'neu' | 'identifikation_ausstehend' | 'geprueft' | 'abgelehnt' | 'abgeschlossen';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -253,6 +314,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posten';
         value: number | Posten;
+      } | null)
+    | ({
+        relationTo: 'kaufanfragen';
+        value: number | Kaufanfragen;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -355,6 +420,46 @@ export interface PostenSelect<T extends boolean = true> {
   standort?: T;
   dokumente?: T;
   veroeffentlicht?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kaufanfragen_select".
+ */
+export interface KaufanfragenSelect<T extends boolean = true> {
+  produkt?: T;
+  produktTitel?: T;
+  produktKategorie?: T;
+  produktStandort?: T;
+  preis?: T;
+  kaeuferTyp?: T;
+  vorname?: T;
+  nachname?: T;
+  email?: T;
+  telefon?: T;
+  adresse?:
+    | T
+    | {
+        strasse?: T;
+        hausnummer?: T;
+        plz?: T;
+        ort?: T;
+        land?: T;
+      };
+  firma?: T;
+  firmenname?: T;
+  handelsregisternummer?: T;
+  ustIdNr?: T;
+  eingereichteDokumente?:
+    | T
+    | {
+        bezeichnung?: T;
+        dateiname?: T;
+        id?: T;
+      };
+  identifikationsstatus?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
