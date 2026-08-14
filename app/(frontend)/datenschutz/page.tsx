@@ -16,7 +16,7 @@ export default function DatenschutzSeite() {
           <p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Website ist:</p>
           <p>DPSS Management GmbH<br />Herzberger Landstr. 63<br />37085 Göttingen<br />Deutschland</p>
           <p>Geschäftsführung: Dirk Schymura und Phillip Schaper</p>
-          <p>E-Mail: <a className="underline decoration-border underline-offset-4 hover:text-accent" href="mailto:info@dpss-management.com">info@dpss-management.com</a><br />Telefon: [TELEFONNUMMER]</p>
+          <p>E-Mail: <a className="underline decoration-border underline-offset-4 hover:text-accent" href={KANZLEI.email.href}>{KANZLEI.email.anzeige}</a><br />Telefon: <a className="underline decoration-border underline-offset-4 hover:text-accent" href={KANZLEI.telefon.href}>{KANZLEI.telefon.anzeige}</a></p>
         </LegalSection>
         <LegalSection nummer="02" titel="Allgemeine Hinweise">
           <p>Der Schutz personenbezogener Daten ist uns wichtig. Personenbezogene Daten werden nur verarbeitet, soweit dies für die Bereitstellung dieser Website, die Bearbeitung von Anfragen und die Kommunikation mit Ihnen erforderlich ist oder Sie hierzu eingewilligt haben.</p>

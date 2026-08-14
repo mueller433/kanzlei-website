@@ -37,7 +37,6 @@ function textFeld(formData: FormData, name: string): string {
  * Client übernehmen (Produkt, Preis, Status).
  */
 export async function sofortkaufAnfrageAction(formData: FormData): Promise<SofortkaufErgebnis> {
-  console.log('[v0] ACTION ENTRY, formData keys:', [...formData.keys()])
   const produktId = textFeld(formData, 'produktId').trim()
   if (!produktId) {
     return { erfolg: false, fehler: 'Es wurde keine Position übermittelt.' }
