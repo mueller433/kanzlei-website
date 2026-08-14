@@ -8,6 +8,7 @@ import React from 'react'
 
 import { AssetGalerie, type GalerieBild } from '@/components/asset-galerie'
 import { KontaktCta } from '@/components/kontakt-cta'
+import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
 import { KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import type { Media, Posten } from '@/payload-types'
@@ -166,7 +167,7 @@ export default async function AssetDetailSeite({
                 </span>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 flex flex-wrap items-center gap-4">
                 <Link
                   href="/kontakt"
                   className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -174,6 +175,15 @@ export default async function AssetDetailSeite({
                   Position anfragen
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
+
+                {posten.status === 'verfuegbar' && (
+                  <SofortkaufDialog
+                    produktId={posten.id}
+                    produktTitel={posten.titel}
+                    preisText={preisText}
+                    standort={posten.standort}
+                  />
+                )}
               </div>
             </div>
 
