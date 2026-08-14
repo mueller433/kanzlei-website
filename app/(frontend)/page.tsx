@@ -60,26 +60,26 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Ruhiges zweispaltiges Beratungs-Layout: Text links, hochwertiger
-          Asset-/Industrieausschnitt rechts. Kein Vollbild-Overlay. */}
-      <section className="mx-auto grid h-auto min-h-[680px] w-full max-w-7xl grid-cols-1 md:h-[750px] md:min-h-0 md:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex min-w-0 flex-col justify-center px-6 py-16 md:px-12 lg:px-16">
-          <div className="min-w-0 max-w-[600px]">
-            <p className="mb-7 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+      {/* Kompaktes zweispaltiges Beratungs-Layout: Text links (~45%), großes,
+          dominantes Bestandsbild rechts (~55%). Kein Overlay, kein Farbfilter. */}
+      <section className="mx-auto grid h-auto w-full max-w-7xl grid-cols-1 items-stretch gap-10 px-6 py-10 md:h-[620px] md:grid-cols-[0.9fr_1.1fr] md:gap-14 md:px-12 md:py-14 lg:px-16">
+        <div className="flex min-w-0 flex-col justify-center py-2 md:py-0">
+          <div className="min-w-0 max-w-[520px]">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
               DPSS MANAGEMENT
             </p>
-            <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-[4.2rem] lg:text-[4.75rem]">
+            <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-[3.6rem] lg:text-[4.1rem]">
               Vermögenswerte
               <br />
               professionell
               <br />
               verwerten.
             </h1>
-            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p className="mt-6 max-w-[460px] text-lg leading-relaxed text-muted-foreground text-pretty">
               Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
               Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -96,14 +96,14 @@ export default async function Startseite() {
           </div>
         </div>
 
-        <div className="relative min-h-[420px] overflow-hidden md:min-h-0">
+        <div className="relative min-h-[320px] overflow-hidden rounded-sm md:min-h-0">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/afinis-group-afinis-gasket-production-OnbSOhz0oig-unsplash-xs6kPwACiwBBK1KcnD4kbHlGm6XZaB.jpg"
-            alt="Moderne Industriehalle mit Palettenregalen und professioneller Betriebsausstattung"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image.png-uke0GSjFQrSkooak5i71sFF7GIdj2M.jpeg"
+            alt="Industrielle Lagerhalle mit langen Regalreihen voller Bestände, Maschinen und Materialien aus Verwertungsverfahren"
             fill
             priority
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover saturate-[0.88]"
+            sizes="(min-width: 768px) 55vw, 100vw"
+            className="object-cover"
           />
         </div>
       </section>
