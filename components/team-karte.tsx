@@ -8,6 +8,8 @@ export type TeamMitglied = {
   bild?: string
   /** Fallback-Kürzel, falls (noch) kein Bildpfad hinterlegt ist. */
   initialen: string
+  /** Direkte E-Mail-Adresse der Person, optional in der Listenansicht angezeigt. */
+  email?: string
 }
 
 /**
@@ -67,6 +69,14 @@ export function TeamZeile({ person }: { person: TeamMitglied }) {
       <div className="flex flex-col">
         <span className="font-serif text-lg text-foreground">{person.name}</span>
         <span className="text-sm text-muted-foreground">{person.rolle}</span>
+        {person.email && (
+          <a
+            href={`mailto:${person.email}`}
+            className="text-sm text-muted-foreground/80 transition-colors hover:text-accent"
+          >
+            {person.email}
+          </a>
+        )}
       </div>
     </div>
   )

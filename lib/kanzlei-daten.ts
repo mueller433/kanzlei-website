@@ -25,9 +25,8 @@ export const KANZLEI = {
     ort: 'Göttingen',
   },
   telefon: {
-    /** Noch zu ersetzen – echte Telefonnummer liegt nicht vor. */
-    anzeige: 'Telefon folgt',
-    href: '#kontakt-telefon-folgt',
+    anzeige: '+49 (0) 551 000 0000',
+    href: 'tel:+495510000000',
   },
   email: {
     anzeige: 'kontakt@dpss-management.com',
@@ -52,30 +51,35 @@ export const TEAM = [
     rolle: 'Geschäftsführung',
     bild: '/team/phillip-schaper.jpg',
     initialen: 'PS',
+    email: 'p.schaper@dpss-management.com',
   },
   {
     name: 'Dirk Schymura',
     rolle: 'Geschäftsführung',
     bild: '/team/dirk-schymura.jpg',
     initialen: 'DS',
+    email: 'd.schymura@dpss-management.com',
   },
   {
     name: 'Andreas Schmidt',
     rolle: 'Insolvenzsachbearbeiter',
     bild: '/team/andreas-schmidt.jpg',
     initialen: 'AS',
+    email: 'a.schmidt@dpss-management.com',
   },
   {
     name: 'Andrea Kloser',
     rolle: 'Insolvenzsachbearbeiterin',
     bild: '/team/andrea-kloser.jpg',
     initialen: 'AK',
+    email: 'a.kloser@dpss-management.com',
   },
   {
     name: 'Christine Meier',
     rolle: 'Buchhaltung & Rechnungswesen',
     bild: '/team/christine-meier.jpg',
     initialen: 'CM',
+    email: 'c.meier@dpss-management.com',
   },
 ] as const
 
@@ -127,7 +131,7 @@ export const NEWS_BEITRAEGE: readonly NewsBeitrag[] = [
     abschnitte: [
       { ueberschrift: 'Warum Fristen eine zentrale Rolle spielen', text: 'Ein Insolvenzverfahren folgt einem formal geregelten Ablauf. Je nach Verfahren und Beteiligten können unterschiedliche Fristen und Termine relevant sein.\n\nDazu gehören beispielsweise Fristen im Zusammenhang mit der Forderungsanmeldung, gerichtlichen Entscheidungen, Gläubigerversammlungen oder weiteren Verfahrensschritten.\n\nWer relevante Fristen übersieht, kann unter Umständen Handlungsmöglichkeiten verlieren oder wichtige Entscheidungen nicht rechtzeitig vorbereiten.' },
       { ueberschrift: 'Forderungsanmeldung', text: 'Für Gläubiger ist insbesondere die Anmeldung ihrer Forderungen von Bedeutung. Welche Forderungen in welcher Form anzumelden sind und welche Fristen dabei gelten, hängt vom jeweiligen Insolvenzverfahren und den entsprechenden gerichtlichen Vorgaben ab.\n\nDeshalb sollten die veröffentlichten Verfahrensinformationen sorgfältig geprüft und die jeweiligen Angaben des zuständigen Insolvenzgerichts beziehungsweise der Insolvenzverwaltung berücksichtigt werden.' },
-      { ueberschrift: 'Nicht nur Gläubiger müssen Fristen beachten', text: 'Auch für Unternehmen und andere Verfahrensbeteiligte können zahlreiche zeitliche Vorgaben relevant sein. Gerade in einer wirtschaftlichen Krise müssen operative Entscheidungen, rechtliche Anforderungen und wirtschaftliche Maßnahmen häufig parallel vorbereitet werden.\n\nEine frühzeitige strukturierte Erfassung der relevanten Informationen kann dabei helfen, Prioritäten zu setzen und notwendige Schritte rechtzeitig einzuleiten.' },
+      { ueberschrift: 'Nicht nur Gläubiger müssen Fristen beachten', text: 'Auch für Unternehmen und andere Verfahrensbeteiligte können zahlreiche zeitliche Vorgaben relevant sein. Gerade in einer wirtschaftlichen Krise müssen operative Entscheidungen, rechtliche Anforderungen und wirtschaftliche Ma��nahmen häufig parallel vorbereitet werden.\n\nEine frühzeitige strukturierte Erfassung der relevanten Informationen kann dabei helfen, Prioritäten zu setzen und notwendige Schritte rechtzeitig einzuleiten.' },
       { ueberschrift: 'Vermögenswerte frühzeitig erfassen', text: 'Neben rechtlichen und finanziellen Fragestellungen spielt auch die Übersicht über die vorhandenen Vermögenswerte eine wichtige Rolle.\n\nMaschinen, Fahrzeuge, technische Anlagen, Betriebsausstattung und Inventar sollten möglichst frühzeitig erfasst und hinsichtlich Zustand, Standort und Verwertbarkeit dokumentiert werden.\n\nEine solche strukturierte Datengrundlage erleichtert spätere Bewertungs- und Vermarktungsprozesse und schafft Transparenz für die weitere Abwicklung.' },
       { ueberschrift: 'Struktur statt Zeitdruck', text: 'In einem dynamischen Insolvenzverfahren kann sich der verfügbare Handlungsspielraum schnell verändern. Eine frühzeitige Vorbereitung ermöglicht es, notwendige Informationen zusammenzutragen, Vermögenswerte zu dokumentieren und mögliche Verwertungswege rechtzeitig zu prüfen.' },
       { ueberschrift: 'Fazit', text: 'Fristen sind ein wesentlicher Bestandteil jedes Insolvenzverfahrens. Für alle Beteiligten gilt deshalb: Verfahrensinformationen frühzeitig prüfen, relevante Termine dokumentieren und notwendige Maßnahmen rechtzeitig vorbereiten.\n\nEine strukturierte Erfassung und Dokumentation von Vermögenswerten kann dabei eine wichtige Grundlage für die weitere Verwertung und Abwicklung bilden.' },
