@@ -8,6 +8,7 @@ import { KatalogPositionKarte } from '@/components/katalog-position-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import type { Schritt } from '@/components/prozess-schritte'
+import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
 import './styles.css'
@@ -290,6 +291,59 @@ export default async function Startseite() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* FACHBEITRÄGE / AKTUELLES */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Aktuelles
+              </p>
+              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
+                Fachbeiträge &amp; Einblicke
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
+                Fundierte Einordnungen zu Wertermittlung, Standortmanagement, Fremdrechten und
+                übertragender Sanierung – aus der Praxis für Verfahrensbeteiligte.
+              </p>
+            </div>
+            <Link
+              href="/aktuelles"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent md:shrink-0"
+            >
+              Alle Fachbeiträge
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {NEWS_BEITRAEGE.slice(-3)
+              .reverse()
+              .map((beitrag) => (
+                <Link
+                  key={beitrag.slug}
+                  href={`/aktuelles/${beitrag.slug}`}
+                  className="group flex h-full flex-col gap-4 border border-border bg-card p-7 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
+                    <span className="text-accent">{beitrag.kategorie}</span>
+                    <span className="text-muted-foreground">{beitrag.datum}</span>
+                  </div>
+                  <h3 className="font-serif text-xl leading-snug text-card-foreground text-balance">
+                    {beitrag.titel}
+                  </h3>
+                  <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                    {beitrag.anriss}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                    Beitrag lesen <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              ))}
+          </div>
         </div>
       </section>
 

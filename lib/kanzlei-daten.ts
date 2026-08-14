@@ -134,6 +134,74 @@ export const NEWS_BEITRAEGE: readonly NewsBeitrag[] = [
     ],
     hinweis: 'Dieser Beitrag dient ausschließlich der allgemeinen Information und ersetzt keine individuelle rechtliche oder wirtschaftliche Beratung.',
   },
+  {
+    slug: 'wertermittlung-im-insolvenzverfahren-fortfuehrungswert-vs-liquidationswert',
+    kategorie: 'Fachbeitrag',
+    datum: '20.02.2026',
+    titel: 'Wertermittlung im Insolvenzverfahren: Fortführungswert vs. Liquidationswert',
+    anriss:
+      'Warum eine präzise und marktgerechte Bewertung von Maschinen und technischen Anlagen entscheidend für die Insolvenzmasse ist und welche Wertansätze wann greifen.',
+    einleitung:
+      'Die realistische Bewertung von Vermögenswerten gehört zu den ersten und wichtigsten Schritten in einem Insolvenz- oder Restrukturierungsverfahren. Für Insolvenzverwalter und Gläubiger bildet sie die Entscheidungsgrundlage dafür, ob ein Unternehmen fortgeführt, im Paket veräußert oder einzeln verwertet werden sollte.\n\nBesonders bei industriellen Vermögenswerten – wie Produktionsstraßen, Maschinenpark oder Fuhrpark – stehen dabei zwei wesentliche Wertansätze im Mittelpunkt: der Fortführungswert (Going-Concern-Wert) und der Zerschlagungs- bzw. Liquidationswert.',
+    abschnitte: [
+      { ueberschrift: 'Fortführungswert: Wenn die Struktur erhalten bleibt', text: 'Der Fortführungswert geht davon aus, dass der Betrieb oder ein abgrenzbarer Betriebsteil im Rahmen einer übertragenden Sanierung oder eines Insolvenzplans aufrechterhalten wird.\n\nMaschinen und Anlagen verbleiben an ihrem Standort und im gewohnten Produktionskontext. Der Wert bemisst sich hierbei nicht nur nach dem reinen Sachwert der Anlage, sondern auch nach ihrer funktionellen Einbindung, dem aktuellen Zustand und ihrer Ertragskraft im laufenden Betrieb.' },
+      { ueberschrift: 'Liquidationswert: Verwertung unter Zeit- und Marktdruck', text: 'Lässt sich eine Fortführung nicht realisieren, rückt der Liquidationswert in den Fokus. Dieser Wert spiegelt den Erlös wider, der bei einer zügigen Einzelverwertung der Gegenstände am freien Markt erzielt werden kann.\n\nHierbei müssen Demontagekosten, Transportaufwände, der Zustand der Güter sowie die aktuelle Marktnachfrage realistisch einkalkuliert werden. Ein zu hoch angesetzter Liquidationswert birgt das Risiko von Fehleinschätzungen im Verfahren, während eine zu vorsichtige Bewertung Verhandlungspotenzial verschenkt.' },
+      { ueberschrift: 'Transparenz schützt die Insolvenzmasse', text: 'Eine fachgerechte, standortnahe Aufnahme und Bewertung vor Ort schafft Rechtssicherheit für alle Verfahrensbeteiligten. Sie dient als verlässliche Verhandlungsbasis gegenüber potenziellen Erwerbern, Banken und Sicherungsgutgläubigern.' },
+      { ueberschrift: 'Fazit', text: 'Die Wahl und fundierte Ermittlung des richtigen Wertansatzes ist der Schlüssel für eine optimale Verwertungsquote. Eine strukturierte Inventarisierung und Wertermittlung durch erfahrene Spezialisten schützt die Masse und sichert nachvollziehbare Verwertungsergebnisse.' },
+    ],
+    hinweis: 'Dieser Beitrag dient ausschließlich der allgemeinen Information und ersetzt keine individuelle rechtliche oder wirtschaftliche Beratung.',
+  },
+  {
+    slug: 'standkosten-minimieren-effizientes-standortmanagement',
+    kategorie: 'Fachbeitrag',
+    datum: '27.02.2026',
+    titel: 'Standkosten minimieren: Effizientes Standortmanagement bei der Unternehmensabwicklung',
+    anriss:
+      'Laufende Miet-, Pacht- und Sicherungskosten können die Insolvenzmasse stark belasten. Wie eine strukturierte Räumung und Verwertung Werte schützt und Kosten senkt.',
+    einleitung:
+      'Nach der Eröffnung eines Insolvenzverfahrens oder bei der Entscheidung zur Betriebseinstellung läuft die Uhr: Gewerbemieten, Pachtverträge, Energie- und Bewachungskosten fallen fortlaufend an und zehren an der vorhandenen Liquidität der Masse.\n\nEin zielgerichtetes Standort- und Verwertungsmanagement ist daher essenziell, um Objekte zeitnah, geordnet und wirtschaftlich an den Vermieter oder Eigentümer zurückzugeben.',
+    abschnitte: [
+      { ueberschrift: 'Die Herausforderung: Komplexität an den Standorten', text: 'Oftmals stehen Verwerter und Insolvenzverwalter vor unübersichtlichen Betriebsgeländen. Eingebaute Schwerlastmaschinen, gefahrstoffhaltige Betriebe oder eine unvollständige Dokumentation erschweren die schnelle Freizügigkeit der Immobilien.\n\nEine unsortierte Räumung birgt zudem die Gefahr, dass werthaltige Betriebsmittel beschädigt, unter Wert veräußert oder vorschnell verschrottet werden.' },
+      { ueberschrift: 'Der strukturierte Ablauf zum Werterhalt', text: 'Um Standkosten zu minimieren und gleichzeitig den maximalen Erlös zu sichern, hat sich ein phasenorientiertes Vorgehen bewährt:\n\nSchnelle Bestandserfassung: Lückenlose Erfassung aller mobilen und immobilen Wirtschaftsgüter vor Ort.\n\nSicherung & Zutrittskontrolle: Schutz werthaltiger Wirtschaftsgüter vor unbefugtem Zugriff oder Entwendung.\n\nParallele Vermarktung: Gezielte Ansprache potenzieller Käufer noch während der Vorbereitungsphase.\n\nKoordinierte Demontage: Fachgerechter Rückbau und termingerechte Übergabe der Besenreinheit an den Eigentümer.' },
+      { ueberschrift: 'Entlastung für Insolvenzverwalter und Eigentümer', text: 'Wird die Verwertung aus einer Hand koordiniert, reduzieren sich die Schnittstellen für die Verfahrensbeteiligten erheblich. Verwertungs- und Räumungsprozesse greifen nahtlos ineinander, was die Verfahrensdauer verkürzt und Kosten einspart.' },
+      { ueberschrift: 'Fazit', text: 'Schnelligkeit und Sorgfalt schließen sich bei der Verwertung nicht aus. Durch ein professionelles Standortmanagement lassen sich laufende Betriebskosten drastisch senken und der Wert des Inventars optimal realisieren.' },
+    ],
+    hinweis: 'Dieser Beitrag dient ausschließlich der allgemeinen Information und ersetzt keine individuelle rechtliche oder wirtschaftliche Beratung.',
+  },
+  {
+    slug: 'fremdrechte-im-blick-aussonderung-und-absonderung-rechtssicher-handhaben',
+    kategorie: 'Fachbeitrag',
+    datum: '06.03.2026',
+    titel: 'Fremdrechte im Blick: Aussonderung und Absonderung rechtssicher handhaben',
+    anriss:
+      'Eigentumsvorbehalte, Sicherungseigentum der Banken und Leasingkontrakte verkomplizieren die Verwertung. Warum eine lückenlose Inventarisierung Streitigkeiten vermeidet.',
+    einleitung:
+      'In der Praxis eines Insolvenzverfahrens gehören Güter selten uneingeschränkt dem Schuldnerunternehmen. Maschinen sind leasingsicherungsübereignet, Rohstoffe unter verlängertem Eigentumsvorbehalt geliefert und der Fuhrpark fremdfinanziert.\n\nFür den Insolvenzverwalter ist die saubere Trennung von Aussonderungsrechten (Dritt-Eigentum) und Absonderungsrechten (Pfandrechte/Sicherungseigentum) eine der anspruchsvollsten Aufgaben zu Verfahrensbeginn.',
+    abschnitte: [
+      { ueberschrift: 'Aussonderung vs. Absonderung: Die Unterschiede', text: 'Aussonderungsberechtigte (z. B. Leasinggeber oder Lieferanten mit einfachem Eigentumsvorbehalt) verlangen die Herausgabe ihres Eigentums. Die Gegenstände gehören nicht zur Insolvenzmasse.\n\nAbsonderungsberechtigte (z. B. finanzierende Banken mit Sicherungseigentum an Maschinen) haben vorrangigen Anspruch auf den Verwertungserlös des jeweiligen Objekts.\n\nWerden Gegenstände fehlerhaft zugeordnet oder ohne Klärung der Rechte verwertet, drohen langwierige Schadensersatzansprüche und Streitigkeiten mit Gläubigern.' },
+      { ueberschrift: 'Transparenz durch präzise Seriennummern- und Vertragserfassung', text: 'Eine effiziente Verwertung setzt voraus, dass bereits bei der ersten Bestandsaufnahme vor Ort alle relevanten Daten erfasst werden: Typenschilder, Seriennummern, Fahrgestellnummern und der konkrete Standort innerhalb des Betriebes.\n\nNur so lassen sich Inventarlisten eindeutig mit den Verträgen der Banken, Leasinggesellschaften und Lieferanten abgleichen.' },
+      { ueberschrift: 'Verwertung im Einvernehmen mit den Gläubigern', text: 'Oftmals ist es auch im Interesse der Sicherungsgutgläubigen (z. B. Kreditinstitute), die Verwertung nicht selbst durchzuführen, sondern den Verwalter oder spezialisierte Dienstleister damit zu beauftragen. Durch Bündelung der Güter lassen sich meist deutlich höhere Erlöse erzielen als bei einzelnen Notverkäufen.' },
+      { ueberschrift: 'Fazit', text: 'Die lückenlose Aufarbeitung von Fremdrechten schützt vor rechtlichen Risiken und schafft die Voraussetzung für eine zügige, einvernehmliche und ertragreiche Verwertung aller Vermögenswerte.' },
+    ],
+    hinweis: 'Dieser Beitrag dient ausschließlich der allgemeinen Information und ersetzt keine individuelle rechtliche oder wirtschaftliche Beratung.',
+  },
+  {
+    slug: 'uebertragende-sanierung-wie-zielgerichtete-vermarktung-industriestandorte-sichert',
+    kategorie: 'Fachbeitrag',
+    datum: '13.03.2026',
+    titel: 'Übertragende Sanierung: Wie zielgerichtete Vermarktung Industriestandorte sichert',
+    anriss:
+      'Der Verkauf von Vermögenswerten im Rahmen einer übertragenden Sanierung ermöglicht den Erhalt von Arbeitsplätzen. Wie ein strukturierter M&A- und Verwertungsprozess abläuft.',
+    einleitung:
+      'Wenn eine Sanierung des Rechtsträgers über einen Insolvenzplan nicht möglich oder nicht sinnvoll ist, bietet die übertragende Sanierung (Distressed M&A) oft den besten Ausweg.\n\nDabei werden die werthaltigen Wirtschaftsgüter – von den Produktionsanlagen über Verträge bis zum Kundenstamm – auf einen neuen Investor übertragen, während die Schulden beim bisherigen Rechtsträger verbleiben.',
+    abschnitte: [
+      { ueberschrift: 'Die Bündelung von Anlagevermögen und Know-how', text: 'Damit ein Investor einen Betriebsteil oder Standort übernimmt, muss das Gesamtpaket stimmen. Die technischen Anlagen, Maschinen und Fahrzeuge müssen einsatzbereit, rechtlich geklärt und transparent bewertet sein.\n\nEine professionelle Aufbereitung der Dokumentation erhöht das Vertrauen potenzieller Käufer und beschleunigt den Prüfungsprozess (Due Diligence) erheblich.' },
+      { ueberschrift: 'Internationale und zielgruppengenaue Vermarktung', text: 'Die Zeiten, in denen eine Sanierung nur regional ausgeschrieben wurde, sind vorbei. Moderne Verwertungsprozesse sprechen gezielt Branchenteilnehmer, Mitbewerber und strategische Investoren auf nationaler und internationaler Ebene an.\n\nEine strukturierte Ansprache sorgt für Wettbewerb unter den Bietern, was sich positiv auf die Verwertungsquote und somit auf die Gläubigerbefriedigung auswirkt.' },
+      { ueberschrift: 'Nachvollziehbarkeit für Gläubigerausschuss und Gericht', text: 'Jeder Schritt im Vermarktungsprozess muss nachvollziehbar dokumentiert werden. Der Insolvenzverwalter muss gegenüber dem Gericht und dem Gläubigerausschuss belegen können, dass der gewählte Verwertungsweg das bestmögliche Ergebnis erzielt hat.' },
+      { ueberschrift: 'Fazit', text: 'Die übertragende Sanierung verbindet den Erhalt industrieller Substanz mit optimaler Gläubigerbefriedigung. Ein strukturierter, hochgradig transparenter Vermarktungsprozess bildet hierfür das Fundament.' },
+    ],
+    hinweis: 'Dieser Beitrag dient ausschließlich der allgemeinen Information und ersetzt keine individuelle rechtliche oder wirtschaftliche Beratung.',
+  },
 ] as const
 
 /** Zusammengesetzte Adresszeile "PLZ Ort" – Komfort-Helfer. */
