@@ -1,13 +1,11 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Check, ScaleIcon, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { EditorialProzess } from '@/components/editorial-prozess'
 import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
-import type { Schritt } from '@/components/prozess-schritte'
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
@@ -19,28 +17,26 @@ export const metadata = {
     'DPSS Management GmbH verwertet Vermögenswerte im Auftrag von Insolvenzverwaltern und bietet Käufern einen transparenten Katalog aktueller Positionen.',
 }
 
-const ABLAUF: readonly Schritt[] = [
+const ABLAUF = [
   {
-    schritt: '01',
-    titel: 'Auftrag & Zielsetzung',
-    beschreibung: 'Gemeinsame Klärung des Bestands, der Zielsetzung und des vorgesehenen Verwertungswegs.',
+    nummer: '01',
+    titel: 'Erfassung & Bewertung',
+    beschreibung: 'Vermögenswerte werden strukturiert aufgenommen und marktgerecht bewertet.',
   },
   {
-    schritt: '02',
-    titel: 'Erfassung & Einordnung',
-    beschreibung: 'Systematische Aufnahme und marktgerechte Einordnung der vorhandenen Vermögenswerte.',
+    nummer: '02',
+    titel: 'Vermarktung & Verkauf',
+    beschreibung: 'Gezielte Ansprache passender Interessenten über geeignete Kanäle.',
   },
   {
-    schritt: '03',
-    titel: 'Verwertung',
-    beschreibung: 'Gezielte Vermarktung und Ansprache geeigneter Interessenten.',
-  },
-  {
-    schritt: '04',
-    titel: 'Abwicklung',
-    beschreibung: 'Verkauf, Dokumentation und Abrechnung werden nachvollziehbar abgeschlossen.',
+    nummer: '03',
+    titel: 'Abwicklung & Bericht',
+    beschreibung: 'Verkauf, Übergabe und Abrechnung werden nachvollziehbar dokumentiert.',
   },
 ] as const
+
+const AUFTRAGGEBER_PUNKTE = ['Erfassungs-Service', 'Erlösoptimierung', 'Transparenz'] as const
+const KAEUFER_PUNKTE = ['Transparente Preise', 'Geprüfte Qualität', 'Direkte Abwicklung'] as const
 
 const WARUM_DPSS_PUNKTE = [
   'Nachvollziehbare Herkunft',
@@ -156,6 +152,76 @@ export default async function Startseite() {
         </div>
       </section>
 
+      {/* ZWEI WEGE, EIN PARTNER — Zielgruppen-Split direkt nach dem Produkt-Grid */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Zwei Wege, ein Partner
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
+              Für Auftraggeber und Käufer
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* Card 1: Für Auftraggeber */}
+            <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
+              <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
+                <ScaleIcon className="h-5 w-5 text-accent" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
+                  Für Insolvenzverwalter &amp; Verwalter
+                </h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {AUFTRAGGEBER_PUNKTE.map((punkt) => (
+                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
+                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      {punkt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href="/kontakt?betreff=Verwertungsauftrag"
+                className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Verwertungsauftrag anfragen
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            {/* Card 2: Für Käufer */}
+            <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
+              <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
+                <Search className="h-5 w-5 text-accent" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
+                  Für Käufer &amp; Investoren
+                </h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {KAEUFER_PUNKTE.map((punkt) => (
+                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
+                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      {punkt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href="/katalog"
+                className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Gesamten Katalog ansehen
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* VERWERTUNG AUS EINER HAND */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-24">
@@ -210,7 +276,7 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* UNSER ABLAUF */}
+      {/* UNSER ABLAUF — kompaktes, horizontales 3-Spalten-Grid statt langer vertikaler Zeilen */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-14 max-w-2xl">
@@ -221,7 +287,18 @@ export default async function Startseite() {
               Strukturiert von der Beauftragung bis zum Abschluss.
             </h2>
           </div>
-          <EditorialProzess schritte={ABLAUF} />
+
+          <div className="grid grid-cols-1 gap-6 border-t border-border pt-10 md:grid-cols-3 md:gap-8">
+            {ABLAUF.map((schritt) => (
+              <div key={schritt.nummer} className="flex flex-col gap-3 border border-border bg-card p-7">
+                <span className="font-serif text-3xl leading-none text-accent">{schritt.nummer}</span>
+                <h3 className="font-serif text-xl text-card-foreground">{schritt.titel}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                  {schritt.beschreibung}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -279,17 +356,26 @@ export default async function Startseite() {
             </p>
           </div>
 
-          <ul className="warum-punkte flex flex-col gap-7 self-end">
-            {WARUM_DPSS_PUNKTE.map((punkt) => (
-              <li key={punkt} className="flex items-start gap-3">
-                <span
-                  className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
-                  aria-hidden="true"
-                />
-                <span className="text-base font-medium text-background text-pretty">{punkt}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="warum-punkte flex flex-col gap-7 self-end">
+            <ul className="flex flex-col gap-7">
+              {WARUM_DPSS_PUNKTE.map((punkt) => (
+                <li key={punkt} className="flex items-start gap-3">
+                  <span
+                    className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent ring-1 ring-background/40"
+                    aria-hidden="true"
+                  />
+                  <span className="text-base font-medium text-background text-pretty">{punkt}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/kontakt"
+              className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            >
+              Jetzt Kontakt aufnehmen
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
         </div>
       </section>
 
