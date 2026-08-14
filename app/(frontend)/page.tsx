@@ -60,25 +60,26 @@ export default async function Startseite() {
   return (
     <div>
       {/* HERO */}
-      {/* Full-Width Hintergrundbild über die gesamte Sektion, mit dunklem
-          Verlauf von links für Lesbarkeit. Text in Off-White links platziert. */}
-      <section className="relative flex min-h-[640px] items-center overflow-hidden md:min-h-[680px]">
+      {/* Full-Width Hintergrundbild über die gesamte Sektion, mit subtilem
+          dunklem Verlauf von links für Lesbarkeit. Text in Off-White links
+          platziert, Bild rechts bleibt ruhig sichtbar. */}
+      <section className="relative flex min-h-[720px] items-center overflow-hidden md:min-h-[680px]">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image.png-uke0GSjFQrSkooak5i71sFF7GIdj2M.jpeg"
-          alt="Moderne, saubere Industriehalle mit langen Regalreihen und professioneller Betriebsausstattung"
+          src="/images/hero-industrie-modern.png"
+          alt="Moderne, helle Industriehalle mit Präzisionsmaschinen und klarer, aufgeräumter Struktur"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-[#141110]/95 from-0% via-[#141110]/60 via-45% to-[#141110]/10 to-85%"
+          className="absolute inset-0 bg-gradient-to-r from-[#141110]/88 from-0% via-[#141110]/45 via-48% to-[#141110]/5 to-85%"
           aria-hidden="true"
         />
 
         <div className="relative z-10 w-full px-6 py-16 md:px-12 lg:px-16">
           <div className="max-w-[560px]">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-accent">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[#f7f5f0]">
               DPSS MANAGEMENT
             </p>
             <h1 className="font-serif text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-[#f7f5f0] text-balance md:text-[3.6rem] lg:text-[4.1rem]">
