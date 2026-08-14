@@ -16,11 +16,12 @@
   --color-accent: #7a1f32;
   --color-accent-foreground: #f7f5f0;
 
-  /* Schlanke Utility-Bar oberhalb der Hauptnavigation: dunkles Nachtblau,
-     bewusst abgesetzt vom bordeauxroten Haupt-Akzent der Buttons. */
-  --color-topbar: #11141d;
+  /* Schlanke Utility-Bar oberhalb der Hauptnavigation: exakt die Logo-Farben
+     (dunkles Schriftschwarz + bordeauxroter "GMBH"-Akzent), kein separates
+     Nachtblau. */
+  --color-topbar: #23201b;
   --color-topbar-foreground: #f2efe9;
-  --color-topbar-highlight: #d4af7a;
+  --color-topbar-highlight: #b8546d;
 }
 
 html {
