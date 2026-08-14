@@ -1,4 +1,5 @@
 import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
+import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const metadata = {
   title: 'Datenschutz | DPSS Management GmbH',
