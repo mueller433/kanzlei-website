@@ -86,7 +86,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -124,7 +124,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -149,7 +149,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -168,13 +168,13 @@ export interface Media {
  * via the `definition` "posten".
  */
 export interface Posten {
-  id: string;
+  id: number;
   titel: string;
   beschreibung?: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -186,48 +186,44 @@ export interface Posten {
     [k: string]: unknown;
   } | null;
   kategorie: 'immobilien' | 'maschinen' | 'fahrzeuge' | 'inventar' | 'sonstiges';
+  /**
+   * Preis in Euro. Leer lassen, wenn "Preis auf Anfrage" aktiv ist.
+   */
   preis?: number | null;
   preisAufAnfrage?: boolean | null;
   status: 'verfuegbar' | 'reserviert' | 'verkauft';
-  bilder?: (string | Media)[] | null;
+  bilder?: (number | Media)[] | null;
+  /**
+   * z.B. Aktenzeichen oder Bezeichnung des Verfahrens
+   */
   insolvenzverfahren?: string | null;
   zustand: 'neu' | 'gebraucht' | 'restbestand';
+  /**
+   * Ein Satz für die Kartenansicht, z.B. "45 MP Vollformat, 8K RAW Video"
+   */
   kurzspezifikation?: string | null;
+  /**
+   * Verfügbare Menge dieser Position
+   */
   stueckzahl: number;
   standort?: string | null;
-  dokumente?: (string | Media)[] | null;
+  /**
+   * z.B. Gutachten, Datenblätter, Zustandsprotokolle
+   */
+  dokumente?: (number | Media)[] | null;
+  /**
+   * Nur aktivierte Posten werden auf der öffentlichen Seite angezeigt.
+   */
   veroeffentlicht?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posten_select".
- */
-export interface PostenSelect<T extends boolean = true> {
-  titel?: T;
-  beschreibung?: T;
-  kategorie?: T;
-  preis?: T;
-  preisAufAnfrage?: T;
-  status?: T;
-  bilder?: T;
-  insolvenzverfahren?: T;
-  zustand?: T;
-  kurzspezifikation?: T;
-  stueckzahl?: T;
-  standort?: T;
-  dokumente?: T;
-  veroeffentlicht?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -244,20 +240,24 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'posten';
+        value: number | Posten;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -267,10 +267,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -290,7 +290,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -335,6 +335,28 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posten_select".
+ */
+export interface PostenSelect<T extends boolean = true> {
+  titel?: T;
+  beschreibung?: T;
+  kategorie?: T;
+  preis?: T;
+  preisAufAnfrage?: T;
+  status?: T;
+  bilder?: T;
+  insolvenzverfahren?: T;
+  zustand?: T;
+  kurzspezifikation?: T;
+  stueckzahl?: T;
+  standort?: T;
+  dokumente?: T;
+  veroeffentlicht?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
