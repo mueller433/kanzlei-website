@@ -77,7 +77,7 @@ export default async function Startseite() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full px-6 py-16 md:px-12 lg:px-16">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-8 py-16 md:px-16 lg:px-24">
           <div className="max-w-[560px]">
             <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[#f7f5f0]">
               DPSS MANAGEMENT
