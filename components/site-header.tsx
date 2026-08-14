@@ -10,7 +10,6 @@ export const NAV_LINKS = [
   { href: '/unternehmen', label: 'Unternehmen' },
   { href: '/leistungen', label: 'Leistungen' },
   { href: '/verwertung', label: 'Verwertung' },
-  { href: '/katalog', label: 'Katalog' },
   { href: '/aktuelles', label: 'Aktuelles' },
   { href: '/kontakt', label: 'Kontakt' },
 ] as const
@@ -107,10 +106,10 @@ export function SiteHeader() {
 
         <div className="flex items-center justify-end gap-2">
           <Link
-            href="/kontakt"
+            href="/katalog"
             className="hidden bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-block"
           >
-            Anfrage stellen
+            Verwertungskatalog
           </Link>
 
           <button
@@ -151,10 +150,10 @@ export function SiteHeader() {
             })}
             <li className="py-3">
               <Link
-                href="/kontakt"
+                href="/katalog"
                 className="inline-block bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
               >
-                Anfrage stellen
+                Verwertungskatalog
               </Link>
             </li>
           </ul>
