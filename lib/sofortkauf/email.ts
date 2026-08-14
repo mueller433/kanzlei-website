@@ -22,7 +22,7 @@ function resendClient(): Resend {
 const ABSENDER = process.env.RESEND_FROM_EMAIL || 'DPSS Sofortkauf <onboarding@resend.dev>'
 
 function escapeHtml(wert: string): string {
-  return wert
+  return String(wert)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -146,13 +146,20 @@ export async function sendeInterneBenachrichtigung(input: InterneBenachrichtigun
   </div>`
 
   const client = resendClient()
-  await client.emails.send({
+  // WICHTIG: Der Resend-SDK-Aufruf wirft bei einem API-Fehler (z.B. ungültiger
+  // Absender/Empfänger, fehlende Domain-Verifizierung) standardmäßig KEINE
+  // Exception, sondern liefert ein { data, error }-Objekt zurück. Ohne diese
+  // Prüfung würde eine fehlgeschlagene Zustellung fälschlich als Erfolg gewertet.
+  const { error } = await client.emails.send({
     from: ABSENDER,
     to: empfaenger,
     subject: `Neue Sofortkauf-Anfrage: ${produktTitel}`,
     html,
     attachments: anhaenge.map((a) => ({ filename: a.dateiname, content: a.inhalt })),
   })
+  if (error) {
+    throw new Error(`Resend-Versand der internen Benachrichtigung fehlgeschlagen: ${error.message}`)
+  }
 }
 
 type KaeuferBestaetigungInput = {
@@ -183,10 +190,13 @@ export async function sendeKaeuferBestaetigung(input: KaeuferBestaetigungInput):
   </div>`
 
   const client = resendClient()
-  await client.emails.send({
+  const { error } = await client.emails.send({
     from: ABSENDER,
     to: empfaenger,
     subject: `Ihre Kaufanfrage: ${produktTitel}`,
     html,
   })
+  if (error) {
+    throw new Error(`Resend-Versand der Käufer-Bestätigung fehlgeschlagen: ${error.message}`)
+  }
 }

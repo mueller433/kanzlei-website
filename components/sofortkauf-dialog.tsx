@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import React, { useEffect, useId, useRef, useState, useTransition } from 'react'
 
-import { sofortkaufAnfrageAction } from '@/lib/sofortkauf/action'
 import {
   dokumentSlotsFuer,
   ERLAUBTE_DOKUMENT_TYPEN,
@@ -20,6 +19,7 @@ import {
   MAX_DOKUMENT_GROESSE_BYTES,
   type DokumentSlot,
   type KaeuferTyp,
+  type SofortkaufErgebnis,
 } from '@/lib/sofortkauf/schema'
 
 const MAX_DOKUMENT_GROESSE_MB = Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))
@@ -210,12 +210,23 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
     }
 
     startTransition(async () => {
-      const ergebnis = await sofortkaufAnfrageAction(formData)
-      if (ergebnis.erfolg) {
-        setErfolgId(ergebnis.kaufanfrageId)
-      } else {
-        setServerFehler(ergebnis.fehler)
-        if (ergebnis.feldFehler) setFeldFehler(ergebnis.feldFehler)
+      try {
+        const antwort = await fetch('/api/sofortkauf', {
+          method: 'POST',
+          body: formData,
+        })
+        const ergebnis: SofortkaufErgebnis = await antwort.json()
+        if (ergebnis.erfolg) {
+          setErfolgId(ergebnis.kaufanfrageId)
+        } else {
+          setServerFehler(ergebnis.fehler)
+          if (ergebnis.feldFehler) setFeldFehler(ergebnis.feldFehler)
+        }
+      } catch (error) {
+        console.error('[v0] Kaufanfrage konnte nicht übermittelt werden:', error)
+        setServerFehler(
+          'Ihre Kaufanfrage konnte nicht übermittelt werden. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+        )
       }
     })
   }

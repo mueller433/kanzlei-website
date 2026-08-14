@@ -1,10 +1,9 @@
-'use server'
-
+import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
 import { KANZLEI } from '@/lib/kanzlei-daten'
 import { KATEGORIE_LABELS } from '@/lib/katalog'
-import config from '@/payload.config'
+import { sendeInterneBenachrichtigung, sendeKaeuferBestaetigung } from '@/lib/sofortkauf/email'
 import {
   DOKUMENT_SLOTS_PRIVATPERSON,
   DOKUMENT_SLOTS_UNTERNEHMEN,
@@ -14,7 +13,12 @@ import {
   type Kaeuferdaten,
   type SofortkaufErgebnis,
 } from '@/lib/sofortkauf/schema'
-import { sendeInterneBenachrichtigung, sendeKaeuferBestaetigung } from '@/lib/sofortkauf/email'
+
+// Diese Route läuft ausschließlich serverseitig (Node-Runtime). RESEND_API_KEY
+// und die Payload Local API werden hier verwendet, aber niemals an den Client
+// übertragen. Der Client sendet ausschließlich ein normales multipart/form-data
+// per fetch() an diese Route – keine React Server Action mehr für den finalen Submit.
+export const runtime = 'nodejs'
 
 function formatiertePreis(preis: number): string {
   return new Intl.NumberFormat('de-DE', {
@@ -29,20 +33,28 @@ function textFeld(formData: FormData, name: string): string {
   return typeof wert === 'string' ? wert : ''
 }
 
-/**
- * Server Action für die "Sofortkauf anfragen"-Funktion. Nimmt ausschließlich
- * FormData entgegen (Textfelder + Datei-Uploads) und validiert/lädt jeden
- * sicherheitsrelevanten Wert erneut serverseitig – niemals ungeprüft aus dem
- * Client übernehmen (Produkt, Preis, Status).
- */
-export async function sofortkaufAnfrageAction(formData: FormData): Promise<SofortkaufErgebnis> {
-  const produktId = textFeld(formData, 'produktId').trim()
-  if (!produktId) {
-    return { erfolg: false, fehler: 'Es wurde keine Position übermittelt.' }
+function fehlerAntwort(ergebnis: SofortkaufErgebnis & { erfolg: false }, status: number) {
+  return Response.json(ergebnis, { status })
+}
+
+export async function POST(request: Request): Promise<Response> {
+  let formData: FormData
+  try {
+    formData = await request.formData()
+  } catch (error) {
+    console.error('[v0] Konnte eingehende Anfrage nicht als FormData lesen:', error)
+    return fehlerAntwort(
+      { erfolg: false, fehler: 'Die Anfrage konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.' },
+      400,
+    )
   }
 
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
+  const produktId = textFeld(formData, 'produktId').trim()
+  if (!produktId) {
+    return fehlerAntwort({ erfolg: false, fehler: 'Es wurde keine Position übermittelt.' }, 400)
+  }
+
+  const payload = await getPayload({ config: configPromise })
 
   // 1. Produkt AUSSCHLIESSLICH serverseitig aus Payload laden – niemals
   //    Preis/Status/Titel vom Client übernehmen.
@@ -54,17 +66,23 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
   })
 
   if (!produkt || produkt.veroeffentlicht !== true) {
-    return { erfolg: false, fehler: 'Diese Position wurde nicht gefunden oder ist nicht mehr verfügbar.' }
+    return fehlerAntwort(
+      { erfolg: false, fehler: 'Diese Position wurde nicht gefunden oder ist nicht mehr verfügbar.' },
+      404,
+    )
   }
 
   if (produkt.status !== 'verfuegbar') {
-    return {
-      erfolg: false,
-      fehler:
-        produkt.status === 'reserviert'
-          ? 'Diese Position ist bereits reserviert und kann derzeit nicht per Sofortkauf angefragt werden.'
-          : 'Diese Position wurde bereits verkauft und kann nicht mehr angefragt werden.',
-    }
+    return fehlerAntwort(
+      {
+        erfolg: false,
+        fehler:
+          produkt.status === 'reserviert'
+            ? 'Diese Position ist bereits reserviert und kann derzeit nicht per Sofortkauf angefragt werden.'
+            : 'Diese Position wurde bereits verkauft und kann nicht mehr angefragt werden.',
+      },
+      409,
+    )
   }
 
   // 2. Käuferdaten validieren
@@ -93,7 +111,7 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
       const pfad = issue.path.join('.')
       if (pfad && !feldFehler[pfad]) feldFehler[pfad] = issue.message
     }
-    return { erfolg: false, fehler: 'Bitte überprüfen Sie Ihre Angaben.', feldFehler }
+    return fehlerAntwort({ erfolg: false, fehler: 'Bitte überprüfen Sie Ihre Angaben.', feldFehler }, 400)
   }
 
   const kaeufer: Kaeuferdaten = parsed.data
@@ -102,18 +120,21 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
   const bestaetigtRichtig = textFeld(formData, 'bestaetigungRichtigkeit') === 'on'
   const bestaetigtUebermittlung = textFeld(formData, 'bestaetigungUebermittlung') === 'on'
   if (!bestaetigtRichtig || !bestaetigtUebermittlung) {
-    return {
-      erfolg: false,
-      fehler: 'Bitte bestätigen Sie beide Checkboxen, bevor Sie die Kaufanfrage absenden.',
-    }
+    return fehlerAntwort(
+      {
+        erfolg: false,
+        fehler: 'Bitte bestätigen Sie beide Checkboxen, bevor Sie die Kaufanfrage absenden.',
+      },
+      400,
+    )
   }
 
   // 4. Dokumente validieren (Anzahl/Slots abhängig vom Käufertyp, Dateityp, Dateigröße) und
   //    SOFORT serverseitig in den Speicher lesen. Die Dokumente werden bewusst NIEMALS
   //    dauerhaft gespeichert – nicht in Vercel Blob, nicht als Payload-Media/-Relation und
   //    nicht als öffentlich erreichbare URL. Sie existieren ausschließlich als flüchtiger
-  //    Buffer innerhalb dieser Funktionsausführung, werden als Resend-E-Mail-Anhang
-  //    verwendet und danach mit Beendigung der Funktion automatisch verworfen.
+  //    Buffer innerhalb dieser Request-Ausführung, werden als Resend-E-Mail-Anhang
+  //    verwendet und danach mit Beendigung der Anfrage automatisch verworfen.
   const erforderlicheSlots =
     kaeufer.kaeuferTyp === 'unternehmen' ? DOKUMENT_SLOTS_UNTERNEHMEN : DOKUMENT_SLOTS_PRIVATPERSON
 
@@ -121,26 +142,35 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
   for (const slot of erforderlicheSlots) {
     const eintrag = formData.get(slot.key)
     if (!(eintrag instanceof File) || eintrag.size === 0) {
-      return { erfolg: false, fehler: `Bitte laden Sie das Dokument „${slot.label}“ hoch.` }
+      return fehlerAntwort({ erfolg: false, fehler: `Bitte laden Sie das Dokument „${slot.label}“ hoch.` }, 400)
     }
     if (eintrag.size > MAX_DOKUMENT_GROESSE_BYTES) {
-      return {
-        erfolg: false,
-        fehler: `Die Datei „${slot.label}“ überschreitet die maximale Größe von ${Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))} MB.`,
-      }
+      return fehlerAntwort(
+        {
+          erfolg: false,
+          fehler: `Die Datei „${slot.label}“ überschreitet die maximale Größe von ${Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))} MB.`,
+        },
+        413,
+      )
     }
     if (!ERLAUBTE_DOKUMENT_TYPEN.includes(eintrag.type)) {
-      return {
-        erfolg: false,
-        fehler: `Die Datei „${slot.label}“ hat ein nicht unterstütztes Format. Erlaubt sind JPG, JPEG, PNG und PDF.`,
-      }
+      return fehlerAntwort(
+        {
+          erfolg: false,
+          fehler: `Die Datei „${slot.label}“ hat ein nicht unterstütztes Format. Erlaubt sind JPG, JPEG, PNG und PDF.`,
+        },
+        400,
+      )
     }
     let inhalt: Buffer
     try {
       inhalt = Buffer.from(await eintrag.arrayBuffer())
     } catch (error) {
       console.error('[v0] Fehler beim Lesen der Datei im Speicher:', error)
-      return { erfolg: false, fehler: `Die Datei „${slot.label}“ konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.` }
+      return fehlerAntwort(
+        { erfolg: false, fehler: `Die Datei „${slot.label}“ konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.` },
+        400,
+      )
     }
     dateien.push({ slot: slot.key, label: slot.label, dateiname: eintrag.name, inhalt })
   }
@@ -159,7 +189,7 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
     await sendeInterneBenachrichtigung({
       empfaenger: process.env.SOFORTKAUF_EMPFAENGER_EMAIL || KANZLEI.email.anzeige,
       produktTitel: produkt.titel,
-      produktId: produkt.id,
+      produktId: String(produkt.id),
       preisText,
       kategorie: KATEGORIE_LABELS[produkt.kategorie],
       standort: produkt.standort || 'Nicht angegeben',
@@ -172,11 +202,14 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
     })
   } catch (error) {
     console.error('[v0] Interne Benachrichtigungs-E-Mail (mit Dokumenten) konnte nicht versendet werden:', error)
-    return {
-      erfolg: false,
-      fehler:
-        'Ihre Kaufanfrage konnte nicht übermittelt werden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.',
-    }
+    return fehlerAntwort(
+      {
+        erfolg: false,
+        fehler:
+          'Ihre Kaufanfrage konnte nicht übermittelt werden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.',
+      },
+      502,
+    )
   }
 
   // 6. Kaufanfrage als reinen Metadaten-Eintrag in Payload anlegen (Local API umgeht
@@ -239,5 +272,6 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
     console.error('[v0] Bestätigungs-E-Mail an den Käufer konnte nicht versendet werden:', error)
   }
 
-  return { erfolg: true, kaufanfrageId }
+  const ergebnis: SofortkaufErgebnis = { erfolg: true, kaufanfrageId }
+  return Response.json(ergebnis, { status: 200 })
 }
