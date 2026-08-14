@@ -49,6 +49,14 @@ type InterneBenachrichtigungInput = {
   kaeufer: Kaeuferdaten
   identifikationsstatus: string
   dokumente: { bezeichnung: string; dateiname: string }[]
+  /**
+   * Die eigentlichen Dateiinhalte der Identifikationsdokumente. Diese werden
+   * ausschließlich als E-Mail-Anhang an DPSS Management gesendet – niemals
+   * in Vercel Blob oder Payload gespeichert. Nach dem Versand existieren sie
+   * nur noch als flüchtiger Speicherinhalt der Server Action und werden mit
+   * deren Beendigung automatisch verworfen.
+   */
+  anhaenge: { dateiname: string; inhalt: Buffer }[]
   zeitstempel: Date
 }
 
@@ -65,6 +73,7 @@ export async function sendeInterneBenachrichtigung(input: InterneBenachrichtigun
     kaeufer,
     identifikationsstatus,
     dokumente,
+    anhaenge,
     zeitstempel,
   } = input
 
@@ -130,7 +139,8 @@ export async function sendeInterneBenachrichtigung(input: InterneBenachrichtigun
 
       <p style="margin-top:24px;font-size:12px;color:#6b6b6b;">
         Eingegangen am ${zeitstempel.toLocaleString('de-DE', { dateStyle: 'long', timeStyle: 'short' })} Uhr.<br />
-        Die Dokumente wurden privat und nicht öffentlich zugänglich abgelegt. Prüfung bitte im Payload-Admin unter „Kaufanfragen“.
+        Die Identifikationsdokumente sind dieser E-Mail als Anhang beigefügt. Sie wurden zu keinem
+        Zeitpunkt in Vercel Blob oder in der Datenbank gespeichert und liegen ausschließlich hier vor.
       </p>
     </div>
   </div>`
@@ -141,6 +151,7 @@ export async function sendeInterneBenachrichtigung(input: InterneBenachrichtigun
     to: empfaenger,
     subject: `Neue Sofortkauf-Anfrage: ${produktTitel}`,
     html,
+    attachments: anhaenge.map((a) => ({ filename: a.dateiname, content: a.inhalt })),
   })
 }
 
@@ -148,38 +159,25 @@ type KaeuferBestaetigungInput = {
   empfaenger: string
   vorname: string
   produktTitel: string
-  preisText: string
 }
 
 /**
- * Sendet die Bestätigungs-E-Mail an den Käufer. Enthält bewusst KEINE
- * sensiblen Identifikationsdokumente oder deren Inhalte.
+ * Sendet die Bestätigungs-E-Mail an den Käufer. Diese E-Mail bestätigt
+ * bewusst NUR den erfolgreichen Eingang der Anfrage und enthält KEINE
+ * Ausweisdokumente, Anhänge oder andere sensible Identifikationsunterlagen.
  */
 export async function sendeKaeuferBestaetigung(input: KaeuferBestaetigungInput): Promise<void> {
-  const { empfaenger, vorname, produktTitel, preisText } = input
+  const { empfaenger, vorname, produktTitel } = input
 
   const html = `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;">
     <div style="background:#111111;color:#ffffff;padding:20px 24px;">
       <p style="margin:0;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:#c9a24b;">${escapeHtml(KANZLEI.name)}</p>
-      <h1 style="margin:8px 0 0;font-size:20px;">Ihre Sofortkauf-Anfrage ist eingegangen</h1>
+      <h1 style="margin:8px 0 0;font-size:20px;">Ihre Kaufanfrage ist eingegangen</h1>
     </div>
     <div style="padding:24px;border:1px solid #e5e5e5;border-top:none;font-size:14px;color:#1a1a1a;line-height:1.6;">
       <p>Guten Tag ${escapeHtml(vorname)},</p>
-      <p>vielen Dank für Ihre Sofortkauf-Anfrage zu folgender Position:</p>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        ${zeile('Produkt', produktTitel)}
-        ${zeile('Preis', preisText)}
-      </table>
-      <p>
-        Wir prüfen Ihre Angaben und die eingereichten Unterlagen und melden uns in Kürze bei Ihnen,
-        um die weiteren Schritte zum Kaufabschluss zu besprechen.
-      </p>
-      <p>
-        Bei Rückfragen erreichen Sie uns unter
-        <a href="${KANZLEI.email.href}" style="color:#c9a24b;">${escapeHtml(KANZLEI.email.anzeige)}</a>
-        oder telefonisch unter ${escapeHtml(KANZLEI.telefon.anzeige)}.
-      </p>
+      <p>Danke für Ihre Kaufanfrage. Ihre Anfrage wurde erfolgreich an DPSS Management übermittelt.</p>
       <p style="margin-top:24px;">Mit freundlichen Grüßen<br />${escapeHtml(KANZLEI.name)}</p>
     </div>
   </div>`
@@ -188,7 +186,7 @@ export async function sendeKaeuferBestaetigung(input: KaeuferBestaetigungInput):
   await client.emails.send({
     from: ABSENDER,
     to: empfaenger,
-    subject: `Ihre Sofortkauf-Anfrage: ${produktTitel}`,
+    subject: `Ihre Kaufanfrage: ${produktTitel}`,
     html,
   })
 }

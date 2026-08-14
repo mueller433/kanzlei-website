@@ -3,11 +3,13 @@ import type { CollectionConfig } from 'payload'
 /**
  * Speichert eingehende Sofortkauf-Anfragen aus dem öffentlichen Katalog.
  *
- * Sicherheitshinweis: Dokumente (Ausweiskopien etc.) werden NICHT in dieser
- * Collection als Payload-Upload gespeichert, sondern vorher serverseitig als
- * PRIVATE Blobs in Vercel Blob abgelegt (access: 'private'). Hier landen nur
- * Metadaten (Dateiname, privater Blob-Pfad, Größe, Typ) — niemals eine
- * öffentlich erreichbare URL.
+ * Sicherheitshinweis: Identifikationsdokumente (Ausweiskopien, Firmennachweis
+ * etc.) werden HIER BEWUSST NICHT gespeichert — weder als Payload-Upload
+ * noch als Relation/Metadaten, und auch nicht in Vercel Blob. Die Dokumente
+ * werden ausschließlich serverseitig im Speicher der Server Action gelesen,
+ * als E-Mail-Anhang per Resend direkt an DPSS Management gesendet und
+ * anschließend verworfen. Diese Collection enthält daher nur die reinen
+ * Käufer- und Produktangaben zur Nachverfolgung im Admin.
  *
  * Zugriff: Anfragen werden ausschließlich serverseitig über die Payload
  * Local API angelegt (server action), die die Access-Control standardmäßig
@@ -83,19 +85,16 @@ export const Kaufanfragen: CollectionConfig = {
     { name: 'handelsregisternummer', type: 'text' },
     { name: 'ustIdNr', type: 'text', label: 'USt-IdNr.' },
     {
-      name: 'dokumente',
+      name: 'eingereichteDokumente',
       type: 'array',
-      label: 'Hochgeladene Dokumente (privat in Vercel Blob)',
+      label: 'Eingereichte Dokumente (nur Bezeichnung, keine Dateien)',
       admin: {
         description:
-          'Nur Metadaten. Die eigentlichen Dateien liegen privat in Vercel Blob und sind nicht öffentlich erreichbar.',
+          'Nur die Bezeichnung der eingereichten Dokumente zur Nachverfolgung. Die eigentlichen Dateien wurden ausschließlich per E-Mail an DPSS Management gesendet und nirgends gespeichert.',
       },
       fields: [
         { name: 'bezeichnung', type: 'text', required: true },
         { name: 'dateiname', type: 'text', required: true },
-        { name: 'pfad', type: 'text', required: true, admin: { description: 'Privater Blob-Pathname.' } },
-        { name: 'groesse', type: 'number' },
-        { name: 'typ', type: 'text' },
       ],
     },
     {
@@ -103,6 +102,9 @@ export const Kaufanfragen: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'eingegangen',
+      admin: {
+        description: 'Die Dokumente selbst liegen nur als E-Mail-Anhang bei DPSS Management vor, nicht im Admin.',
+      },
       options: [
         { label: 'Eingegangen', value: 'eingegangen' },
         { label: 'Unvollständig', value: 'unvollstaendig' },

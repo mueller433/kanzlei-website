@@ -15,10 +15,15 @@ import React, { useEffect, useId, useRef, useState, useTransition } from 'react'
 import { sofortkaufAnfrageAction } from '@/lib/sofortkauf/action'
 import {
   dokumentSlotsFuer,
+  ERLAUBTE_DOKUMENT_TYPEN,
   kaeuferdatenSchema,
+  MAX_DOKUMENT_GROESSE_BYTES,
   type DokumentSlot,
   type KaeuferTyp,
 } from '@/lib/sofortkauf/schema'
+
+const MAX_DOKUMENT_GROESSE_MB = Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))
+const DATEI_ACCEPT_ATTRIBUT = ERLAUBTE_DOKUMENT_TYPEN.join(',')
 
 type Props = {
   produktId: string
@@ -164,10 +169,10 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
       const datei = dateien[slot.key]
       if (!datei) {
         fehler[slot.key] = 'Bitte laden Sie dieses Dokument hoch.'
-      } else if (datei.size > 10 * 1024 * 1024) {
-        fehler[slot.key] = 'Die Datei darf maximal 10 MB groß sein.'
-      } else if (!['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(datei.type)) {
-        fehler[slot.key] = 'Erlaubt sind JPG, PNG, WEBP und PDF.'
+      } else if (datei.size > MAX_DOKUMENT_GROESSE_BYTES) {
+        fehler[slot.key] = `Die Datei darf maximal ${MAX_DOKUMENT_GROESSE_MB} MB groß sein.`
+      } else if (!ERLAUBTE_DOKUMENT_TYPEN.includes(datei.type)) {
+        fehler[slot.key] = 'Erlaubt sind JPG, JPEG, PNG und PDF.'
       }
     }
     setFeldFehler(fehler)
@@ -495,7 +500,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               <input
                                 id={slot.key}
                                 type="file"
-                                accept="image/jpeg,image/png,image/webp,application/pdf"
+                                accept={DATEI_ACCEPT_ATTRIBUT}
                                 className="sr-only"
                                 onChange={(e) => {
                                   const file = e.target.files?.[0] ?? null

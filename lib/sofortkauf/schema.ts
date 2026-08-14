@@ -41,9 +41,18 @@ export const kaeuferdatenSchema = z.discriminatedUnion('kaeuferTyp', [
 
 export type Kaeuferdaten = z.infer<typeof kaeuferdatenSchema>
 
-/** Serverseitig erlaubte Dateitypen/-größen für Identifikationsdokumente. */
-export const ERLAUBTE_DOKUMENT_TYPEN = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
-export const MAX_DOKUMENT_GROESSE_BYTES = 10 * 1024 * 1024 // 10 MB
+/**
+ * Serverseitig erlaubte Dateitypen/-größen für Identifikationsdokumente.
+ *
+ * WICHTIG (Sicherheit/Datenschutz): Diese Dokumente werden NIEMALS dauerhaft
+ * gespeichert – nicht in Vercel Blob, nicht als Payload-Media/-Relation.
+ * Sie werden ausschließlich serverseitig im Speicher gelesen, als
+ * E-Mail-Anhang per Resend an DPSS Management gesendet und danach verworfen.
+ * Die Größe ist bewusst konservativ begrenzt, damit bis zu drei Anhänge pro
+ * Anfrage sicher unter dem Anhangslimit von Resend bleiben.
+ */
+export const ERLAUBTE_DOKUMENT_TYPEN = ['image/jpeg', 'image/png', 'application/pdf']
+export const MAX_DOKUMENT_GROESSE_BYTES = 5 * 1024 * 1024 // 5 MB
 
 export type DokumentSlot = {
   key: string

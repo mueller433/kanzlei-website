@@ -1,6 +1,5 @@
 'use server'
 
-import { put } from '@vercel/blob'
 import { getPayload } from 'payload'
 
 import { KANZLEI } from '@/lib/kanzlei-daten'
@@ -109,63 +108,83 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
     }
   }
 
-  // 4. Dokumente validieren (Anzahl/Slots abhängig vom Käufertyp, Dateityp, Dateigröße)
+  // 4. Dokumente validieren (Anzahl/Slots abhängig vom Käufertyp, Dateityp, Dateigröße) und
+  //    SOFORT serverseitig in den Speicher lesen. Die Dokumente werden bewusst NIEMALS
+  //    dauerhaft gespeichert – nicht in Vercel Blob, nicht als Payload-Media/-Relation und
+  //    nicht als öffentlich erreichbare URL. Sie existieren ausschließlich als flüchtiger
+  //    Buffer innerhalb dieser Funktionsausführung, werden als Resend-E-Mail-Anhang
+  //    verwendet und danach mit Beendigung der Funktion automatisch verworfen.
   const erforderlicheSlots =
     kaeufer.kaeuferTyp === 'unternehmen' ? DOKUMENT_SLOTS_UNTERNEHMEN : DOKUMENT_SLOTS_PRIVATPERSON
 
-  const dateien: { slot: string; label: string; file: File }[] = []
+  const dateien: { slot: string; label: string; dateiname: string; inhalt: Buffer }[] = []
   for (const slot of erforderlicheSlots) {
     const eintrag = formData.get(slot.key)
     if (!(eintrag instanceof File) || eintrag.size === 0) {
       return { erfolg: false, fehler: `Bitte laden Sie das Dokument „${slot.label}“ hoch.` }
     }
     if (eintrag.size > MAX_DOKUMENT_GROESSE_BYTES) {
-      return { erfolg: false, fehler: `Die Datei „${slot.label}“ überschreitet die maximale Größe von 10 MB.` }
+      return {
+        erfolg: false,
+        fehler: `Die Datei „${slot.label}“ überschreitet die maximale Größe von ${Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))} MB.`,
+      }
     }
     if (!ERLAUBTE_DOKUMENT_TYPEN.includes(eintrag.type)) {
       return {
         erfolg: false,
-        fehler: `Die Datei „${slot.label}“ hat ein nicht unterstütztes Format. Erlaubt sind JPG, PNG, WEBP und PDF.`,
+        fehler: `Die Datei „${slot.label}“ hat ein nicht unterstütztes Format. Erlaubt sind JPG, JPEG, PNG und PDF.`,
       }
     }
-    dateien.push({ slot: slot.key, label: slot.label, file: eintrag })
+    let inhalt: Buffer
+    try {
+      inhalt = Buffer.from(await eintrag.arrayBuffer())
+    } catch (error) {
+      console.error('[v0] Fehler beim Lesen der Datei im Speicher:', error)
+      return { erfolg: false, fehler: `Die Datei „${slot.label}“ konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.` }
+    }
+    dateien.push({ slot: slot.key, label: slot.label, dateiname: eintrag.name, inhalt })
   }
 
-  // 5. Dokumente PRIVAT (nicht öffentlich erreichbar) in Vercel Blob ablegen.
-  //    Niemals im öffentlichen Media-/Upload-Ordner speichern.
-  const zeitstempel = Date.now()
-  const hochgeladeneDokumente: {
-    bezeichnung: string
-    dateiname: string
-    pfad: string
-    groesse: number
-    typ: string
-  }[] = []
+  const preisText = produkt.preisAufAnfrage
+    ? 'Preis auf Anfrage'
+    : typeof produkt.preis === 'number'
+      ? formatiertePreis(produkt.preis)
+      : 'Preis auf Anfrage'
 
+  // 5. Interne Benachrichtigung MIT den Dokumenten als E-Mail-Anhang versenden. Dies ist
+  //    der EINZIGE Ort, an dem die Identifikationsdokumente ankommen – sie werden an
+  //    keiner anderen Stelle gespeichert. Schlägt der Versand fehl, brechen wir die
+  //    Anfrage ab, statt die Anfrage ohne die Dokumente "erfolgreich" zu speichern.
   try {
-    for (const { slot, label, file } of dateien) {
-      const blob = await put(
-        `kaufanfragen/${produktId}/${zeitstempel}-${slot}-${file.name}`,
-        file,
-        { access: 'private', addRandomSuffix: true },
-      )
-      hochgeladeneDokumente.push({
-        bezeichnung: label,
-        dateiname: file.name,
-        pfad: blob.pathname,
-        groesse: file.size,
-        typ: file.type,
-      })
-    }
+    await sendeInterneBenachrichtigung({
+      empfaenger: process.env.SOFORTKAUF_EMPFAENGER_EMAIL || KANZLEI.email.anzeige,
+      produktTitel: produkt.titel,
+      produktId: produkt.id,
+      preisText,
+      kategorie: KATEGORIE_LABELS[produkt.kategorie],
+      standort: produkt.standort || 'Nicht angegeben',
+      kaeuferTyp: kaeufer.kaeuferTyp,
+      kaeufer,
+      identifikationsstatus: 'Eingegangen',
+      dokumente: dateien.map((d) => ({ bezeichnung: d.label, dateiname: d.dateiname })),
+      anhaenge: dateien.map((d) => ({ dateiname: d.dateiname, inhalt: d.inhalt })),
+      zeitstempel: new Date(),
+    })
   } catch (error) {
-    console.error('[v0] Fehler beim Hochladen der Identifikationsdokumente:', error)
+    console.error('[v0] Interne Benachrichtigungs-E-Mail (mit Dokumenten) konnte nicht versendet werden:', error)
     return {
       erfolg: false,
-      fehler: 'Die Dokumente konnten nicht hochgeladen werden. Bitte versuchen Sie es erneut.',
+      fehler:
+        'Ihre Kaufanfrage konnte nicht übermittelt werden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.',
     }
   }
 
-  // 6. Kaufanfrage in Payload anlegen (Local API umgeht Access-Control standardmäßig)
+  // 6. Kaufanfrage als reinen Metadaten-Eintrag in Payload anlegen (Local API umgeht
+  //    Access-Control standardmäßig). Es werden ausschließlich Käufer- und
+  //    Produktangaben sowie die Bezeichnung der eingereichten Dokumente gespeichert –
+  //    NIEMALS die Dateien oder deren Inhalt selbst. Ein Fehler hier darf die bereits
+  //    erfolgreich per E-Mail übermittelte Anfrage nicht als Fehlschlag an den Käufer
+  //    zurückgeben, da DPSS Management die Anfrage inklusive Dokumenten bereits erhalten hat.
   const adresse = {
     strasse: kaeufer.strasse,
     hausnummer: kaeufer.hausnummer,
@@ -195,52 +214,26 @@ export async function sofortkaufAnfrageAction(formData: FormData): Promise<Sofor
         handelsregisternummer:
           kaeufer.kaeuferTyp === 'unternehmen' ? kaeufer.handelsregisternummer || '' : '',
         ustIdNr: kaeufer.kaeuferTyp === 'unternehmen' ? kaeufer.ustIdNr || '' : '',
-        dokumente: hochgeladeneDokumente,
+        eingereichteDokumente: dateien.map((d) => ({ bezeichnung: d.label, dateiname: d.dateiname })),
         identifikationsstatus: 'eingegangen',
         status: 'neu',
       },
     })
     kaufanfrageId = String(angelegt.id)
   } catch (error) {
-    console.error('[v0] Fehler beim Speichern der Kaufanfrage in Payload:', error)
-    return {
-      erfolg: false,
-      fehler: 'Die Kaufanfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.',
-    }
+    console.error('[v0] Fehler beim Speichern der Kaufanfrage in Payload (Metadaten):', error)
+    // Die Anfrage inkl. Dokumenten ist bereits per E-Mail bei DPSS Management eingegangen.
+    // Der Admin-Datensatz ist nur eine Nachverfolgungshilfe, daher hier kein Abbruch.
+    kaufanfrageId = crypto.randomUUID()
   }
 
-  // 7. Benachrichtigungen versenden (Resend). Ein Fehlschlag beim Versand darf die
-  //    bereits erfolgreich gespeicherte Anfrage nicht als Fehler an den Käufer zurückgeben.
-  const preisText = produkt.preisAufAnfrage
-    ? 'Preis auf Anfrage'
-    : typeof produkt.preis === 'number'
-      ? formatiertePreis(produkt.preis)
-      : 'Preis auf Anfrage'
-
-  try {
-    await sendeInterneBenachrichtigung({
-      empfaenger: process.env.SOFORTKAUF_EMPFAENGER_EMAIL || KANZLEI.email.anzeige,
-      produktTitel: produkt.titel,
-      produktId: produkt.id,
-      preisText,
-      kategorie: KATEGORIE_LABELS[produkt.kategorie],
-      standort: produkt.standort || 'Nicht angegeben',
-      kaeuferTyp: kaeufer.kaeuferTyp,
-      kaeufer,
-      identifikationsstatus: 'Eingegangen',
-      dokumente: hochgeladeneDokumente.map((d) => ({ bezeichnung: d.bezeichnung, dateiname: d.dateiname })),
-      zeitstempel: new Date(),
-    })
-  } catch (error) {
-    console.error('[v0] Interne Benachrichtigungs-E-Mail konnte nicht versendet werden:', error)
-  }
-
+  // 7. Bestätigungs-E-Mail an den Käufer (OHNE Dokumente/Anhänge). Ein Fehlschlag hier
+  //    darf die bereits erfolgreich übermittelte Anfrage nicht als Fehler zurückgeben.
   try {
     await sendeKaeuferBestaetigung({
       empfaenger: kaeufer.email,
       vorname: kaeufer.vorname,
       produktTitel: produkt.titel,
-      preisText,
     })
   } catch (error) {
     console.error('[v0] Bestätigungs-E-Mail an den Käufer konnte nicht versendet werden:', error)

@@ -251,13 +251,10 @@ export interface Kaufanfrage {
   firmenname?: string | null;
   handelsregisternummer?: string | null;
   ustIdNr?: string | null;
-  dokumente?:
+  eingereichteDokumente?:
     | {
         bezeichnung: string;
         dateiname: string;
-        pfad: string;
-        groesse?: number | null;
-        typ?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -294,14 +291,11 @@ export interface KaufanfragenSelect<T extends boolean = true> {
   firmenname?: T;
   handelsregisternummer?: T;
   ustIdNr?: T;
-  dokumente?:
+  eingereichteDokumente?:
     | T
     | {
         bezeichnung?: T;
         dateiname?: T;
-        pfad?: T;
-        groesse?: T;
-        typ?: T;
         id?: T;
       };
   identifikationsstatus?: T;
