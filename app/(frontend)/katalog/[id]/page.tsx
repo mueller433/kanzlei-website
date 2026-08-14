@@ -178,7 +178,7 @@ export default async function AssetDetailSeite({
 
                 {posten.status === 'verfuegbar' && (
                   <SofortkaufDialog
-                    produktId={posten.id}
+                    produktId={String(posten.id)}
                     produktTitel={posten.titel}
                     preisText={preisText}
                     standort={posten.standort}
