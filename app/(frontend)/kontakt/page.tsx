@@ -33,7 +33,14 @@ const KONTAKTDATEN = [
   },
 ] as const
 
-export default function KontaktSeite() {
+export default async function KontaktSeite({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const sp = await searchParams
+  const betreffVorbelegung = typeof sp.betreff === 'string' ? sp.betreff : ''
+
   return (
     <div>
       {/* HERO */}
@@ -194,6 +201,7 @@ export default function KontaktSeite() {
                     id="betreff"
                     name="betreff"
                     type="text"
+                    defaultValue={betreffVorbelegung}
                     placeholder="z. B. Aktenzeichen oder Betreff Ihrer Anfrage"
                     className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                   />
