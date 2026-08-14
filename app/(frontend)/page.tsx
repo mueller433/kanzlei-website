@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import { EditorialProzess } from '@/components/editorial-prozess'
-import { KatalogPositionKarte } from '@/components/katalog-position-karte'
+import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import type { Schritt } from '@/components/prozess-schritte'
@@ -112,9 +112,9 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* AKTUELLE POSITIONEN / KATALOG — ruhiger, hochwertiger Katalog-Stil */}
-      <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-[1100px] px-6 py-20 md:px-10 md:py-28">
+      {/* AKTUELLE POSITIONEN / KATALOG — edles 3-spaltiges Card-Grid */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-14 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Verwertung · Katalog
@@ -130,9 +130,9 @@ export default async function Startseite() {
           </div>
 
           {docs.length > 0 ? (
-            <div className="karten-grid flex flex-col border-t border-border">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {docs.map((posten) => (
-                <KatalogPositionKarte key={posten.id} posten={posten} />
+                <KatalogPositionGridKarte key={posten.id} posten={posten} />
               ))}
             </div>
           ) : (
@@ -144,16 +144,15 @@ export default async function Startseite() {
             </div>
           )}
 
-          <div className="mt-10">
+          <div className="mt-14 flex justify-center">
             <Link
               href="/katalog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="group inline-flex items-center justify-center gap-2 border border-accent/40 bg-accent/5 px-8 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/10"
             >
-              Alle Positionen ansehen
+              Gesamten Katalog ansehen
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
-
         </div>
       </section>
 
