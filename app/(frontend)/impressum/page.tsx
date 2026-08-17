@@ -17,7 +17,7 @@ const IMPRESSUM = {
   handelsregisternummer: 'HRB 207736',
   ustId: 'DE452777224',
   email: 'info@dpss-management.com',
-  telefon: '[TELEFONNUMMER]',
+  telefon: '+4932212243813',
 } as const
 
 function Feld({ label, children }: { label: string; children: React.ReactNode }) {

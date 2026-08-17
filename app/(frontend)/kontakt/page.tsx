@@ -169,7 +169,7 @@ export default async function KontaktSeite({
                       type="tel"
                       autoComplete="tel"
                       required
-                      placeholder="+49 (0) 551 000 0000"
+                      placeholder="+4932212243813"
                       className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                     />
                   </div>
