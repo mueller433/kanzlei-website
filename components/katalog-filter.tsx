@@ -76,7 +76,7 @@ export function KatalogFilter({
             name="q"
             type="search"
             defaultValue={q}
-            placeholder="Position, Aktenzeichen oder Detail suchen …"
+            placeholder="Position oder Detail suchen …"
             className="h-11 w-full border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
           />
         </label>

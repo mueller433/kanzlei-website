@@ -102,9 +102,6 @@ export default async function AssetDetailSeite({
 
   // Eckdaten-Tabelle: echte Verwertungs-Details ohne Dopplungen zu Titel-Block/Kacheln
   const eckdaten = [
-    posten.insolvenzverfahren
-      ? { label: 'Aktenzeichen / Verfahren', wert: posten.insolvenzverfahren }
-      : null,
     { label: 'MwSt.-Satz', wert: '19 % (zzgl. USt.)' },
     hatNettoPreis
       ? { label: 'Preis (netto)', wert: formatiertePreis(posten.preis as number) }
@@ -192,7 +189,7 @@ export default async function AssetDetailSeite({
               <AssetGalerie bilder={bilder} />
             </div>
 
-            {/* Kerninformationen + Aktenzeichen */}
+            {/* Kerninformationen */}
             <div className="order-3 lg:order-3 lg:col-start-2 lg:row-start-2">
               <dl
                 className={`grid grid-cols-2 gap-px overflow-hidden border border-border bg-border ${

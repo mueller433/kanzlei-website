@@ -37,9 +37,7 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
 
   const mengeText =
     typeof posten.stueckzahl === 'number' ? `${posten.stueckzahl} Stück` : null
-  const nebeninfo = [posten.insolvenzverfahren, posten.standort, mengeText]
-    .filter(Boolean)
-    .join(' · ')
+  const nebeninfo = [posten.standort, mengeText].filter(Boolean).join(' · ')
 
   return (
     <Link
