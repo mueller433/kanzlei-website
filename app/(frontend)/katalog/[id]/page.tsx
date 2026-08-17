@@ -169,7 +169,7 @@ export default async function AssetDetailSeite({
                   href="/kontakt"
                   className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
                 >
-                  Position anfragen
+                  Fragen?
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
 
