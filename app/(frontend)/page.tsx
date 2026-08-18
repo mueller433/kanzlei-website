@@ -51,7 +51,7 @@ export default async function Startseite() {
     where: { veroeffentlicht: { equals: true } },
     sort: '-createdAt',
     depth: 1,
-    limit: 3,
+    limit: 6,
   })
 
   return (
@@ -126,7 +126,7 @@ export default async function Startseite() {
           </div>
 
           {docs.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {docs.map((posten) => (
                 <KatalogPositionGridKarte key={posten.id} posten={posten} />
               ))}
