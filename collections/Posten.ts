@@ -37,11 +37,15 @@ export const Posten: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
-        { label: 'Immobilien', value: 'immobilien' },
+        { label: 'Smartphones & Mobilgeräte', value: 'Smartphones & Mobilgeräte' },
         { label: 'Maschinen', value: 'maschinen' },
         { label: 'Fahrzeuge', value: 'fahrzeuge' },
-        { label: 'Inventar', value: 'inventar' },
+        { label: 'IT & Büroelektronik', value: 'IT & Büroelektronik' },
         { label: 'Sonstiges', value: 'sonstiges' },
+		{ label: 'Gastronomie', value: 'Gastronomie' },
+		{ label: 'Möbel & Einrichtung', value: 'Möbel & Einrichtung' },
+		{ label: 'Energie & Gebäudetechnik', value: 'Energie & Gebäudetechnik' },
+		{ label: 'Lager, Logistik & Reinigung', value: 'Lager, Logistik & Reinigung' },
       ],
     },
     {
@@ -126,7 +130,7 @@ export const Posten: CollectionConfig = {
       name: 'veroeffentlicht',
       type: 'checkbox',
       label: 'Öffentlich sichtbar',
-      defaultValue: false,
+      defaultValue: true,
       admin: {
         description: 'Nur aktivierte Posten werden auf der öffentlichen Seite angezeigt.',
         position: 'sidebar',
