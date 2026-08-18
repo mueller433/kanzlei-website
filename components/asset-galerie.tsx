@@ -136,7 +136,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={bild.url || '/placeholder.svg'} alt="" className="h-full w-full object-cover" />
+              <img src={bild.url || '/placeholder.svg'} alt={bild.alt} className="h-full w-full object-cover" />
             </button>
           ))}
         </div>
