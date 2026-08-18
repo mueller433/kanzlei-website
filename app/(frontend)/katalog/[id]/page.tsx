@@ -96,7 +96,7 @@ export default async function AssetDetailSeite({
   const kerninfo = [
     { label: 'Preis', wert: preisText },
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'MwSt.', wert: '19 % netto' },
+    { label: 'MwSt.', wert: '19 %' },
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
