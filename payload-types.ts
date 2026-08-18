@@ -187,7 +187,16 @@ export interface Posten {
     };
     [k: string]: unknown;
   } | null;
-  kategorie: 'immobilien' | 'maschinen' | 'fahrzeuge' | 'inventar' | 'sonstiges';
+  kategorie:
+    | 'smartphones'
+    | 'maschinen'
+    | 'fahrzeuge'
+    | 'it-bueroelektronik'
+    | 'sonstiges'
+    | 'gastronomie'
+    | 'moebel-einrichtung'
+    | 'energie-gebaeudetechnik'
+    | 'lager-logistik-reinigung';
   /**
    * Preis in Euro. Leer lassen, wenn "Preis auf Anfrage" aktiv ist.
    */

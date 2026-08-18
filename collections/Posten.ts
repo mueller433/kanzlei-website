@@ -37,11 +37,15 @@ export const Posten: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
-        { label: 'Immobilien', value: 'immobilien' },
+        { label: 'Smartphones & Mobilgeräte', value: 'smartphones' },
         { label: 'Maschinen', value: 'maschinen' },
         { label: 'Fahrzeuge', value: 'fahrzeuge' },
-        { label: 'Inventar', value: 'inventar' },
+        { label: 'IT & Büroelektronik', value: 'it-bueroelektronik' },
         { label: 'Sonstiges', value: 'sonstiges' },
+        { label: 'Gastronomie', value: 'gastronomie' },
+        { label: 'Möbel & Einrichtung', value: 'moebel-einrichtung' },
+        { label: 'Energie & Gebäudetechnik', value: 'energie-gebaeudetechnik' },
+        { label: 'Lager, Logistik & Reinigung', value: 'lager-logistik-reinigung' },
       ],
     },
     {

@@ -7,21 +7,29 @@ import type { Media, Posten } from '@/payload-types'
  */
 
 export const KATEGORIE_REIHENFOLGE = [
-  'immobilien',
+  'smartphones',
   'maschinen',
   'fahrzeuge',
-  'inventar',
+  'it-bueroelektronik',
   'sonstiges',
+  'gastronomie',
+  'moebel-einrichtung',
+  'energie-gebaeudetechnik',
+  'lager-logistik-reinigung',
 ] as const
 
 export type Kategorie = (typeof KATEGORIE_REIHENFOLGE)[number]
 
 export const KATEGORIE_LABELS: Record<Kategorie, string> = {
-  immobilien: 'Immobilien',
+  smartphones: 'Smartphones & Mobilgeräte',
   maschinen: 'Maschinen',
   fahrzeuge: 'Fahrzeuge',
-  inventar: 'Inventar',
+  'it-bueroelektronik': 'IT & Büroelektronik',
   sonstiges: 'Sonstiges',
+  gastronomie: 'Gastronomie',
+  'moebel-einrichtung': 'Möbel & Einrichtung',
+  'energie-gebaeudetechnik': 'Energie & Gebäudetechnik',
+  'lager-logistik-reinigung': 'Lager, Logistik & Reinigung',
 }
 
 export const ZUSTAND_REIHENFOLGE = ['neu', 'gebraucht', 'restbestand'] as const
