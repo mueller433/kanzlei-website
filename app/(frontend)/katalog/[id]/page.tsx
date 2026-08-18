@@ -80,7 +80,7 @@ export default async function AssetDetailSeite({
 
   const bilder: GalerieBild[] = medienObjekte(posten.bilder)
     .filter((m) => typeof m.url === 'string')
-    .map((m) => ({ url: m.url as string, alt: m.alt || posten.titel }))
+    .map((m) => ({ url: m.url as string, alt: posten.titel }))
 
   const dokumente = medienObjekte(posten.dokumente).filter((m) => typeof m.url === 'string')
 
