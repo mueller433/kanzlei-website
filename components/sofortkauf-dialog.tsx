@@ -240,7 +240,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
         onClick={() => setOpen(true)}
         className="group inline-flex items-center justify-center gap-2 border border-accent bg-transparent px-6 py-3 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
       >
-        Sofortkauf anfragen
+        Jetzt Kaufen
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </button>
 
@@ -261,9 +261,9 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
             {/* Kopfzeile */}
             <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent">
-                  Sofortkauf anfragen
-                </p>
+  <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent">
+  Sofortkauf anfragen
+  </p>
                 <h2 id={`${idBasis}-titel`} className="mt-1 font-serif text-xl text-card-foreground">
                   {produktTitel}
                 </h2>

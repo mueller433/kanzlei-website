@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import React from 'react'
 
 export type GalerieBild = {
@@ -15,6 +15,7 @@ export type GalerieBild = {
  */
 export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   const [aktiv, setAktiv] = React.useState(0)
+  const [vorschauOffen, setVorschauOffen] = React.useState(false)
   // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild.
   // Muss vor jedem bedingten `return` stehen (Rules of Hooks).
   const touchStartX = React.useRef<number | null>(null)
@@ -53,6 +54,23 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
     touchStartX.current = null
   }
 
+  React.useEffect(() => {
+    if (!vorschauOffen) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setVorschauOffen(false)
+      if (event.key === 'ArrowLeft' && zeigeNavigation) zeige(aktiv - 1)
+      if (event.key === 'ArrowRight' && zeigeNavigation) zeige(aktiv + 1)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [aktiv, vorschauOffen, zeigeNavigation])
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -60,13 +78,24 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
         onTouchStart={zeigeNavigation ? onTouchStart : undefined}
         onTouchEnd={zeigeNavigation ? onTouchEnd : undefined}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={aktuelles.url || '/placeholder.svg'}
-          alt={aktuelles.alt}
-          draggable={false}
-          className="h-full w-full object-cover"
-        />
+        <button
+          type="button"
+          onClick={() => setVorschauOffen(true)}
+          aria-label="Bild vergrößert ansehen"
+          className="group absolute inset-0 h-full w-full cursor-zoom-in"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={aktuelles.url || '/placeholder.svg'}
+            alt={aktuelles.alt}
+            draggable={false}
+            className="h-full w-full object-cover"
+          />
+          <span className="absolute bottom-3 left-3 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-xs text-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+            <Maximize2 className="h-4 w-4" aria-hidden="true" />
+            Vergrößern
+          </span>
+        </button>
 
         {zeigeNavigation && (
           <>
@@ -110,6 +139,68 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
               <img src={bild.url || '/placeholder.svg'} alt="" className="h-full w-full object-cover" />
             </button>
           ))}
+        </div>
+      )}
+
+      {vorschauOffen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Bildvorschau: ${aktuelles.alt}`}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/90 p-4 md:p-10"
+          onClick={() => setVorschauOffen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setVorschauOffen(false)}
+            aria-label="Bildvorschau schließen"
+            className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center border border-background/30 bg-background/90 text-foreground transition-colors hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background"
+          >
+            <X className="h-5 w-5" aria-hidden="true" />
+          </button>
+
+          {zeigeNavigation && (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                zeige(aktiv - 1)
+              }}
+              aria-label="Vorheriges Bild in der Vorschau"
+              className="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-background/30 bg-background/90 text-foreground transition-colors hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background md:left-8"
+            >
+              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+            </button>
+          )}
+
+          <div
+            className="relative flex max-h-full max-w-full items-center justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={aktuelles.url || '/placeholder.svg'}
+              alt={aktuelles.alt}
+              className="max-h-[calc(100vh-5rem)] max-w-[calc(100vw-2rem)] object-contain md:max-h-[calc(100vh-6rem)] md:max-w-[calc(100vw-10rem)]"
+            />
+            <span className="absolute bottom-3 right-3 bg-background/90 px-2 py-1 text-xs tabular-nums text-foreground">
+              {aktiv + 1} / {anzahl}
+            </span>
+          </div>
+
+          {zeigeNavigation && (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                zeige(aktiv + 1)
+              }}
+              aria-label="Nächstes Bild in der Vorschau"
+              className="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-background/30 bg-background/90 text-foreground transition-colors hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background md:right-8"
+            >
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
+            </button>
+          )}
         </div>
       )}
     </div>

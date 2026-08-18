@@ -25,8 +25,8 @@ export const KANZLEI = {
     ort: 'Göttingen',
   },
   telefon: {
-    anzeige: '+49 (0) 551 000 0000',
-    href: 'tel:+495510000000',
+    anzeige: '+4932212243813',
+    href: 'tel:+4932212243813',
   },
   email: {
     anzeige: 'kontakt@dpss-management.com',
