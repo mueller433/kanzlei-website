@@ -28,6 +28,24 @@ function formatiertePreis(preis: number): string {
   }).format(preis)
 }
 
+/**
+ * Erzeugt eine stabile, aus der Objekt-ID abgeleitete Positionsnummer im Format
+ * "AB12345" (2 Buchstaben + 5 Ziffern) – deterministisch pro Posten, aber ohne
+ * erkennbaren Bezug zur echten Datenbank-ID.
+ */
+function positionsnummer(id: string | number): string {
+  const text = String(id)
+  let hash = 0
+  for (let i = 0; i < text.length; i++) {
+    hash = (hash * 31 + text.charCodeAt(i)) >>> 0
+  }
+  const buchstaben = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const buchstabe1 = buchstaben[hash % 26]
+  const buchstabe2 = buchstaben[Math.floor(hash / 26) % 26]
+  const ziffern = String(hash % 100000).padStart(5, '0')
+  return `${buchstabe1}${buchstabe2}${ziffern}`
+}
+
 /** Extrahiert aus einem upload-Feld (string | Media)[] die vollständigen Media-Objekte. */
 function medienObjekte(feld: Posten['bilder']): Media[] {
   if (!feld) return []
@@ -113,7 +131,7 @@ export default async function AssetDetailSeite({
         }
       : null,
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'Objekt-ID', wert: posten.id },
+    { label: 'Pos.-Nr.', wert: positionsnummer(posten.id) },
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
   return (
