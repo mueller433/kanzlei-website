@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, CheckCircle2, Clock, Mail, Menu, Phone, X } from 'lucide-react'
+import { ArrowRight, Clock, Mail, Menu, Phone, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -58,11 +58,6 @@ function UtilityTopBar() {
   return (
     <div className="hidden bg-topbar text-topbar-foreground lg:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-8 py-2 md:px-16 lg:px-24">
-        <p className="flex items-center gap-2 whitespace-nowrap text-xs font-medium tracking-wide text-topbar-foreground/90">
-          <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-topbar-foreground/60" aria-hidden="true" />
-          Verwertungsbeauftragter · Amtsgericht Göttingen
-        </p>
-
         <div className="flex items-center gap-4 whitespace-nowrap text-xs font-medium tracking-wide text-topbar-foreground/90">
           <a
             href={KANZLEI.telefon.href}
