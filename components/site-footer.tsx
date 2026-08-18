@@ -17,7 +17,6 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     links: [
       { href: '/unternehmen', label: 'Über DPSS' },
       { href: '/leistungen', label: 'Leistungen' },
-      { href: '/verwertung', label: 'Verwertung' },
     ],
   },
   {
@@ -25,7 +24,6 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     links: [
       { href: '/verwertung', label: 'Verwertung' },
       { href: '/katalog', label: 'Katalog' },
-      { href: '/katalog', label: 'Aktuelle Angebote' },
     ],
   },
   {
