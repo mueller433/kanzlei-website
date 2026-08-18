@@ -3,9 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import { FaqSection } from '@/components/faq-section'
 import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
+import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
@@ -428,6 +430,32 @@ export default async function Startseite() {
                   </span>
                 </Link>
               ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — kompakter Teaser mit 5 ausgewählten Fragen */}
+      <section className="border-b border-border">
+        <div className="reveal mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Häufige Fragen
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
+              Antworten auf die wichtigsten Fragen
+            </h2>
+          </div>
+
+          <FaqSection eintraege={findeFaqEintraege(STARTSEITE_FAQ_IDS)} idPrefix="start-" />
+
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/faq"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+            >
+              Alle häufigen Fragen ansehen
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
       </section>
