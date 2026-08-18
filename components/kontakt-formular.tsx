@@ -166,7 +166,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
             type="tel"
             autoComplete="tel"
             required
-            placeholder="+4932212243813"
+            placeholder="+49 30 12345678"
             value={werte.telefon}
             onChange={(event) => aktualisiereFeld('telefon', event.target.value)}
             className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
