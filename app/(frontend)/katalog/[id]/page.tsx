@@ -152,7 +152,7 @@ export default async function AssetDetailSeite({
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
-      ? formatiertePreis(posten.preis)
+      ? formatiertePreis(Math.round(posten.preis * 1.19))
       : 'Preis auf Anfrage'
 
   // Kompakte Kerninformationen im Hero – nur befüllte Felder (Sektion 5 der Vorgabe)
@@ -165,10 +165,6 @@ export default async function AssetDetailSeite({
 
   // Eckdaten-Tabelle: echte Verwertungs-Details ohne Dopplungen zu Titel-Block/Kacheln
   const eckdaten = [
-    { label: 'MwSt.-Satz', wert: '19 % (zzgl. USt.)' },
-    hatNettoPreis
-      ? { label: 'Preis (netto)', wert: formatiertePreis(posten.preis as number) }
-      : null,
     hatNettoPreis
       ? {
           label: 'Preis (brutto, inkl. 19 % USt.)',
