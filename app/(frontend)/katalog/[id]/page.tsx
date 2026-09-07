@@ -327,7 +327,7 @@ export default async function AssetDetailSeite({
                           className="group inline-flex items-center gap-3 border border-border px-4 py-3 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
                         >
                           <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />
-                          <span className="flex-1">{dok.alt || dok.filename || 'Dokument'}</span>
+                          <span className="flex-1">{dok.filename || posten.titel}</span>
                           <span className="text-muted-foreground transition-colors group-hover:text-accent">
                             ansehen ↓
                           </span>
