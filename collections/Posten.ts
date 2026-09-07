@@ -22,36 +22,6 @@ export const Posten: CollectionConfig = {
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
-<<<<<<< HEAD
-fields: [
-  {
-    name: 'titel',
-    type: 'text',
-    required: true,
-  },
-  {
-    name: 'beschreibung',
-    type: 'richText',
-  },
-  {
-    name: 'kategorie',
-    type: 'select',
-    required: true,
-    options: [
-      { label: 'Smartphones & Mobilgeräte', value: 'smartphones' },
-      { label: 'Maschinen', value: 'maschinen' },
-      { label: 'Fahrzeuge', value: 'fahrzeuge' },
-      { label: 'IT & Büroelektronik', value: 'it-bueroelektronik' },
-      { label: 'Sonstiges', value: 'sonstiges' },
-      { label: 'Gastronomie', value: 'gastronomie' },
-      { label: 'Möbel & Einrichtung', value: 'moebel-einrichtung' },
-      { label: 'Energie & Gebäudetechnik', value: 'energie-gebaeudetechnik' },
-      { label: 'Lager, Logistik & Reinigung', value: 'lager-logistik-reinigung' },
-    ],
-  },
-  {
-    name: 'preis',
-=======
   fields: [
     {
       name: 'titel',
@@ -80,7 +50,6 @@ fields: [
     },
     {
       name: 'preis',
->>>>>>> origin/v0/mueller433-1484-5cbf32c7
       type: 'number',
       admin: {
         description: 'Preis in Euro. Leer lassen, wenn "Preis auf Anfrage" aktiv ist.',
