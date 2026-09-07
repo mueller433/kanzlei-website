@@ -7,6 +7,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import { AssetGalerie, type GalerieBild } from '@/components/asset-galerie'
+import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
 import { KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
@@ -26,6 +27,24 @@ function formatiertePreis(preis: number): string {
     currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(preis)
+}
+
+/**
+ * Erzeugt eine stabile, aus der Objekt-ID abgeleitete Positionsnummer im Format
+ * "AB12345" (2 Buchstaben + 5 Ziffern) – deterministisch pro Posten, aber ohne
+ * erkennbaren Bezug zur echten Datenbank-ID.
+ */
+function positionsnummer(id: string | number): string {
+  const text = String(id)
+  let hash = 0
+  for (let i = 0; i < text.length; i++) {
+    hash = (hash * 31 + text.charCodeAt(i)) >>> 0
+  }
+  const buchstaben = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const buchstabe1 = buchstaben[hash % 26]
+  const buchstabe2 = buchstaben[Math.floor(hash / 26) % 26]
+  const ziffern = String(hash % 100000).padStart(5, '0')
+  return `${buchstabe1}${buchstabe2}${ziffern}`
 }
 
 /** Extrahiert aus einem upload-Feld (string | Media)[] die vollständigen Media-Objekte. */
@@ -48,6 +67,48 @@ async function ladePosten(id: string): Promise<Posten | null> {
 
   if (!doc || doc.veroeffentlicht !== true) return null
   return doc
+}
+
+/**
+ * Lädt bis zu 3 weitere veröffentlichte Positionen als Vorschlag – bevorzugt
+ * aus derselben Kategorie, sonst die neuesten übrigen Positionen. Schließt
+ * die aktuell angezeigte Position aus.
+ */
+async function ladeAehnlichePositionen(posten: Posten): Promise<Posten[]> {
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+
+  const { docs: passende } = await payload.find({
+    collection: 'posten',
+    depth: 1,
+    limit: 3,
+    sort: '-createdAt',
+    where: {
+      and: [
+        { veroeffentlicht: { equals: true } },
+        { kategorie: { equals: posten.kategorie } },
+        { id: { not_equals: posten.id } },
+      ],
+    },
+  })
+
+  if (passende.length >= 3) return passende
+
+  const { docs: weitere } = await payload.find({
+    collection: 'posten',
+    depth: 1,
+    limit: 3 - passende.length,
+    sort: '-createdAt',
+    where: {
+      and: [
+        { veroeffentlicht: { equals: true } },
+        { id: { not_equals: posten.id } },
+        { id: { not_in: passende.map((p) => p.id) } },
+      ],
+    },
+  })
+
+  return [...passende, ...weitere]
 }
 
 export async function generateMetadata({
@@ -78,6 +139,8 @@ export default async function AssetDetailSeite({
 
   if (!posten) notFound()
 
+  const aehnlichePositionen = await ladeAehnlichePositionen(posten)
+
   const bilder: GalerieBild[] = medienObjekte(posten.bilder)
     .filter((m) => typeof m.url === 'string')
     .map((m) => ({ url: m.url as string, alt: posten.titel }))
@@ -89,23 +152,19 @@ export default async function AssetDetailSeite({
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
-      ? formatiertePreis(posten.preis)
+      ? formatiertePreis(Math.round(posten.preis * 1.19))
       : 'Preis auf Anfrage'
 
   // Kompakte Kerninformationen im Hero – nur befüllte Felder (Sektion 5 der Vorgabe)
   const kerninfo = [
     { label: 'Preis', wert: preisText },
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'MwSt.', wert: '19 % netto' },
+    { label: 'MwSt.', wert: '19 %' },
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
   // Eckdaten-Tabelle: echte Verwertungs-Details ohne Dopplungen zu Titel-Block/Kacheln
   const eckdaten = [
-    { label: 'MwSt.-Satz', wert: '19 % (zzgl. USt.)' },
-    hatNettoPreis
-      ? { label: 'Preis (netto)', wert: formatiertePreis(posten.preis as number) }
-      : null,
     hatNettoPreis
       ? {
           label: 'Preis (brutto, inkl. 19 % USt.)',
@@ -113,7 +172,7 @@ export default async function AssetDetailSeite({
         }
       : null,
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
-    { label: 'Objekt-ID', wert: posten.id },
+    { label: 'Pos.-Nr.', wert: positionsnummer(posten.id) },
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
   return (
@@ -268,7 +327,7 @@ export default async function AssetDetailSeite({
                           className="group inline-flex items-center gap-3 border border-border px-4 py-3 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
                         >
                           <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />
-                          <span className="flex-1">{dok.alt || dok.filename || 'Dokument'}</span>
+                          <span className="flex-1">{dok.filename || posten.titel}</span>
                           <span className="text-muted-foreground transition-colors group-hover:text-accent">
                             ansehen ↓
                           </span>
@@ -282,6 +341,30 @@ export default async function AssetDetailSeite({
           </div>
         </div>
       </section>
+
+      {aehnlichePositionen.length > 0 && (
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+            <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+              <h2 className="font-serif text-2xl text-foreground md:text-3xl">
+                Andere Positionen
+              </h2>
+              <Link
+                href="/katalog"
+                className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
+              >
+                Zum gesamten Katalog
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {aehnlichePositionen.map((eintrag) => (
+                <KatalogPositionGridKarte key={eintrag.id} posten={eintrag} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <KontaktCta
         titel="Interesse an dieser Position?"

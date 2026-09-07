@@ -219,7 +219,7 @@ export default async function KatalogSeite({
                         </span>
                         {gruppe.minimalpreis !== null && (
                           <span className="font-medium text-accent">
-                            ab {formatiertePreis(gruppe.minimalpreis)}
+                            {formatiertePreis(Math.round(gruppe.minimalpreis * 1.19))}
                           </span>
                         )}
                       </div>

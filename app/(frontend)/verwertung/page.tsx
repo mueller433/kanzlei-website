@@ -1,4 +1,15 @@
-import { ArrowRight, Building2, PackageSearch, Search, Truck, Wrench } from 'lucide-react'
+import {
+  ArrowRight,
+  Boxes,
+  Flame,
+  Laptop,
+  Search,
+  Smartphone,
+  Sofa,
+  Truck,
+  UtensilsCrossed,
+  Wrench,
+} from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -14,19 +25,22 @@ export const metadata = {
     'Der Verwertungsprozess der DPSS Management GmbH: Vermögenswerte werden identifiziert, bewertet, marktgerecht verwertet und transparent dokumentiert.',
 }
 
-const KATEGORIE_ICONS: Record<Kategorie, typeof Building2> = {
-  immobilien: Building2,
+const KATEGORIE_ICONS: Record<Kategorie, typeof Wrench> = {
+  smartphones: Smartphone,
   maschinen: Wrench,
   fahrzeuge: Truck,
-  inventar: PackageSearch,
-  sonstiges: PackageSearch,
+  'it-bueroelektronik': Laptop,
+  sonstiges: Boxes,
+  gastronomie: UtensilsCrossed,
+  'moebel-einrichtung': Sofa,
+  'energie-gebaeudetechnik': Flame,
+  'lager-logistik-reinigung': Boxes,
 }
 
 const KATEGORIEN: ReadonlyArray<{ kategorie: Kategorie; beschreibung: string }> = [
   {
-    kategorie: 'immobilien',
-    beschreibung:
-      'Betriebs- und Wohnimmobilien, Grundstücke und Sonderobjekte aus laufenden Verfahren.',
+    kategorie: 'smartphones',
+    beschreibung: 'Smartphones und mobile Endgeräte aus laufenden Verfahren.',
   },
   {
     kategorie: 'maschinen',
@@ -37,8 +51,28 @@ const KATEGORIEN: ReadonlyArray<{ kategorie: Kategorie; beschreibung: string }> 
     beschreibung: 'Nutzfahrzeuge, Fuhrparks und Spezialfahrzeuge in verschiedenen Zuständen.',
   },
   {
-    kategorie: 'inventar',
-    beschreibung: 'Betriebs- und Geschäftsausstattung, Warenbestände und sonstige Wirtschaftsgüter.',
+    kategorie: 'it-bueroelektronik',
+    beschreibung: 'IT-Ausstattung, Büroelektronik und Kommunikationstechnik aus Betrieben.',
+  },
+  {
+    kategorie: 'gastronomie',
+    beschreibung: 'Küchen-, Theken- und Einrichtungstechnik aus dem Gastronomiebereich.',
+  },
+  {
+    kategorie: 'moebel-einrichtung',
+    beschreibung: 'Büro- und Objektmöbel sowie Einrichtungsgegenstände aus Betriebsauflösungen.',
+  },
+  {
+    kategorie: 'energie-gebaeudetechnik',
+    beschreibung: 'Anlagen und Komponenten der Energieversorgung und Gebäudetechnik.',
+  },
+  {
+    kategorie: 'lager-logistik-reinigung',
+    beschreibung: 'Lager-, Logistik- und Reinigungstechnik aus laufenden Verfahren.',
+  },
+  {
+    kategorie: 'sonstiges',
+    beschreibung: 'Weitere Wirtschaftsgüter und Betriebsausstattung aus laufenden Verfahren.',
   },
 ] as const
 
@@ -67,7 +101,7 @@ const PROZESS: readonly ProzessSchritt[] = [
     titel: 'Identifikation',
     punkte: [
       'Vollständige Erfassung aller verwertbaren Vermögenswerte',
-      'Immobilien, Maschinen, Fahrzeuge und Inventar',
+      'Maschinen, Fahrzeuge, IT und weitere Wirtschaftsgüter',
       'Abstimmung mit dem Insolvenzverwalter vor Ort',
     ],
   },
@@ -124,7 +158,7 @@ export default async function VerwertungSeite() {
       <SeitenHero
         eyebrow="Verwertung"
         titel="Geordnete Verwertung von Vermögenswerten"
-        lead="Im Auftrag von Insolvenzverwaltern und Verfahrensbeteiligten verwerten wir Immobilien, Maschinen, Fahrzeuge und Inventar – strukturiert, marktgerecht und nachvollziehbar."
+        lead="Im Auftrag von Insolvenzverwaltern und Verfahrensbeteiligten verwerten wir Maschinen, Fahrzeuge, IT-Ausstattung und weitere Wirtschaftsgüter – strukturiert, marktgerecht und nachvollziehbar."
       />
 
       {/* EINORDNUNG – Transparenz als Kernversprechen, zweispaltig */}
@@ -158,10 +192,10 @@ export default async function VerwertungSeite() {
               Was wir verwerten
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Vier Kategorien im Bestand
+              Neun Kategorien im Bestand
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {KATEGORIEN.map(({ kategorie, beschreibung }) => {
               const Icon = KATEGORIE_ICONS[kategorie]
               const anzahl = kategorieCounts[kategorie] ?? 0
@@ -274,8 +308,8 @@ export default async function VerwertungSeite() {
                   Aktuelle Positionen direkt einsehen
                 </h2>
                 <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-                  Immobilien, Maschinen, Fahrzeuge und Inventar aus laufenden Verfahren – geordnet
-                  nach Kategorie und mit Preisangabe.
+                  Maschinen, Fahrzeuge, IT-Ausstattung und weitere Wirtschaftsgüter aus laufenden
+                  Verfahren – geordnet nach Kategorie und mit Preisangabe.
                 </p>
               </div>
               <Link

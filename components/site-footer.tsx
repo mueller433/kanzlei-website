@@ -30,6 +30,7 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
     titel: 'Informationen',
     links: [
       { href: '/aktuelles', label: 'Aktuelles' },
+      { href: '/faq', label: 'FAQ' },
       { href: '/kontakt', label: 'Kontakt' },
       { href: '/kontakt', label: 'Ansprechpartner' },
     ],
