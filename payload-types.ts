@@ -152,7 +152,6 @@ export interface User {
  */
 export interface Media {
   id: number;
-  alt: string;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -187,7 +186,16 @@ export interface Posten {
     };
     [k: string]: unknown;
   } | null;
-  kategorie: 'immobilien' | 'maschinen' | 'fahrzeuge' | 'inventar' | 'sonstiges';
+  kategorie:
+    | 'smartphones'
+    | 'maschinen'
+    | 'fahrzeuge'
+    | 'it-bueroelektronik'
+    | 'sonstiges'
+    | 'gastronomie'
+    | 'moebel-einrichtung'
+    | 'energie-gebaeudetechnik'
+    | 'lager-logistik-reinigung';
   /**
    * Preis in Euro. Leer lassen, wenn "Preis auf Anfrage" aktiv ist.
    */
@@ -388,7 +396,6 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
