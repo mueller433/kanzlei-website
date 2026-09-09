@@ -31,7 +31,7 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
-      ? `ab ${formatiertePreis(posten.preis)}`
+      ? formatiertePreis(Math.round(posten.preis * 1.19))
       : '—'
 
   return (

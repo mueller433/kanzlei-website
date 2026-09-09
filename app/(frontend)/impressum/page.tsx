@@ -12,7 +12,7 @@ const IMPRESSUM = {
   strasse: 'Herzberger Landstr. 63',
   plzOrt: '37085 Göttingen',
   land: 'Deutschland',
-  geschaeftsfuehrer: ['Dirk Schymura', 'Phillip Schaper'],
+  geschaeftsfuehrer: ['Dirk Schymura', 'Phillip Schaper', 'Monika Schymura'],
   registergericht: 'Amtsgericht Göttingen',
   handelsregisternummer: 'HRB 207736',
   ustId: 'DE452777224',

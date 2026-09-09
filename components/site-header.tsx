@@ -13,6 +13,7 @@ export const NAV_LINKS = [
   { href: '/leistungen', label: 'Leistungen' },
   { href: '/verwertung', label: 'Verwertung' },
   { href: '/aktuelles', label: 'Aktuelles' },
+  { href: '/faq', label: 'FAQ' },
   { href: '/kontakt', label: 'Kontakt' },
 ] as const
 

@@ -2,8 +2,7 @@ import { Mail, MapPin, Phone } from 'lucide-react'
 import React from 'react'
 
 import { KontaktFormular } from '@/components/kontakt-formular'
-import { TeamZeile } from '@/components/team-karte'
-import { KANZLEI, KANZLEI_ORT, TEAM } from '@/lib/kanzlei-daten'
+import { KANZLEI, KANZLEI_ORT } from '@/lib/kanzlei-daten'
 
 export const metadata = {
   title: 'Kontakt',
@@ -105,12 +104,11 @@ export default async function KontaktSeite({
               {/* Ansprechpartner */}
               <div className="border-t border-border pt-8">
                 <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                  Ansprechpartner
+                  Ansprechpartnerin
                 </p>
-                <div className="flex flex-col gap-5">
-                  {TEAM.map((person) => (
-                    <TeamZeile key={person.name} person={person} />
-                  ))}
+                <div className="flex flex-col gap-1">
+                  <span className="font-serif text-lg text-foreground">Monika Schymura</span>
+                  <span className="text-sm text-muted-foreground">Ihre Kontaktperson</span>
                 </div>
               </div>
             </div>

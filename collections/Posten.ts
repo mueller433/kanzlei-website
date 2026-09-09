@@ -22,34 +22,34 @@ export const Posten: CollectionConfig = {
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
-fields: [
-  {
-    name: 'titel',
-    type: 'text',
-    required: true,
-  },
-  {
-    name: 'beschreibung',
-    type: 'richText',
-  },
-  {
-    name: 'kategorie',
-    type: 'select',
-    required: true,
-    options: [
-      { label: 'Smartphones & Mobilgeräte', value: 'smartphones' },
-      { label: 'Maschinen', value: 'maschinen' },
-      { label: 'Fahrzeuge', value: 'fahrzeuge' },
-      { label: 'IT & Büroelektronik', value: 'it-bueroelektronik' },
-      { label: 'Sonstiges', value: 'sonstiges' },
-      { label: 'Gastronomie', value: 'gastronomie' },
-      { label: 'Möbel & Einrichtung', value: 'moebel-einrichtung' },
-      { label: 'Energie & Gebäudetechnik', value: 'energie-gebaeudetechnik' },
-      { label: 'Lager, Logistik & Reinigung', value: 'lager-logistik-reinigung' },
-    ],
-  },
-  {
-    name: 'preis',
+  fields: [
+    {
+      name: 'titel',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'beschreibung',
+      type: 'richText',
+    },
+    {
+      name: 'kategorie',
+      type: 'select',
+      required: true,
+      options: [
+        { label: 'Smartphones & Mobilgeräte', value: 'smartphones' },
+        { label: 'Maschinen', value: 'maschinen' },
+        { label: 'Fahrzeuge', value: 'fahrzeuge' },
+        { label: 'IT & Büroelektronik', value: 'it-bueroelektronik' },
+        { label: 'Sonstiges', value: 'sonstiges' },
+        { label: 'Gastronomie', value: 'gastronomie' },
+        { label: 'Möbel & Einrichtung', value: 'moebel-einrichtung' },
+        { label: 'Energie & Gebäudetechnik', value: 'energie-gebaeudetechnik' },
+        { label: 'Lager, Logistik & Reinigung', value: 'lager-logistik-reinigung' },
+      ],
+    },
+    {
+      name: 'preis',
       type: 'number',
       admin: {
         description: 'Preis in Euro. Leer lassen, wenn "Preis auf Anfrage" aktiv ist.',
@@ -86,46 +86,46 @@ fields: [
         description: 'z.B. Aktenzeichen oder Bezeichnung des Verfahrens',
       },
     },
-	{
-  name: 'zustand',
-  type: 'select',
-  required: true,
-  defaultValue: 'neu',
-  options: [
-    { label: 'Neu', value: 'neu' },
-    { label: 'Gebraucht', value: 'gebraucht' },
-    { label: 'Restbestand', value: 'restbestand' },
-  ],
-},
-{
-  name: 'kurzspezifikation',
-  type: 'text',
-  admin: {
-    description: 'Ein Satz für die Kartenansicht, z.B. "45 MP Vollformat, 8K RAW Video"',
-  },
-},
-{
-  name: 'stueckzahl',
-  type: 'number',
-  required: true,
-  defaultValue: 1,
-  admin: {
-    description: 'Verfügbare Menge dieser Position',
-  },
-},
-{
-  name: 'standort',
-  type: 'text',
-},
-{
-  name: 'dokumente',
-  type: 'upload',
-  relationTo: 'media',
-  hasMany: true,
-  admin: {
-    description: 'z.B. Gutachten, Datenblätter, Zustandsprotokolle',
-  },
-},
+    {
+      name: 'zustand',
+      type: 'select',
+      required: true,
+      defaultValue: 'neu',
+      options: [
+        { label: 'Neu', value: 'neu' },
+        { label: 'Gebraucht', value: 'gebraucht' },
+        { label: 'Restbestand', value: 'restbestand' },
+      ],
+    },
+    {
+      name: 'kurzspezifikation',
+      type: 'text',
+      admin: {
+        description: 'Ein Satz für die Kartenansicht, z.B. "45 MP Vollformat, 8K RAW Video"',
+      },
+    },
+    {
+      name: 'stueckzahl',
+      type: 'number',
+      required: true,
+      defaultValue: 1,
+      admin: {
+        description: 'Verfügbare Menge dieser Position',
+      },
+    },
+    {
+      name: 'standort',
+      type: 'text',
+    },
+    {
+      name: 'dokumente',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      admin: {
+        description: 'z.B. Gutachten, Datenblätter, Zustandsprotokolle',
+      },
+    },
     {
       name: 'veroeffentlicht',
       type: 'checkbox',
