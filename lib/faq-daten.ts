@@ -93,11 +93,10 @@ export const FAQ_KATEGORIEN: FaqKategorie[] = [
       {
         id: 'besichtigung',
         frage: 'Kann ich eine Position besichtigen?',
-        antwort: [
-          'Ja. Eine Besichtigung ist nach vorheriger Terminvereinbarung grundsätzlich möglich, sofern dies bei der jeweiligen Position vorgesehen bzw. organisatorisch möglich ist.',
-          'Gerade bei gebrauchten, ungeprüften oder beschädigten Artikeln empfehlen wir eine vorherige Besichtigung. So können Sie sich selbst einen Eindruck vom Zustand, Umfang und der Vollständigkeit der angebotenen Ware verschaffen.',
-          'Bitte kontaktieren Sie uns zur Vereinbarung eines Besichtigungstermins.',
-        ],
+      antwort: [
+        'Eine Besichtigung der angebotenen Positionen ist erst nach vollständigem Zahlungseingang möglich.',
+        'Nach Eingang der Zahlung kann ein entsprechender Besichtigungstermin nach vorheriger Absprache vereinbart werden. Die Abholung bzw. Übergabe der Position erfolgt ebenfalls erst nach bestätigtem Zahlungseingang.',
+      ],
       },
       {
         id: 'position-reserviert-verkauft',
