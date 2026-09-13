@@ -402,33 +402,61 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* PROFESSIONELLE VERWERTUNG — dunkles Kontrastband, 6 Kernpunkte */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-[#16130f]">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
-          <div className="mb-8 max-w-2xl">
-            <p className="mb-4 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/70">
-              <span className="inline-block h-px w-8 bg-accent" aria-hidden="true" />
-              Leistung
-            </p>
-            <h2 className="font-serif text-3xl leading-tight text-[#f7f5f0] text-balance md:text-5xl">
-              Professionelle Verwertung aus einer Hand
-            </h2>
-            <p className="mt-5 text-lg leading-relaxed text-[#c9c3b8] text-pretty">
-              DPSS ist mehr als ein Katalog: Wir begleiten den gesamten Verwertungsprozess – von der
-              ersten Erfassung bis zur dokumentierten Abwicklung.
-            </p>
+      {/* PROFESSIONELLE VERWERTUNG */}
+      <section className="border-b border-border bg-[#17130f] text-white">
+        <div className="mx-auto grid max-w-7xl lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="relative min-h-[280px] overflow-hidden sm:min-h-[360px] lg:min-h-full">
+            <Image
+              src="/warum-dpss-editorial.png"
+              alt="Industrielager mit erfassten Vermögenswerten"
+              fill
+              sizes="(max-width: 1024px) 100vw, 46vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#17130f]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#17130f]/25" aria-hidden="true" />
+            <div className="absolute bottom-4 left-4 border border-white/30 bg-[#17130f]/75 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm sm:bottom-6 sm:left-6">
+              Erfassung · Bewertung · Vermarktung
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
-            {WARUM_DPSS.map((punkt) => (
-              <div key={punkt.nummer} className="flex flex-col gap-4 bg-[#16130f] p-5 md:p-6">
-                <span className="font-serif text-2xl leading-none text-accent">{punkt.nummer}</span>
-                <h3 className="font-serif text-xl text-[#f7f5f0] text-balance">{punkt.titel}</h3>
-                <p className="text-base leading-relaxed text-[#c9c3b8] text-pretty">{punkt.text}</p>
-              </div>
-            ))}
+          <div className="px-4 py-9 sm:px-8 sm:py-12 lg:px-12 lg:py-16">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#c56a80]">
+              Verwertungsdienstleistung
+            </p>
+            <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl">
+              Professionelle Verwertung aus einer Hand
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+              DPSS begleitet Vermögenswerte von der strukturierten Aufnahme bis zur nachvollziehbar
+              dokumentierten Abwicklung.
+            </p>
+
+            <ol className="mt-7 border-t border-white/15">
+              {[WARUM_DPSS[0], WARUM_DPSS[1], WARUM_DPSS[2], WARUM_DPSS[4]].map((punkt) => (
+                <li key={punkt.nummer} className="grid grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 py-4 sm:grid-cols-[2.75rem_0.9fr_1.25fr] sm:items-start sm:gap-4">
+                  <span className="font-serif text-lg text-[#c56a80]">{punkt.nummer}</span>
+                  <h3 className="font-semibold leading-snug text-white">{punkt.titel}</h3>
+                  <p className="col-start-2 text-sm leading-relaxed text-white/65 sm:col-start-3">
+                    {punkt.text}
+                  </p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="/kontakt?betreff=Verwertungsauftrag"
+                className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/verwertung"
+                className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/30 px-6 py-3 text-sm font-medium text-white transition-colors hover:border-white/60"
+              >
+                Leistung kennenlernen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
