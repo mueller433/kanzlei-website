@@ -20,7 +20,7 @@ const STATUS_BADGE_KLASSE: Record<Posten['status'], string> = {
 }
 
 /**
- * Horizontale Premium-Listenzeile einer Position für den Katalog. Zeigt
+ * Bildstarke Premium-Karte einer Position für den Katalog. Zeigt
  * Status, Kategorie, Titel, Standort, Preis und das erste hinterlegte Bild
  * zurückhaltend ohne Shop-Optik. Nutzt ausschließlich bestehende Felder der
  * Collection `posten`.
