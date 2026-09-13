@@ -1,4 +1,4 @@
-import { ArrowRight, Check, ScaleIcon, Search } from 'lucide-react'
+import { ArrowRight, ScaleIcon, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -22,23 +22,57 @@ export const metadata = {
 const ABLAUF = [
   {
     nummer: '01',
-    titel: 'Erfassung & Bewertung',
-    beschreibung: 'Vermögenswerte werden strukturiert aufgenommen und marktgerecht bewertet.',
+    titel: 'Inventarisierung',
+    beschreibung: 'Vermögenswerte werden vor Ort strukturiert erfasst, fotografiert und dokumentiert.',
   },
   {
     nummer: '02',
-    titel: 'Vermarktung & Verkauf',
-    beschreibung: 'Gezielte Ansprache passender Interessenten über geeignete Kanäle.',
+    titel: 'Bewertung',
+    beschreibung: 'Positionen werden marktgerecht eingeordnet und nachvollziehbar bewertet.',
   },
   {
     nummer: '03',
-    titel: 'Abwicklung & Bericht',
-    beschreibung: 'Verkauf, Übergabe und Abrechnung werden nachvollziehbar dokumentiert.',
+    titel: 'Vermarktung',
+    beschreibung: 'Passende Interessenten werden über geeignete Kanäle gezielt angesprochen.',
+  },
+  {
+    nummer: '04',
+    titel: 'Verkauf',
+    beschreibung: 'Angebote, Verhandlungen und Verkäufe werden koordiniert abgewickelt.',
+  },
+  {
+    nummer: '05',
+    titel: 'Abwicklung',
+    beschreibung: 'Übergabe, Abrechnung und Dokumentation erfolgen geordnet und transparent.',
   },
 ] as const
 
-const AUFTRAGGEBER_PUNKTE = ['Erfassungs-Service', 'Erlösoptimierung', 'Transparenz'] as const
-const KAEUFER_PUNKTE = ['Transparente Preise', 'Geprüfte Qualität', 'Direkte Abwicklung'] as const
+const WARUM_DPSS = [
+  {
+    titel: 'Strukturierte Inventarisierung',
+    text: 'Lückenlose Erfassung aller Vermögenswerte inklusive Zustand, Standort und Dokumentation.',
+  },
+  {
+    titel: 'Marktgerechte Bewertung',
+    text: 'Realistische Wertansätze auf Basis aktueller Marktdaten und langjähriger Erfahrung.',
+  },
+  {
+    titel: 'Professionelle Vermarktung',
+    text: 'Zielgerichtete Ansprache passender Käufer über geeignete Kanäle und Netzwerke.',
+  },
+  {
+    titel: 'Transparente Verkaufsprozesse',
+    text: 'Nachvollziehbare Abläufe und klare Kommunikation in jedem Schritt des Verfahrens.',
+  },
+  {
+    titel: 'Dokumentierte Abwicklung',
+    text: 'Vollständige Nachweisführung von der ersten Erfassung bis zur finalen Abrechnung.',
+  },
+  {
+    titel: 'Persönlicher Ansprechpartner',
+    text: 'Eine feste Kontaktperson begleitet Auftraggeber und Interessenten über das gesamte Verfahren.',
+  },
+] as const
 
 const WARUM_DPSS_PUNKTE = [
   'Nachvollziehbare Herkunft',
@@ -88,16 +122,17 @@ export default async function Startseite() {
               <br />
               verwerten.
             </h1>
-            <p className="mt-6 max-w-[460px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
-              Wir begleiten die strukturierte Erfassung, Bewertung, Vermarktung und Verwertung von
-              Vermögenswerten – nachvollziehbar, professionell und mit klarer Abwicklung.
+            <p className="mt-6 max-w-[480px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
+              DPSS Management unterstützt Unternehmen, Insolvenzverwalter und Verfahrensbeteiligte
+              bei der strukturierten Erfassung, Bewertung, Vermarktung und Verwertung von
+              Vermögenswerten.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/katalog"
                 className="inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
               >
-                Aktuelle Positionen <ArrowRight className="h-4 w-4" />
+                Zum Verwertungskatalog <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/kontakt"
@@ -118,12 +153,11 @@ export default async function Startseite() {
               Verwertung · Katalog
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
-              Aktuelle Positionen
+              Aktuelle Vermögenswerte
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-              In unserem Katalog finden Sie ausgewählte Vermögenswerte aus laufenden
-              Verwertungs- und Auflösungsverfahren – erfasst, eingeordnet und über geeignete
-              Kanäle gezielt angeboten.
+              Entdecken Sie aktuell verfügbare Maschinen, Fahrzeuge, Betriebsausstattung und
+              weitere Vermögenswerte aus laufenden Verwertungs- und Auflösungsverfahren.
             </p>
           </div>
 
@@ -147,7 +181,7 @@ export default async function Startseite() {
               href="/katalog"
               className="group inline-flex items-center justify-center gap-2 border border-accent/40 bg-accent/5 px-8 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/10"
             >
-              Gesamten Katalog ansehen
+              Alle Positionen ansehen
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
@@ -167,34 +201,30 @@ export default async function Startseite() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Card 1: Für Auftraggeber */}
+            {/* Card 1: Für Unternehmen & Insolvenzverwalter */}
             <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
               <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
                 <ScaleIcon className="h-5 w-5 text-accent" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
-                  Für Insolvenzverwalter &amp; Verwalter
+                  Für Unternehmen &amp; Insolvenzverwalter
                 </h3>
-                <ul className="mt-6 flex flex-col gap-3">
-                  {AUFTRAGGEBER_PUNKTE.map((punkt) => (
-                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
-                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                      {punkt}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-5 text-base leading-relaxed text-muted-foreground text-pretty">
+                  Professionelle Unterstützung bei Inventarisierung, Bewertung, Vermarktung und
+                  Verwertung von Maschinen, Fahrzeugen, Betriebsausstattung und Warenbeständen.
+                </p>
               </div>
               <Link
-                href="/kontakt?betreff=Verwertungsauftrag"
+                href="/leistungen"
                 className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
               >
-                Verwertungsauftrag anfragen
+                Unsere Leistungen
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
 
-            {/* Card 2: Für Käufer */}
+            {/* Card 2: Für Käufer & Investoren */}
             <div className="flex flex-col gap-8 border border-border bg-card p-8 md:p-10">
               <div className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5">
                 <Search className="h-5 w-5 text-accent" aria-hidden="true" />
@@ -203,20 +233,16 @@ export default async function Startseite() {
                 <h3 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-[1.7rem]">
                   Für Käufer &amp; Investoren
                 </h3>
-                <ul className="mt-6 flex flex-col gap-3">
-                  {KAEUFER_PUNKTE.map((punkt) => (
-                    <li key={punkt} className="flex items-center gap-3 text-base text-muted-foreground">
-                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                      {punkt}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-5 text-base leading-relaxed text-muted-foreground text-pretty">
+                  Entdecken Sie aktuelle Maschinen, Fahrzeuge, Betriebsausstattung und weitere
+                  Vermögenswerte im DPSS Verwertungskatalog.
+                </p>
               </div>
               <Link
                 href="/katalog"
                 className="group mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
               >
-                Gesamten Katalog ansehen
+                Katalog ansehen
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
@@ -224,13 +250,43 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* VERWERTUNG AUS EINER HAND */}
+      {/* WARUM DPSS — sechs Kernpunkte als ruhiges Kartenraster */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-14 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Warum DPSS
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Verlässliche Verwertung mit Struktur und Transparenz.
+            </h2>
+          </div>
+
+          <div className="karten-grid grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {WARUM_DPSS.map((punkt) => (
+              <div key={punkt.titel} className="flex flex-col gap-3 border border-border bg-card p-7">
+                <h3 className="font-serif text-xl text-card-foreground text-balance">{punkt.titel}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                  {punkt.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ÜBER DPSS MANAGEMENT */}
       <section className="border-b border-border">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-24">
           <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Verwertung aus einer Hand
-            </h2>
+            <div>
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Über DPSS
+              </p>
+              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+                Verwertung aus einer Hand
+              </h2>
+            </div>
             <div className="flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
               <p>
                 DPSS Management übernimmt die operative Verwertung von Vermögenswerten im Auftrag
@@ -247,33 +303,14 @@ export default async function Startseite() {
                 Prozess im Blick. Dadurch entstehen nachvollziehbare Abläufe, klare Zuständigkeiten
                 und eine transparente Dokumentation.
               </p>
+              <Link
+                href="/unternehmen"
+                className="group mt-2 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Mehr über DPSS Management
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
             </div>
-          </div>
-
-          <div className="mt-16 grid border-t border-border md:grid-cols-3 md:divide-x md:divide-border">
-            {[
-              {
-                nummer: '01',
-                titel: 'Erfassung & Bewertung',
-                text: 'Vermögenswerte werden strukturiert aufgenommen, dokumentiert und marktgerecht eingeordnet.',
-              },
-              {
-                nummer: '02',
-                titel: 'Vermarktung & Verkauf',
-                text: 'Geeignete Vermögenswerte werden gezielt angeboten und potenziellen Interessenten zugänglich gemacht.',
-              },
-              {
-                nummer: '03',
-                titel: 'Abrechnung & Dokumentation',
-                text: 'Vorgänge, Verkäufe und Abrechnungen werden nachvollziehbar dokumentiert.',
-              },
-            ].map((kompetenz) => (
-              <div key={kompetenz.nummer} className="flex flex-col gap-3 border-b border-border py-7 last:border-b-0 md:border-b-0 md:px-8 md:first:pl-0 md:last:pr-0">
-                <span className="font-serif text-sm text-accent">{kompetenz.nummer}</span>
-                <h3 className="font-serif text-xl text-foreground">{kompetenz.titel}</h3>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">{kompetenz.text}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -283,14 +320,14 @@ export default async function Startseite() {
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
           <div className="mb-14 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Unser Ablauf
+              Ablauf
             </p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Strukturiert von der Beauftragung bis zum Abschluss.
+              So funktioniert die Verwertung.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 border-t border-border pt-10 md:grid-cols-3 md:gap-8">
+          <div className="grid grid-cols-1 gap-6 border-t border-border pt-10 sm:grid-cols-2 lg:grid-cols-5 md:gap-6">
             {ABLAUF.map((schritt) => (
               <div key={schritt.nummer} className="flex flex-col gap-3 border border-border bg-card p-7">
                 <span className="font-serif text-3xl leading-none text-accent">{schritt.nummer}</span>
@@ -346,7 +383,7 @@ export default async function Startseite() {
         <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[1.3fr_1fr] md:gap-16 md:px-10 md:py-32">
           <div className="warum-text-reveal">
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-background/70">
-              Warum DPSS
+              Herkunft &amp; Vertrauen
             </p>
             <h2 className="max-w-xl font-serif text-3xl leading-tight text-background text-balance md:text-4xl">
               Keine anonyme Restware, sondern Vermögenswerte mit Herkunft.
@@ -463,8 +500,8 @@ export default async function Startseite() {
       {/* KONTAKT-CTA */}
       <KontaktCta
         eyebrow="Kontakt"
-        titel="Sie möchten Vermögenswerte verwerten lassen?"
-        text="Sprechen Sie uns an, wenn Sie eine Verwertung beauftragen oder eine Position aus dem Katalog näher prüfen möchten."
+        titel="Sie möchten Vermögenswerte professionell verwerten?"
+        text="Sprechen Sie mit DPSS Management über Ihr Vorhaben."
         buttonLabel="Kontakt aufnehmen"
       />
     </div>
