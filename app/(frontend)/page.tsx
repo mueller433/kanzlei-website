@@ -198,8 +198,8 @@ export default async function Startseite() {
       <section className="relative border-b border-border bg-[#17130f]">
         <div className="relative min-h-[500px] overflow-hidden lg:min-h-[540px]">
           <Image
-            src="/images/hero-marketplace.png"
-            alt="Industriehalle mit Maschinen, Fahrzeugen und weiteren Vermögenswerten"
+            src="/images/hero-marketplace-v2.webp"
+            alt="Bagger, Fahrzeug und Maschinen auf einem modernen Industriegelände"
             fill
             priority
             sizes="100vw"
