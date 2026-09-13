@@ -19,27 +19,17 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild.
   // Muss vor jedem bedingten `return` stehen (Rules of Hooks).
   const touchStartX = React.useRef<number | null>(null)
-
-  if (bilder.length === 0) {
-    return (
-      <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 overflow-hidden border border-border bg-card">
-        <div className="absolute inset-4 border border-border" aria-hidden="true" />
-        <span
-          aria-hidden="true"
-          className="flex h-12 w-12 items-center justify-center bg-accent font-serif text-2xl leading-none text-accent-foreground"
-        >
-          §
-        </span>
-        <p className="text-sm text-muted-foreground">Keine Abbildung vorhanden</p>
-      </div>
-    )
-  }
-
   const anzahl = bilder.length
   const zeigeNavigation = anzahl > 1
   const aktuelles = bilder[aktiv]
 
-  const zeige = (index: number) => setAktiv((index + anzahl) % anzahl)
+  const zeige = React.useCallback(
+    (index: number) => {
+      if (anzahl === 0) return
+      setAktiv((index + anzahl) % anzahl)
+    },
+    [anzahl],
+  )
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
@@ -69,10 +59,25 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = ''
     }
-  }, [aktiv, vorschauOffen, zeigeNavigation])
+  }, [aktiv, vorschauOffen, zeige, zeigeNavigation])
+
+  if (bilder.length === 0) {
+    return (
+      <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 overflow-hidden border border-border bg-card">
+        <div className="absolute inset-4 border border-border" aria-hidden="true" />
+        <span
+          aria-hidden="true"
+          className="flex h-12 w-12 items-center justify-center bg-accent font-serif text-2xl leading-none text-accent-foreground"
+        >
+          §
+        </span>
+        <p className="text-sm text-muted-foreground">Keine Abbildung vorhanden</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-hidden">
       <div
         className="relative aspect-[4/3] w-full touch-pan-y select-none overflow-hidden border border-border bg-card"
         onTouchStart={zeigeNavigation ? onTouchStart : undefined}
@@ -89,7 +94,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
             src={aktuelles.url || '/placeholder.svg'}
             alt={aktuelles.alt}
             draggable={false}
-            className="h-full w-full object-cover"
+            className="h-full min-w-0 max-w-full object-cover"
           />
           <span className="absolute bottom-3 left-3 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-xs text-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
             <Maximize2 className="h-4 w-4" aria-hidden="true" />
