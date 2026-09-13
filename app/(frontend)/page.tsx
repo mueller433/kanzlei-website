@@ -258,28 +258,70 @@ export default async function Startseite() {
         </div>
       </section>
 
-      <section aria-labelledby="homepage-kategorien" className="border-b border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-10 lg:py-9">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
-            <h2 id="homepage-kategorien" className="text-lg font-semibold tracking-tight sm:text-xl">Nach Kategorie entdecken</h2>
-            <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm text-accent">Alle Positionen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+      <section aria-labelledby="homepage-kategorien" className="border-b border-border bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-14">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                Kategorien
+              </p>
+              <h2 id="homepage-kategorien" className="font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                Vermögenswerte entdecken
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                Direkt zu den verfügbaren Fahrzeugen, Maschinen und weiteren Vermögenswerten.
+              </p>
+            </div>
+            <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
+              Alle Kategorien <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {kategorien.filter((kategorie) => kategorie.anzahl > 0).map(({ key, anzahl, bild }, index) => (
-              <Link key={key} href={`/katalog?kategorie=${key}`} className={`group min-w-0 overflow-hidden border border-border bg-background transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${index >= 4 ? 'hidden sm:block' : 'block'}`}>
-                <div className="aspect-[3/2] overflow-hidden bg-muted">
+
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:thin] sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-12 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0">
+            {kategorien.filter((kategorie) => kategorie.anzahl > 0).map(({ key, anzahl, bild }, index) => {
+              const hervorgehoben = index < 2
+              return (
+                <Link
+                  key={key}
+                  href={`/katalog?kategorie=${key}`}
+                  className={`group relative aspect-[4/3] w-[78vw] max-w-[310px] shrink-0 snap-start overflow-hidden border border-border bg-[#24201b] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent sm:w-[44vw] lg:w-auto lg:max-w-none ${hervorgehoben ? 'lg:col-span-6 lg:aspect-[16/8]' : 'lg:col-span-3 lg:aspect-[4/3]'}`}
+                >
                   {bild ? (
+                    // Das Bild ist dekorativ; Kategorie und Anzahl stehen als Text darüber.
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={bild} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain p-2" />
-                  ) : <div className="flex h-full items-center justify-center"><Package className="h-7 w-7 text-muted-foreground" aria-hidden="true" /></div>}
-                </div>
-                <div className="p-3">
-                  <h3 className="break-words text-sm font-semibold leading-snug">{KATEGORIE_LABELS[key]}</h3>
-                  <p className="mt-1 text-xs text-muted-foreground">{anzahl} {anzahl === 1 ? 'Position' : 'Positionen'}</p>
-                </div>
-              </Link>
-            ))}
+                    <img
+                      src={bild}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#24201b]">
+                      <Package className="h-10 w-10 text-white/35" aria-hidden="true" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/5 transition-colors group-hover:from-black/90" aria-hidden="true" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
+                    <div className="min-w-0">
+                      <h3 className={`break-words font-serif font-semibold leading-tight text-white ${hervorgehoben ? 'text-2xl sm:text-3xl' : 'text-xl'}`}>
+                        {KATEGORIE_LABELS[key]}
+                      </h3>
+                      <p className="mt-1.5 text-sm text-white/75">
+                        {anzahl} {anzahl === 1 ? 'Position' : 'Positionen'}
+                      </p>
+                    </div>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/50 bg-black/15 text-white transition-colors group-hover:border-white group-hover:bg-white group-hover:text-foreground">
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              )
+            })}
           </div>
+          <p className="mt-2 text-xs text-muted-foreground lg:hidden">
+            Seitlich wischen, um weitere Kategorien zu sehen.
+          </p>
         </div>
       </section>
 
