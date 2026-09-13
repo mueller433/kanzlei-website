@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react'
 import React, { useCallback, useEffect, useId, useRef, useState, useTransition } from 'react'
+import { createPortal } from 'react-dom'
 
 import {
   dokumentSlotsFuer,
@@ -244,7 +245,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-[100] flex items-end justify-center bg-foreground/55 backdrop-blur-[2px] sm:items-center sm:p-6"
           onMouseDown={(e) => {
@@ -725,7 +726,8 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )
