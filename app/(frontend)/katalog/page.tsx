@@ -86,7 +86,7 @@ export default async function KatalogSeite({
   const preisRange = PREIS_RANGES.find((r) => r.key === selectedPreis) ?? null
   const selectedSort = typeof sp.sort === 'string' ? sp.sort : SORT_OPTIONS[0].key
   const sortOption = SORT_OPTIONS.find((s) => s.key === selectedSort) ?? SORT_OPTIONS[0]
-  const ansicht: Ansicht = sp.ansicht === 'karten' ? 'karten' : 'liste'
+  const ansicht: Ansicht = sp.ansicht === 'liste' ? 'liste' : 'karten'
 
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
