@@ -1,4 +1,18 @@
-import { ArrowRight, ScaleIcon, Search } from 'lucide-react'
+import {
+  Armchair,
+  ArrowRight,
+  Cog,
+  type LucideIcon,
+  Monitor,
+  Package,
+  ScaleIcon,
+  Search,
+  Smartphone,
+  Truck,
+  UtensilsCrossed,
+  Warehouse,
+  Zap,
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -9,6 +23,7 @@ import { KontaktCta } from '@/components/kontakt-cta'
 import { ParallaxBild } from '@/components/parallax-bild'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
+import { type Kategorie, KATEGORIE_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
 import './styles.css'
@@ -80,6 +95,42 @@ const WARUM_DPSS_PUNKTE = [
   'Verbindliche Abwicklung',
 ] as const
 
+// Schnellzugriff-Kategorien unter der Suche – verweisen auf die bestehende
+// Katalog-Filterlogik (/katalog?kategorie=…), keine neue Suchlogik.
+const SCHNELL_KATEGORIEN: Kategorie[] = [
+  'fahrzeuge',
+  'maschinen',
+  'it-bueroelektronik',
+  'gastronomie',
+  'sonstiges',
+]
+
+// Anzeigereihenfolge im Kategorienraster (marketplace-typisch: Fahrzeuge und
+// Maschinen zuerst). Alle Werte entsprechen bestehenden Katalog-Kategorien.
+const KATEGORIE_ANZEIGE: Kategorie[] = [
+  'fahrzeuge',
+  'maschinen',
+  'it-bueroelektronik',
+  'smartphones',
+  'gastronomie',
+  'moebel-einrichtung',
+  'energie-gebaeudetechnik',
+  'lager-logistik-reinigung',
+  'sonstiges',
+]
+
+const KATEGORIE_ICONS: Record<Kategorie, LucideIcon> = {
+  smartphones: Smartphone,
+  maschinen: Cog,
+  fahrzeuge: Truck,
+  'it-bueroelektronik': Monitor,
+  sonstiges: Package,
+  gastronomie: UtensilsCrossed,
+  'moebel-einrichtung': Armchair,
+  'energie-gebaeudetechnik': Zap,
+  'lager-logistik-reinigung': Warehouse,
+}
+
 export default async function Startseite() {
   const payload = await getPayload({ config: await config })
   const { docs } = await payload.find({
@@ -96,7 +147,7 @@ export default async function Startseite() {
       {/* Full-Width Hintergrundbild über die gesamte Sektion, mit subtilem
           dunklem Verlauf von links für Lesbarkeit. Text in Off-White links
           platziert, Bild rechts bleibt ruhig sichtbar. */}
-      <section className="relative flex min-h-[720px] items-center overflow-hidden md:min-h-[680px]">
+      <section className="relative flex min-h-[560px] items-center overflow-hidden md:min-h-[680px]">
         <Image
           src="/images/hero-industrie-modern.png"
           alt="Moderne, helle Industriehalle mit Präzisionsmaschinen und klarer, aufgeräumter Struktur"
@@ -110,7 +161,7 @@ export default async function Startseite() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-8 py-16 md:px-16 lg:px-24">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-16 md:px-16 lg:px-24">
           <div className="max-w-[560px]">
             <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-[#f7f5f0]">
               DPSS MANAGEMENT
@@ -141,6 +192,64 @@ export default async function Startseite() {
                 Verwertung anfragen
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SUCHE / DISCOVERY — prominente Katalogsuche, nutzt bestehende
+          /katalog-Filterlogik (GET q=…) ohne neue Suchlogik */}
+      <section className="border-b border-border bg-muted/50">
+        <div className="mx-auto max-w-4xl px-6 py-14 md:px-10 md:py-20">
+          <div className="text-center">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Verwertungskatalog
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Was suchen Sie?
+            </h2>
+          </div>
+
+          <form
+            action="/katalog"
+            method="get"
+            className="mx-auto mt-8 flex w-full max-w-2xl flex-col gap-3 sm:flex-row"
+          >
+            <div className="relative flex-1">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <label htmlFor="startseite-suche" className="sr-only">
+                Vermögenswerte durchsuchen
+              </label>
+              <input
+                id="startseite-suche"
+                type="search"
+                name="q"
+                placeholder="Maschinen, Fahrzeuge, Betriebsausstattung ..."
+                className="h-14 w-full border border-border bg-card pl-12 pr-4 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex h-14 shrink-0 items-center justify-center gap-2 bg-accent px-8 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            >
+              <Search className="h-4 w-4" aria-hidden="true" />
+              Suchen
+            </button>
+          </form>
+
+          <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-2">
+            <span className="text-sm text-muted-foreground">Beliebt:</span>
+            {SCHNELL_KATEGORIEN.map((key) => (
+              <Link
+                key={key}
+                href={`/katalog?kategorie=${key}`}
+                className="inline-flex items-center border border-border bg-card px-3.5 py-2 text-sm text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {KATEGORIE_LABELS[key]}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -184,6 +293,45 @@ export default async function Startseite() {
               Alle Positionen ansehen
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* KATEGORIEN — moderner Marketplace-Einstieg nach Kategorie, verweist
+          auf die bestehende Katalog-Filterlogik (/katalog?kategorie=…) */}
+      <section className="border-b border-border bg-background">
+        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+          <div className="mb-12 max-w-2xl">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Kategorien
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              Nach Kategorie stöbern
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {KATEGORIE_ANZEIGE.map((key) => {
+              const Icon = KATEGORIE_ICONS[key]
+              return (
+                <Link
+                  key={key}
+                  href={`/katalog?kategorie=${key}`}
+                  className="group flex min-h-[84px] items-center gap-3 border border-border bg-card p-4 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:gap-4 sm:p-5"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-accent/30 bg-accent/5 text-accent">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm font-medium leading-snug text-card-foreground text-pretty sm:text-base">
+                    {KATEGORIE_LABELS[key]}
+                  </span>
+                  <ArrowRight
+                    className="ml-auto hidden h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent sm:block"
+                    aria-hidden="true"
+                  />
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
