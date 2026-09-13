@@ -98,35 +98,72 @@ function homepagePreis(posten: Posten) {
 function HomepageAsset({ posten }: { posten: Posten }) {
   const bild = ersteBildUrl(posten.bilder)
   return (
-    <Link href={`/katalog/${posten.id}`}
-      className="group flex min-w-0 flex-col overflow-hidden border border-border bg-card transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+    <Link
+      href={`/katalog/${posten.id}`}
+      className="group flex min-w-0 flex-col overflow-hidden border border-border bg-card transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-muted">
         {bild ? (
           // Payload-Bilder behalten ihre bestehenden URLs.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={bild} alt={posten.titel} loading="lazy" decoding="async"
-            className="h-full w-full object-contain p-3" />
+          <img
+            src={bild}
+            alt={posten.titel}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+          />
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
             <Package className="h-8 w-8" aria-hidden="true" />
             <span className="text-sm">Keine Abbildung vorhanden</span>
           </div>
         )}
-        <span className="absolute left-3 top-3 border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground">
-          {STATUS_LABELS[posten.status]}
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[posten.kategorie]}</p>
-        <h3 className="mt-2 break-words text-lg font-semibold leading-snug text-foreground">{posten.titel}</h3>
-        {posten.kurzspezifikation && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{posten.kurzspezifikation}</p>}
-        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <span>{ZUSTAND_LABELS[posten.zustand]}</span>
-          {posten.standort && <span className="inline-flex min-w-0 items-start gap-1"><MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /><span className="break-words">{posten.standort}</span></span>}
+        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
+          <span className="border border-white/40 bg-[#17130f]/85 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm">
+            {STATUS_LABELS[posten.status]}
+          </span>
+          <span className="max-w-[60%] bg-card/95 px-2.5 py-1 text-right text-[11px] font-medium text-foreground backdrop-blur-sm">
+            {KATEGORIE_LABELS[posten.kategorie]}
+          </span>
         </div>
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
-          <p className="mt-4 text-xl font-semibold tracking-tight text-foreground">{homepagePreis(posten)}</p>
-          <span className="inline-flex items-center gap-1 text-sm font-medium text-accent">Details <ArrowRight className="h-4 w-4" aria-hidden="true" /></span>
+      </div>
+
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="break-words text-lg font-semibold leading-snug text-foreground sm:text-xl">
+          {posten.titel}
+        </h3>
+        {posten.kurzspezifikation && (
+          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+            {posten.kurzspezifikation}
+          </p>
+        )}
+
+        <div className="mt-4 flex min-h-6 flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+          <span>{ZUSTAND_LABELS[posten.zustand]}</span>
+          {posten.standort && (
+            <>
+              <span className="text-border" aria-hidden="true">·</span>
+              <span className="inline-flex min-w-0 items-center gap-1">
+                <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span className="truncate">{posten.standort}</span>
+              </span>
+            </>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+              {posten.preisAufAnfrage ? 'Kaufpreis' : 'Preis'}
+            </p>
+            <p className="mt-1 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              {homepagePreis(posten)}
+            </p>
+          </div>
+          <span className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
+            Details ansehen <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </span>
         </div>
       </div>
     </Link>
@@ -325,27 +362,43 @@ export default async function Startseite() {
         </div>
       </section>
 
-      <section aria-labelledby="homepage-assets" className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-10 lg:py-12">
-          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-            <div><p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Neu im Katalog</p><h2 id="homepage-assets" className="font-serif text-3xl leading-tight sm:text-4xl">Aktuelle Vermögenswerte</h2></div>
-            <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent">Gesamten Bestand ansehen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+      <section aria-labelledby="homepage-assets" className="border-b border-border bg-[#eeeae1]">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-14">
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                Aktueller Bestand
+              </p>
+              <h2 id="homepage-assets" className="font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                Neu im Verwertungskatalog
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                Verfügbare Vermögenswerte aus laufenden Verwertungs- und Auflösungsverfahren.
+              </p>
+            </div>
+            <Link
+              href="/katalog"
+              className="inline-flex min-h-12 items-center justify-center gap-2 border border-accent bg-card px-5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Gesamten Bestand ansehen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
+
           {docs.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
               {docs.map((posten) => <HomepageAsset key={posten.id} posten={posten} />)}
             </div>
           ) : (
-            <div className="border border-border bg-card p-6">
+            <div className="border border-border bg-card p-6 sm:p-8">
               <h3 className="text-lg font-semibold">Derzeit keine veröffentlichten Positionen.</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Schauen Sie später wieder vorbei oder nehmen Sie Kontakt mit uns auf.</p>
-              <Link href="/kontakt" className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent">Kontakt aufnehmen</Link>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
+              </p>
+              <Link href="/kontakt" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
+                Kontakt aufnehmen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
           )}
-          <div className="mt-6 flex flex-col justify-between gap-4 border border-border bg-card p-5 sm:flex-row sm:items-center">
-            <div><h3 className="font-semibold">Gezielt zum passenden Vermögenswert</h3><p className="mt-1 text-sm text-muted-foreground">Bestand nach Kategorie, Zustand und Preis filtern.</p></div>
-            <Link href="/katalog" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 bg-accent px-5 text-sm font-medium text-accent-foreground">Katalog öffnen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-          </div>
         </div>
       </section>
 
