@@ -1,27 +1,14 @@
-import {
-  Armchair,
-  ArrowRight,
-  Cog,
-  type LucideIcon,
-  Monitor,
-  Package,
-  Search,
-  Smartphone,
-  Truck,
-  UtensilsCrossed,
-  Warehouse,
-  Zap,
-} from 'lucide-react'
+import { ArrowRight, MapPin, Package, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 import { FaqSection } from '@/components/faq-section'
-import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
-import { type Kategorie, KATEGORIE_LABELS } from '@/lib/katalog'
+import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, STATUS_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
+import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
 import './styles.css'
@@ -93,42 +80,57 @@ const WARUM_DPSS = [
   },
 ] as const
 
-// Kurze Vertrauens-Marker im Hero. Rein textlich, keine erfundenen Kennzahlen.
-const HERO_MARKER = ['Strukturierte Erfassung', 'Marktgerechte Bewertung', 'Transparente Abwicklung'] as const
-
-// Schnellzugriff-Kategorien unter der Suche – verweisen auf die bestehende
-// Katalog-Filterlogik (/katalog?kategorie=…), keine neue Suchlogik.
-const SCHNELL_KATEGORIEN: Kategorie[] = [
-  'fahrzeuge',
-  'maschinen',
-  'it-bueroelektronik',
-  'gastronomie',
-  'sonstiges',
-]
-
-// Anzeigereihenfolge im Kategorienraster (marketplace-typisch: Fahrzeuge und
-// Maschinen zuerst). Alle Werte entsprechen bestehenden Katalog-Kategorien.
 const KATEGORIE_ANZEIGE: Kategorie[] = [
-  'fahrzeuge',
-  'maschinen',
-  'it-bueroelektronik',
-  'smartphones',
-  'gastronomie',
-  'moebel-einrichtung',
-  'energie-gebaeudetechnik',
-  'lager-logistik-reinigung',
+  'fahrzeuge', 'maschinen', 'lager-logistik-reinigung',
+  'it-bueroelektronik', 'gastronomie', 'moebel-einrichtung',
+  'smartphones', 'energie-gebaeudetechnik', 'sonstiges',
 ]
 
-const KATEGORIE_ICONS: Record<Kategorie, LucideIcon> = {
-  smartphones: Smartphone,
-  maschinen: Cog,
-  fahrzeuge: Truck,
-  'it-bueroelektronik': Monitor,
-  sonstiges: Package,
-  gastronomie: UtensilsCrossed,
-  'moebel-einrichtung': Armchair,
-  'energie-gebaeudetechnik': Zap,
-  'lager-logistik-reinigung': Warehouse,
+// Bestehende Berechnung unverändert. Fachliche Preis-/Provisionsklärung separat.
+function homepagePreis(posten: Posten) {
+  if (posten.preisAufAnfrage) return 'Preis auf Anfrage'
+  if (typeof posten.preis !== 'number') return '—'
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
+  }).format(Math.round(posten.preis * 1.19))
+}
+
+function HomepageAsset({ posten }: { posten: Posten }) {
+  const bild = ersteBildUrl(posten.bilder)
+  return (
+    <Link href={`/katalog/${posten.id}`}
+      className="group flex min-w-0 flex-col overflow-hidden border border-border bg-card transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        {bild ? (
+          // Payload-Bilder behalten ihre bestehenden URLs.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={bild} alt={posten.titel} loading="lazy" decoding="async"
+            className="h-full w-full object-contain p-3" />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
+            <Package className="h-8 w-8" aria-hidden="true" />
+            <span className="text-sm">Keine Abbildung vorhanden</span>
+          </div>
+        )}
+        <span className="absolute left-3 top-3 border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground">
+          {STATUS_LABELS[posten.status]}
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[posten.kategorie]}</p>
+        <h3 className="mt-2 break-words text-lg font-semibold leading-snug text-foreground">{posten.titel}</h3>
+        {posten.kurzspezifikation && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{posten.kurzspezifikation}</p>}
+        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          <span>{ZUSTAND_LABELS[posten.zustand]}</span>
+          {posten.standort && <span className="inline-flex min-w-0 items-start gap-1"><MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /><span className="break-words">{posten.standort}</span></span>}
+        </div>
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
+          <p className="mt-4 text-xl font-semibold tracking-tight text-foreground">{homepagePreis(posten)}</p>
+          <span className="inline-flex items-center gap-1 text-sm font-medium text-accent">Details <ArrowRight className="h-4 w-4" aria-hidden="true" /></span>
+        </div>
+      </div>
+    </Link>
+  )
 }
 
 export default async function Startseite() {
@@ -141,233 +143,117 @@ export default async function Startseite() {
     limit: 6,
   })
 
+  // Pro Kategorie nur ein veröffentlichtes Vorschaudokument, keine Vollbestands-Abfrage.
+  const kategorien = await Promise.all(KATEGORIE_ANZEIGE.map(async (key) => {
+    const ergebnis = await payload.find({
+      collection: 'posten',
+      where: { and: [
+        { veroeffentlicht: { equals: true } },
+        { kategorie: { equals: key } },
+      ] },
+      sort: '-createdAt',
+      depth: 1,
+      limit: 1,
+      select: { bilder: true },
+    })
+    return { key, anzahl: ergebnis.totalDocs, bild: ersteBildUrl(ergebnis.docs[0]?.bilder) }
+  }))
+  const titelbild = docs.map((posten) => ({ posten, bild: ersteBildUrl(posten.bilder) })).find((eintrag) => eintrag.bild)
   return (
     <div>
-      {/* ============================================================= */}
-      {/* HERO — grosses Vollbild mit Marktplatz-Anmutung */}
-      {/* ============================================================= */}
-      <section className="relative flex min-h-[600px] items-center overflow-hidden md:min-h-[720px]">
-        <Image
-          src="/images/hero-marketplace.png"
-          alt="Grosse, helle Industriehalle mit professionellen Maschinen, Staplern und einem Nutzfahrzeug"
-          fill
-          priority
-          sizes="100vw"
-          className="hero-bild-scale object-cover"
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-[#141110]/92 from-0% via-[#141110]/60 via-45% to-[#141110]/15 to-90%"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#141110]/70 to-transparent"
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-20 md:px-16 md:py-28 lg:px-24">
-          <div className="hero-einblenden max-w-[640px]">
-            <p className="mb-6 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-[#f7f5f0]">
-              <span className="inline-block h-px w-8 bg-accent" aria-hidden="true" />
-              DPSS Management
-            </p>
-            <h1 className="font-serif text-[2.6rem] font-semibold leading-[1.02] tracking-tight text-[#f7f5f0] text-balance md:text-[4rem] lg:text-[4.6rem]">
-              Vermögenswerte professionell verwerten.
+      <section className="border-b border-border">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:px-10 lg:py-12">
+          <div className="min-w-0 self-center">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-accent">DPSS Management · Verwertungskatalog</p>
+            <h1 className="max-w-2xl font-serif text-[clamp(2rem,5vw,3.75rem)] font-semibold leading-[1.06] tracking-tight text-foreground">
+              Vermögenswerte<br className="hidden sm:block" /> professionell verwerten.
             </h1>
-            <p className="mt-7 max-w-[520px] text-lg leading-relaxed text-[#e4e0d6] text-pretty">
-              DPSS Management unterstützt Unternehmen, Insolvenzverwalter und Verfahrensbeteiligte
-              bei der strukturierten Erfassung, Bewertung, Vermarktung und Verwertung von
-              Vermögenswerten.
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+              Fahrzeuge, Maschinen und Betriebsausstattung entdecken.
+              Oder die Verwertung Ihrer Vermögenswerte mit DPSS organisieren.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/katalog"
-                className="inline-flex items-center justify-center gap-2 bg-accent px-7 py-3.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-              >
-                Verwertungskatalog <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/kontakt?betreff=Verwertungsauftrag"
-                className="inline-flex items-center justify-center gap-2 border border-[#f7f5f0]/45 bg-[#f7f5f0]/10 px-7 py-3.5 text-sm font-medium text-[#f7f5f0] backdrop-blur-sm transition-colors hover:border-[#f7f5f0]/70 hover:bg-[#f7f5f0]/20"
-              >
-                Verwertung anfragen
-              </Link>
-            </div>
-
-            <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
-              {HERO_MARKER.map((marker) => (
-                <li key={marker} className="flex items-center gap-2 text-sm text-[#e4e0d6]">
-                  <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-                  {marker}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SUCHE / DISCOVERY — schwebendes Panel, das den Hero überlappt.
-          Nutzt die bestehende /katalog-Filterlogik (GET q=…), keine neue
-          Suchlogik. */}
-      {/* ============================================================= */}
-      <section className="relative z-20 border-b border-border bg-background">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="-mt-12 border border-border bg-card p-6 shadow-[0_24px_60px_-30px_rgba(20,17,16,0.5)] md:-mt-20 md:p-10">
-            <div className="flex flex-col gap-2">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Verwertungskatalog durchsuchen
-              </p>
-              <h2 className="font-serif text-2xl leading-tight text-card-foreground text-balance md:text-3xl">
-                Was suchen Sie?
-              </h2>
-            </div>
-
-            <form action="/katalog" method="get" className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <div className="relative flex-1">
-                <Search
-                  className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden="true"
-                />
-                <label htmlFor="startseite-suche" className="sr-only">
-                  Vermögenswerte durchsuchen
-                </label>
-                <input
-                  id="startseite-suche"
-                  type="search"
-                  name="q"
-                  placeholder="Maschinen, Fahrzeuge, Betriebsausstattung ..."
-                  className="h-14 w-full border border-border bg-background pl-12 pr-4 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                />
-              </div>
-              <button
-                type="submit"
-                className="inline-flex h-14 shrink-0 items-center justify-center gap-2 bg-accent px-8 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-              >
-                <Search className="h-4 w-4" aria-hidden="true" />
-                Suchen
+            <form action="/katalog" method="get" className="mt-6 flex min-w-0 border border-border bg-card p-1.5">
+              <label htmlFor="startseite-suche" className="sr-only">Vermögenswerte durchsuchen</label>
+              <input id="startseite-suche" type="search" name="q" placeholder="Was suchen Sie?"
+                className="h-12 min-w-0 flex-1 bg-transparent px-3 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" />
+              <button type="submit" className="inline-flex h-12 min-w-12 shrink-0 items-center justify-center gap-2 bg-accent px-3 text-sm font-medium text-accent-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                <Search className="h-5 w-5" aria-hidden="true" /><span className="sr-only sm:not-sr-only">Suchen</span>
               </button>
             </form>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <span className="text-sm text-muted-foreground">Beliebt:</span>
-              {SCHNELL_KATEGORIEN.map((key) => (
-                <Link
-                  key={key}
-                  href={`/katalog?kategorie=${key}`}
-                  className="inline-flex items-center border border-border bg-background px-3.5 py-2 text-sm text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  {KATEGORIE_LABELS[key]}
-                </Link>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+              {(['fahrzeuge', 'maschinen', 'it-bueroelektronik'] as Kategorie[]).map((key) => (
+                <Link key={key} href={`/katalog?kategorie=${key}`} className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline">{KATEGORIE_LABELS[key]}</Link>
               ))}
             </div>
+            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-3">
+              <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+              <Link href="/kontakt?betreff=Verwertungsauftrag" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground">Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+            </div>
+          </div>
+          {titelbild && (
+            <Link href={`/katalog/${titelbild.posten.id}`} className="group relative hidden min-w-0 overflow-hidden border border-border bg-card lg:flex lg:flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+              <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4 text-xs">
+                <span className="font-medium uppercase tracking-[0.14em] text-accent">Einblick in den Bestand</span>
+                <span className="text-muted-foreground">{STATUS_LABELS[titelbild.posten.status]}</span>
+              </div>
+              <div className="relative min-h-64 flex-1 bg-muted">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={titelbild.bild!} alt={titelbild.posten.titel} fetchPriority="high" className="absolute inset-0 h-full w-full object-contain p-5" />
+              </div>
+              <div className="flex flex-wrap items-end justify-between gap-3 p-5">
+                <div className="min-w-0 flex-1"><p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[titelbild.posten.kategorie]}</p><h2 className="mt-1 text-lg font-semibold leading-snug">{titelbild.posten.titel}</h2></div>
+                <span className="text-xl font-semibold">{homepagePreis(titelbild.posten)}</span>
+              </div>
+            </Link>
+          )}
+        </div>
+      </section>
+
+      <section aria-labelledby="homepage-kategorien" className="border-b border-border bg-card">
+        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-10 lg:py-9">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="homepage-kategorien" className="text-lg font-semibold tracking-tight sm:text-xl">Nach Kategorie entdecken</h2>
+            <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm text-accent">Alle Positionen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {kategorien.filter((kategorie) => kategorie.anzahl > 0).map(({ key, anzahl, bild }, index) => (
+              <Link key={key} href={`/katalog?kategorie=${key}`} className={`group min-w-0 overflow-hidden border border-border bg-background transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${index >= 4 ? 'hidden sm:block' : 'block'}`}>
+                <div className="aspect-[3/2] overflow-hidden bg-muted">
+                  {bild ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={bild} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain p-2" />
+                  ) : <div className="flex h-full items-center justify-center"><Package className="h-7 w-7 text-muted-foreground" aria-hidden="true" /></div>}
+                </div>
+                <div className="p-3">
+                  <h3 className="break-words text-sm font-semibold leading-snug">{KATEGORIE_LABELS[key]}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">{anzahl} {anzahl === 1 ? 'Position' : 'Positionen'}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* KATEGORIEN — grosse, ruhige Kacheln, 2 Spalten mobil / 4 Desktop.
-          Verlinken auf die bestehende Katalog-Filterlogik. */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-          <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Kategorien
-              </p>
-              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                Vermögenswerte entdecken
-              </h2>
-            </div>
-            <Link
-              href="/katalog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent md:shrink-0"
-            >
-              Gesamten Katalog ansehen
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+      <section aria-labelledby="homepage-assets" className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-10 lg:py-12">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div><p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Neu im Katalog</p><h2 id="homepage-assets" className="font-serif text-3xl leading-tight sm:text-4xl">Aktuelle Vermögenswerte</h2></div>
+            <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent">Gesamten Bestand ansehen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
           </div>
-
-          <div className="karten-grid grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            {KATEGORIE_ANZEIGE.map((key) => {
-              const Icon = KATEGORIE_ICONS[key]
-              return (
-                <Link
-                  key={key}
-                  href={`/katalog?kategorie=${key}`}
-                  className="group flex min-h-[132px] flex-col justify-between border border-border bg-card p-5 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:min-h-[168px] md:p-6"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center border border-accent/30 bg-accent/5 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
-                  </span>
-                  <span className="mt-6 flex items-center justify-between gap-2">
-                    <span className="font-serif text-base leading-snug text-card-foreground text-pretty md:text-lg">
-                      {KATEGORIE_LABELS[key]}
-                    </span>
-                    <ArrowRight
-                      className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* AKTUELLE VERMÖGENSWERTE — grosse Produktkarten aus echten Daten */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-muted/40">
-        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-          <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Marktplatz
-              </p>
-              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-5xl">
-                Aktuelle Vermögenswerte
-              </h2>
-              <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-                Entdecken Sie aktuell verfügbare Fahrzeuge, Maschinen und weitere Vermögenswerte aus
-                laufenden Verwertungs- und Auflösungsverfahren.
-              </p>
-            </div>
-            <Link
-              href="/katalog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent md:shrink-0"
-            >
-              Alle Positionen
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
-
           {docs.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {docs.map((posten) => (
-                <KatalogPositionGridKarte key={posten.id} posten={posten} />
-              ))}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+              {docs.map((posten) => <HomepageAsset key={posten.id} posten={posten} />)}
             </div>
           ) : (
-            <div className="border border-border bg-card p-10">
-              <p className="font-serif text-xl text-card-foreground">
-                Derzeit keine Positionen verfügbar.
-              </p>
-              <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-                Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
-              </p>
+            <div className="border border-border bg-card p-6">
+              <h3 className="text-lg font-semibold">Derzeit keine veröffentlichten Positionen.</h3>
+              <p className="mt-2 text-sm text-muted-foreground">Schauen Sie später wieder vorbei oder nehmen Sie Kontakt mit uns auf.</p>
+              <Link href="/kontakt" className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent">Kontakt aufnehmen</Link>
             </div>
           )}
-
-          <div className="mt-12 flex justify-center">
-            <Link
-              href="/katalog"
-              className="group inline-flex items-center justify-center gap-2 border border-accent/40 bg-card px-8 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:bg-accent/5"
-            >
-              Alle Positionen ansehen
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+          <div className="mt-6 flex flex-col justify-between gap-4 border border-border bg-card p-5 sm:flex-row sm:items-center">
+            <div><h3 className="font-semibold">Gezielt zum passenden Vermögenswert</h3><p className="mt-1 text-sm text-muted-foreground">Bestand nach Kategorie, Zustand und Preis filtern.</p></div>
+            <Link href="/katalog" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 bg-accent px-5 text-sm font-medium text-accent-foreground">Katalog öffnen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -376,8 +262,8 @@ export default async function Startseite() {
       {/* PROFESSIONELLE VERWERTUNG — dunkles Kontrastband, 6 Kernpunkte */}
       {/* ============================================================= */}
       <section className="border-b border-border bg-[#16130f]">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="mb-14 max-w-2xl">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
+          <div className="mb-8 max-w-2xl">
             <p className="mb-4 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-[#f7f5f0]/70">
               <span className="inline-block h-px w-8 bg-accent" aria-hidden="true" />
               Leistung
@@ -393,7 +279,7 @@ export default async function Startseite() {
 
           <div className="grid grid-cols-1 gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
             {WARUM_DPSS.map((punkt) => (
-              <div key={punkt.nummer} className="flex flex-col gap-4 bg-[#16130f] p-8 md:p-10">
+              <div key={punkt.nummer} className="flex flex-col gap-4 bg-[#16130f] p-5 md:p-6">
                 <span className="font-serif text-2xl leading-none text-accent">{punkt.nummer}</span>
                 <h3 className="font-serif text-xl text-[#f7f5f0] text-balance">{punkt.titel}</h3>
                 <p className="text-base leading-relaxed text-[#c9c3b8] text-pretty">{punkt.text}</p>
@@ -407,8 +293,8 @@ export default async function Startseite() {
       {/* SO FUNKTIONIERT ES — 5-stufige Timeline */}
       {/* ============================================================= */}
       <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-          <div className="mb-14 max-w-2xl">
+        <div className="reveal mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
+          <div className="mb-8 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">Ablauf</p>
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               So funktioniert es
@@ -477,7 +363,7 @@ export default async function Startseite() {
       {/* FACHBEITRÄGE — bestehende Inhalte, erhalten */}
       {/* ============================================================= */}
       <section className="border-b border-border bg-muted/40">
-        <div className="reveal mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+        <div className="reveal mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
@@ -528,7 +414,7 @@ export default async function Startseite() {
       {/* FAQ — kompakter Teaser, bestehende Inhalte erhalten */}
       {/* ============================================================= */}
       <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto max-w-4xl px-6 py-16 md:px-10 md:py-24">
+        <div className="reveal mx-auto max-w-4xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Häufige Fragen
