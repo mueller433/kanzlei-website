@@ -7,7 +7,7 @@ import { FaqSection } from '@/components/faq-section'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
-import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, STATUS_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
+import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
@@ -158,86 +158,103 @@ export default async function Startseite() {
     })
     return { key, anzahl: ergebnis.totalDocs, bild: ersteBildUrl(ergebnis.docs[0]?.bilder) }
   }))
-  // Zwei unterschiedliche Kategorien, nur verfügbare, veröffentlichte Angebote mit Bild.
-  const heroAuswahl = await Promise.all((['fahrzeuge', 'maschinen'] as Kategorie[]).map(async (kategorie) => {
-    const { docs: auswahl } = await payload.find({
-      collection: 'posten',
-      where: { and: [
-        { veroeffentlicht: { equals: true } },
-        { status: { equals: 'verfuegbar' } },
-        { kategorie: { equals: kategorie } },
-        { bilder: { exists: true } },
-      ] },
-      sort: '-createdAt', depth: 1, limit: 1,
-    })
-    return auswahl[0]
-  }))
-  const heroAssets = heroAuswahl
-    .filter((posten): posten is Posten => Boolean(posten && ersteBildUrl(posten.bilder)))
-  if (heroAssets.length === 0) {
-    const fallback = docs.find((posten) => posten.status === 'verfuegbar' && ersteBildUrl(posten.bilder))
-    if (fallback) heroAssets.push(fallback)
-  }
   return (
     <div>
-      <section className="border-b border-border">
-        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 md:px-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-24 lg:py-10">
-          <div className="min-w-0 self-center">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-accent">DPSS Management · Verwertungskatalog</p>
-            <h1 className="max-w-2xl font-serif text-[clamp(1.875rem,3.3vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-foreground">
-              Vermögenswerte professionell verwerten.
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Fahrzeuge, Maschinen und Betriebsausstattung entdecken.
-              Oder die Verwertung Ihrer Vermögenswerte mit DPSS organisieren.
-            </p>
-            <form action="/katalog" method="get" className="mt-5 flex min-w-0 border border-accent/40 bg-card p-1.5">
-              <label htmlFor="startseite-suche" className="sr-only">Vermögenswerte durchsuchen</label>
-              <input id="startseite-suche" type="search" name="q" placeholder="Was suchen Sie?"
-                className="h-12 min-w-0 flex-1 bg-transparent px-3 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" />
-              <button type="submit" className="inline-flex h-12 min-w-12 shrink-0 items-center justify-center gap-2 bg-accent px-3 text-sm font-medium text-accent-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-                <Search className="h-5 w-5" aria-hidden="true" /><span className="sr-only sm:not-sr-only">Suchen</span>
-              </button>
-            </form>
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
-              {(['fahrzeuge', 'maschinen', 'it-bueroelektronik'] as Kategorie[]).map((key) => (
-                <Link key={key} href={`/katalog?kategorie=${key}`} className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline">{KATEGORIE_LABELS[key]}</Link>
-              ))}
-            </div>
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
-              <Link href="/katalog" className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-              <Link href="/kontakt?betreff=Verwertungsauftrag" className="inline-flex min-h-12 items-center justify-center gap-2 border border-accent px-4 py-3 text-sm font-medium text-accent hover:bg-accent/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+      <section className="relative border-b border-border bg-[#17130f]">
+        <div className="relative min-h-[500px] overflow-hidden lg:min-h-[540px]">
+          <Image
+            src="/images/hero-marketplace.png"
+            alt="Industriehalle mit Maschinen, Fahrzeugen und weiteren Vermögenswerten"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#17130f]/95 via-[#17130f]/60 to-[#17130f]/25 lg:hidden" aria-hidden="true" />
+          <div className="absolute inset-y-0 right-0 hidden w-[60%] bg-[#7a1f32]/94 [clip-path:polygon(16%_0,100%_0,100%_100%,0_100%)] lg:block" aria-hidden="true" />
+          <div className="absolute inset-y-0 right-0 hidden w-[42%] bg-gradient-to-r from-transparent to-[#4d1020]/45 lg:block" aria-hidden="true" />
+
+          <div className="relative z-10 mx-auto grid min-h-[500px] max-w-7xl items-end px-4 pb-28 pt-14 sm:px-6 lg:min-h-[540px] lg:grid-cols-2 lg:items-center lg:px-24 lg:pb-24 lg:pt-20">
+            <div className="lg:col-start-2 lg:pl-14">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
+                DPSS Management · Verwertung
+              </p>
+              <h1 className="max-w-xl font-serif text-[clamp(2.25rem,4.2vw,4rem)] font-semibold leading-[1.03] tracking-tight text-white">
+                Vermögenswerte professionell verwerten.
+              </h1>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+                Aktuelle Fahrzeuge, Maschinen und Betriebsausstattung kaufen – oder eigene
+                Vermögenswerte strukturiert und professionell verwerten lassen.
+              </p>
+              <div className="mt-7 grid gap-3 sm:flex">
+                <Link
+                  href="/katalog"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17130f] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  Vermögenswerte kaufen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/kontakt?betreff=Verwertungsauftrag"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/70 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  Vermögenswerte verwerten <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
             </div>
           </div>
-          {heroAssets.length > 0 && (
-            <div className="min-w-0 self-center">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">Aus dem aktuellen Bestand</p>
-                <span className="text-xs text-muted-foreground">Verfügbar</span>
+        </div>
+
+        <div className="relative z-20 mx-auto -mt-16 max-w-6xl px-4 pb-8 sm:px-6 lg:-mt-20 lg:px-10 lg:pb-10">
+          <form action="/katalog" method="get" className="border border-border bg-card p-4 shadow-[0_18px_50px_-30px_rgba(23,19,15,0.55)] sm:p-6">
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Verwertungskatalog</p>
+                <h2 className="mt-1 font-serif text-2xl font-semibold text-foreground sm:text-3xl">Passenden Bestand finden</h2>
               </div>
-              <div className="grid gap-3">
-                {heroAssets.map((posten, index) => (
-                  <Link key={posten.id} href={`/katalog/${posten.id}`}
-                    className={`group min-w-0 overflow-hidden border border-border bg-card transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${index === 0 ? 'block' : 'grid grid-cols-[38%_1fr]'}`}>
-                    <div className={index === 0 ? 'aspect-[16/9] overflow-hidden bg-muted' : 'min-h-28 overflow-hidden bg-muted'}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={ersteBildUrl(posten.bilder)!} alt={posten.titel}
-                        loading={index === 0 ? 'eager' : 'lazy'}
-                        fetchPriority={index === 0 ? 'high' : 'auto'}
-                        className="h-full w-full object-cover" />
-                    </div>
-                    <div className={`min-w-0 p-3 sm:p-4 ${index === 0 ? 'flex flex-wrap items-end justify-between gap-2' : 'flex flex-col justify-center gap-1'}`}>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[posten.kategorie]}</p>
-                        <h2 className="mt-1 line-clamp-2 break-words text-sm font-semibold leading-snug sm:text-base">{posten.titel}</h2>
-                      </div>
-                      <p className="text-lg font-semibold tracking-tight text-foreground">{homepagePreis(posten)}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent">
+                Alle Positionen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
-          )}
+
+            <label htmlFor="hero-suche" className="sr-only">Schnellsuche im Verwertungskatalog</label>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <input
+                id="hero-suche"
+                type="search"
+                name="q"
+                placeholder="Zum Beispiel Fahrzeug, Minibagger oder Büroausstattung"
+                className="h-14 w-full border border-border bg-background pl-12 pr-4 text-base text-foreground outline-none placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/20"
+              />
+            </div>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_auto]">
+              <label className="min-w-0">
+                <span className="sr-only">Kategorie</span>
+                <select name="kategorie" defaultValue="" className="h-12 w-full border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-accent">
+                  <option value="">Alle Kategorien</option>
+                  {KATEGORIE_ANZEIGE.map((key) => <option key={key} value={key}>{KATEGORIE_LABELS[key]}</option>)}
+                </select>
+              </label>
+              <label className="hidden min-w-0 sm:block">
+                <span className="sr-only">Zustand</span>
+                <select name="zustand" defaultValue="" className="h-12 w-full border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-accent">
+                  <option value="">Alle Zustände</option>
+                  {ZUSTAND_REIHENFOLGE.map((key) => <option key={key} value={key}>{ZUSTAND_LABELS[key]}</option>)}
+                </select>
+              </label>
+              <label className="hidden min-w-0 sm:block">
+                <span className="sr-only">Preisbereich</span>
+                <select name="preis" defaultValue="" className="h-12 w-full border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-accent">
+                  <option value="">Alle Preise</option>
+                  {PREIS_RANGES.map((range) => <option key={range.key} value={range.key}>{range.label}</option>)}
+                </select>
+              </label>
+              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 bg-accent px-6 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                <Search className="h-4 w-4" aria-hidden="true" /> Suchen
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
