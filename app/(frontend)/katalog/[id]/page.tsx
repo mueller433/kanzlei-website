@@ -155,9 +155,8 @@ export default async function AssetDetailSeite({
       ? formatiertePreis(Math.round(posten.preis * 1.19))
       : 'Preis auf Anfrage'
 
-  // Kompakte Kerninformationen im Hero – nur befüllte Felder (Sektion 5 der Vorgabe)
+  // Kompakte Kerninformationen in der Kaufbox – nur befüllte Felder.
   const kerninfo = [
-    { label: 'Preis', wert: preisText },
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
     { label: 'MwSt.', wert: '19 %' },
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
@@ -177,8 +176,8 @@ export default async function AssetDetailSeite({
 
   return (
     <div>
-      <section>
-        <div className="mx-auto max-w-6xl px-6 pt-8 md:px-10 md:pt-10">
+      <section className="border-b border-border bg-card">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
           <Link
             href="/katalog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
@@ -189,21 +188,30 @@ export default async function AssetDetailSeite({
         </div>
       </section>
 
-      <section>
-        <div className="mx-auto max-w-6xl px-6 py-6 md:px-10 md:py-8">
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
           {/*
             Layout: flex-col auf Mobile (DOM-Reihenfolge = visuelle Reihenfolge:
             Titel/Status vor Bildgalerie), ab lg: 2-spaltiges Grid mit Bild links
             über die volle Höhe und Titel/Kerninfo rechts gestapelt.
           */}
-          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-12">
-            {/* Titel-Block */}
-            <div className="order-1 lg:order-2 lg:col-start-2 lg:row-start-1">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-10 xl:gap-14">
+            {/* Kauf- und Informationsbox */}
+            <aside className="order-1 border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
 
-              <h1 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
+              <div className="mb-4 flex flex-wrap gap-2">
+                <span className="whitespace-nowrap border border-accent px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-accent">
+                  {STATUS_LABELS[posten.status]}
+                </span>
+                <span className="whitespace-nowrap border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                  {ZUSTAND_LABELS[posten.zustand]}
+                </span>
+              </div>
+
+              <h1 className="font-serif text-3xl font-semibold leading-tight text-foreground text-balance sm:text-4xl">
                 {posten.titel}
               </h1>
 
@@ -213,25 +221,29 @@ export default async function AssetDetailSeite({
                 </p>
               )}
 
-              {/* Status + Zustand – Kategorie steht bereits in der Eyebrow-Zeile */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="whitespace-nowrap border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
-                  {STATUS_LABELS[posten.status]}
-                </span>
-                <span className="whitespace-nowrap border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                  {ZUSTAND_LABELS[posten.zustand]}
-                </span>
+              <div className="mt-6 border-y border-border py-5">
+                <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  {hatNettoPreis ? 'Kaufpreis inkl. 19 % USt.' : 'Kaufpreis'}
+                </p>
+                <p className="mt-1 font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                  {preisText}
+                </p>
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/kontakt"
-                  className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-                >
-                  Fragen?
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+              <dl className="grid grid-cols-1 divide-y divide-border border-b border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {kerninfo.map((eintrag) => (
+                  <div key={eintrag.label} className="py-3 sm:px-4 sm:py-4 sm:first:pl-0 sm:last:pr-0">
+                    <dt className="text-xs uppercase tracking-[0.13em] text-muted-foreground">
+                      {eintrag.label}
+                    </dt>
+                    <dd className="mt-1 break-words text-sm font-medium text-foreground sm:text-base">
+                      {eintrag.wert}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
 
+              <div className="mt-6 flex flex-col gap-3">
                 {posten.status === 'verfuegbar' && (
                   <SofortkaufDialog
                     produktId={String(posten.id)}
@@ -240,32 +252,20 @@ export default async function AssetDetailSeite({
                     standort={posten.standort}
                   />
                 )}
+
+                <Link
+                  href="/kontakt"
+                  className="group inline-flex min-h-12 w-full items-center justify-center gap-2 border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Frage zur Position
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
-            </div>
+            </aside>
 
             {/* Bildergalerie */}
-            <div className="order-2 lg:order-1 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+            <div className="order-2 lg:order-1 lg:col-start-1 lg:row-start-1">
               <AssetGalerie bilder={bilder} />
-            </div>
-
-            {/* Kerninformationen */}
-            <div className="order-3 lg:order-3 lg:col-start-2 lg:row-start-2">
-              <dl
-                className={`grid grid-cols-2 gap-px overflow-hidden border border-border bg-border ${
-                  kerninfo.length >= 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3'
-                }`}
-              >
-                {kerninfo.map((eintrag) => (
-                  <div key={eintrag.label} className="bg-background p-4">
-                    <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                      {eintrag.label}
-                    </dt>
-                    <dd className="mt-1.5 break-words font-serif text-lg leading-snug text-foreground text-balance md:text-xl">
-                      {eintrag.wert}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@ export default async function AssetDetailSeite({
 
       {/* Beschreibung + Eckdaten */}
       <section className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
             {/* Beschreibung (richText) */}
             <div>
@@ -344,7 +344,7 @@ export default async function AssetDetailSeite({
 
       {aehnlichePositionen.length > 0 && (
         <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <h2 className="font-serif text-2xl text-foreground md:text-3xl">
                 Andere Positionen
