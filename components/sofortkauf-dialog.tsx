@@ -534,6 +534,32 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
 
                   {step === 3 && (
                     <div className="flex flex-col gap-6">
+                      <div className="border border-accent bg-accent/5 px-4 py-4 sm:px-5">
+                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                          Erforderliche Bestätigung
+                        </p>
+                        <div className="flex flex-col gap-3">
+                          <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm leading-relaxed text-foreground">
+                            <input
+                              type="checkbox"
+                              className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
+                              checked={bestaetigtRichtig}
+                              onChange={(e) => setBestaetigtRichtig(e.target.checked)}
+                            />
+                            Ich bestätige, dass meine Angaben vollständig und richtig sind.
+                          </label>
+                          <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm leading-relaxed text-foreground">
+                            <input
+                              type="checkbox"
+                              className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
+                              checked={bestaetigtUebermittlung}
+                              onChange={(e) => setBestaetigtUebermittlung(e.target.checked)}
+                            />
+                            Ich möchte die Kaufanfrage an DPSS Management übermitteln.
+                          </label>
+                        </div>
+                      </div>
+
                       <div>
                         <h3 className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
                           Produkt
@@ -637,27 +663,6 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                         </ul>
                       </div>
 
-                      <div className="flex flex-col gap-3 border-t border-border pt-5">
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtRichtig}
-                            onChange={(e) => setBestaetigtRichtig(e.target.checked)}
-                          />
-                          Ich bestätige, dass meine Angaben vollständig und richtig sind.
-                        </label>
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtUebermittlung}
-                            onChange={(e) => setBestaetigtUebermittlung(e.target.checked)}
-                          />
-                          Ich möchte die Kaufanfrage an DPSS Management übermitteln.
-                        </label>
-                      </div>
-
                       {serverFehler && (
                         <div className="flex items-start gap-2.5 border border-accent bg-accent/5 px-4 py-3 text-sm text-accent">
                           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -697,19 +702,26 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={absenden}
-                    disabled={isPending}
-                    className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-                  >
-                    {isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <ArrowRight className="h-4 w-4" />
+                  <div className="flex flex-col gap-2 sm:items-end">
+                    {(!bestaetigtRichtig || !bestaetigtUebermittlung) && (
+                      <p className="text-center text-xs font-medium text-accent sm:text-right">
+                        Bitte oben beide Bestätigungen auswählen.
+                      </p>
                     )}
-                    Kaufanfrage absenden
-                  </button>
+                    <button
+                      type="button"
+                      onClick={absenden}
+                      disabled={isPending}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <ArrowRight className="h-4 w-4" />
+                      )}
+                      Kaufanfrage absenden
+                    </button>
+                  </div>
                 )}
               </div>
             )}
