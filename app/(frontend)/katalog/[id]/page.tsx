@@ -195,9 +195,9 @@ export default async function AssetDetailSeite({
             Titel/Status vor Bildgalerie), ab lg: 2-spaltiges Grid mit Bild links
             über die volle Höhe und Titel/Kerninfo rechts gestapelt.
           */}
-          <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-10 xl:gap-14">
+          <div className="flex min-w-0 flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start lg:gap-10 xl:gap-14">
             {/* Kauf- und Informationsbox */}
-            <aside className="order-1 border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
+            <aside className="order-1 min-w-0 overflow-hidden border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
@@ -211,12 +211,12 @@ export default async function AssetDetailSeite({
                 </span>
               </div>
 
-              <h1 className="font-serif text-3xl font-semibold leading-tight text-foreground text-balance sm:text-4xl">
+              <h1 className="break-words font-serif text-3xl font-semibold leading-tight text-foreground text-balance [overflow-wrap:anywhere] sm:text-4xl">
                 {posten.titel}
               </h1>
 
               {posten.kurzspezifikation && (
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty md:text-lg">
+                <p className="mt-4 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg">
                   {posten.kurzspezifikation}
                 </p>
               )}
@@ -271,7 +271,7 @@ export default async function AssetDetailSeite({
             </aside>
 
             {/* Bildergalerie */}
-            <div className="order-2 lg:order-1 lg:col-start-1 lg:row-start-1">
+            <div className="order-2 min-w-0 lg:order-1 lg:col-start-1 lg:row-start-1">
               <AssetGalerie bilder={bilder} />
             </div>
           </div>
