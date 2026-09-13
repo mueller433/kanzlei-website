@@ -26,7 +26,7 @@ export function KatalogKategorieNav({
   const alleAktiv = selectedKategorien.length === 0
 
   const pillKlasse = (aktiv: boolean) =>
-    `inline-flex shrink-0 items-center gap-2 whitespace-nowrap border px-4 py-2 text-sm transition-colors ${
+    `inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap border px-4 py-2 text-sm transition-colors ${
       aktiv
         ? 'border-accent bg-accent text-accent-foreground'
         : 'border-border bg-background text-foreground hover:border-accent hover:text-accent'
@@ -35,7 +35,7 @@ export function KatalogKategorieNav({
   return (
     <nav
       aria-label="Kategorien"
-      className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:thin] md:-mx-10 md:px-10 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
+      className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:thin] sm:-mx-5 sm:px-5 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
     >
       <Link href={`/katalog?${buildKatalogQuery(sp, { kategorie: null })}`} className={pillKlasse(alleAktiv)}>
         Alle
