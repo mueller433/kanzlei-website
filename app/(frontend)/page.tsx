@@ -6,7 +6,6 @@ import React from 'react'
 import { FaqSection } from '@/components/faq-section'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
-import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
@@ -581,81 +580,30 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* FACHBEITRÄGE — bestehende Inhalte, erhalten */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-muted/40">
-        <div className="reveal mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
-          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Aktuelles
-              </p>
-              <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                Fachbeiträge &amp; Einblicke
-              </h2>
-            </div>
-            <Link
-              href="/aktuelles"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent md:shrink-0"
-            >
-              Alle Fachbeiträge
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {NEWS_BEITRAEGE.slice(-3)
-              .reverse()
-              .map((beitrag) => (
-                <Link
-                  key={beitrag.slug}
-                  href={`/aktuelles/${beitrag.slug}`}
-                  className="group flex h-full flex-col gap-4 border border-border bg-card p-7 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
-                    <span className="text-accent">{beitrag.kategorie}</span>
-                    <span className="text-muted-foreground">{beitrag.datum}</span>
-                  </div>
-                  <h3 className="font-serif text-xl leading-snug text-card-foreground text-balance">
-                    {beitrag.titel}
-                  </h3>
-                  <p className="text-base leading-relaxed text-muted-foreground text-pretty">
-                    {beitrag.anriss}
-                  </p>
-                  <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
-                    Beitrag lesen <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/* FAQ — kompakter Teaser, bestehende Inhalte erhalten */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto max-w-4xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+      {/* FAQ */}
+      <section className="border-b border-border bg-[#eeeae1]">
+        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14 lg:px-10 lg:py-16">
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               Häufige Fragen
             </p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Antworten auf die wichtigsten Fragen
+            <h2 className="max-w-xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+              Wichtiges vor Kauf und Abwicklung
             </h2>
-          </div>
-
-          <FaqSection eintraege={findeFaqEintraege(STARTSEITE_FAQ_IDS)} idPrefix="start-" />
-
-          <div className="mt-10 flex justify-center">
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground">
+              Antworten zu Preisen, Besichtigung, Reservierung, Sofortkauf und den benötigten
+              Unterlagen.
+            </p>
             <Link
               href="/faq"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 border border-accent bg-card px-5 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground sm:w-fit"
             >
-              Alle häufigen Fragen ansehen
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              Alle Fragen ansehen <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+          </div>
+
+          <div className="min-w-0 border border-border bg-card px-4 sm:px-6">
+            <FaqSection eintraege={findeFaqEintraege(STARTSEITE_FAQ_IDS)} idPrefix="start-" />
           </div>
         </div>
       </section>
