@@ -230,9 +230,16 @@ export default async function AssetDetailSeite({
                 </p>
               </div>
 
-              <dl className="grid grid-cols-1 divide-y divide-border border-b border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              <dl className="grid grid-cols-2 border-b border-border">
                 {kerninfo.map((eintrag) => (
-                  <div key={eintrag.label} className="py-3 sm:px-4 sm:py-4 sm:first:pl-0 sm:last:pr-0">
+                  <div
+                    key={eintrag.label}
+                    className={`py-4 ${
+                      eintrag.label === 'Standort'
+                        ? 'col-span-2 border-t border-border'
+                        : 'pr-4 first:border-r first:border-border first:pr-4 [&:nth-child(2)]:pl-4'
+                    }`}
+                  >
                     <dt className="text-xs uppercase tracking-[0.13em] text-muted-foreground">
                       {eintrag.label}
                     </dt>
