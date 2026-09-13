@@ -6,7 +6,7 @@ import React from 'react'
 import { FaqSection } from '@/components/faq-section'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
-import { NEWS_BEITRAEGE, TEAM_GRUPPENFOTO } from '@/lib/kanzlei-daten'
+import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
@@ -509,65 +509,73 @@ export default async function Startseite() {
 
       {/* ÜBER DPSS / VERTRAUEN */}
       <section className="border-b border-border bg-background">
-        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch lg:gap-12 lg:px-10 lg:py-16">
-          <div className="flex min-w-0 flex-col justify-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-              Über DPSS
-            </p>
-            <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-              Persönlich, verbindlich und nachvollziehbar
-            </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              DPSS Management unterstützt Insolvenzverwalter, Unternehmen und weitere
-              Verfahrensbeteiligte bei der professionellen Verwertung von Vermögenswerten.
-              Käufer erhalten klar dokumentierte Positionen und einen verlässlichen Ansprechpartner.
-            </p>
-
-            <dl className="mt-7 border-t border-border">
-              {[
-                {
-                  titel: 'Sorgfalt',
-                  text: 'Vermögenswerte werden vollständig erfasst, eingeordnet und mit der gebotenen Genauigkeit bewertet.',
-                },
-                {
-                  titel: 'Transparenz',
-                  text: 'Bestand, Vermarktung und Abwicklung bleiben für die Beteiligten nachvollziehbar.',
-                },
-                {
-                  titel: 'Verbindlichkeit',
-                  text: 'Abläufe und Zuständigkeiten sind von der Beauftragung bis zur Dokumentation klar.',
-                },
-              ].map((wert) => (
-                <div key={wert.titel} className="grid grid-cols-[1fr] gap-1 border-b border-border py-4 sm:grid-cols-[0.38fr_1fr] sm:gap-5">
-                  <dt className="font-semibold text-foreground">{wert.titel}</dt>
-                  <dd className="text-sm leading-relaxed text-muted-foreground">{wert.text}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <Link
-              href="/unternehmen"
-              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-fit"
-            >
-              Unternehmen kennenlernen <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
-
-          <div className="relative order-first min-h-[300px] overflow-hidden border border-border bg-[#e8e3d9] sm:min-h-[420px] lg:order-last lg:min-h-full">
-            <Image
-              src={TEAM_GRUPPENFOTO}
-              alt="Team der DPSS Management GmbH"
-              fill
-              sizes="(max-width: 1024px) 100vw, 48vw"
-              className="object-contain object-bottom px-3 pt-5 sm:px-6 sm:pt-8"
-            />
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#17130f]/75 to-transparent" aria-hidden="true" />
-            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-2 text-white sm:bottom-5 sm:left-5 sm:right-5">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70">Das Team</p>
-                <p className="mt-1 font-serif text-xl font-semibold">Menschen hinter der Verwertung</p>
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+          <div className="grid overflow-hidden border border-border bg-card lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="relative flex flex-col justify-between overflow-hidden bg-accent px-5 py-8 text-accent-foreground sm:px-8 sm:py-10 lg:min-h-[480px] lg:px-10 lg:py-12">
+              <div className="absolute -right-16 -top-20 h-64 w-64 rounded-full border border-white/10" aria-hidden="true" />
+              <div className="absolute -right-5 -top-8 h-40 w-40 rounded-full border border-white/10" aria-hidden="true" />
+              <div className="relative">
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                  Über DPSS
+                </p>
+                <h2 className="max-w-xl font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+                  Verwertung braucht klare Zuständigkeiten.
+                </h2>
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-white/78">
+                  DPSS Management unterstützt Insolvenzverwalter, Unternehmen und weitere
+                  Verfahrensbeteiligte bei der professionellen Verwertung von Vermögenswerten.
+                </p>
               </div>
-              <span className="text-sm text-white/75">Göttingen</span>
+
+              <div className="relative mt-8 border-t border-white/25 pt-6">
+                <p className="max-w-lg text-sm leading-relaxed text-white/72">
+                  Käufer erhalten nachvollziehbare Informationen zu den angebotenen Positionen und
+                  einen verbindlichen Ansprechpartner für die Abwicklung.
+                </p>
+                <Link
+                  href="/unternehmen"
+                  className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-white/90 sm:w-fit"
+                >
+                  DPSS kennenlernen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="px-5 py-4 sm:px-8 sm:py-6 lg:flex lg:flex-col lg:justify-center lg:px-10 lg:py-10">
+              <p className="pb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+                Unser Anspruch
+              </p>
+              <dl className="border-t border-border">
+                {[
+                  {
+                    nummer: '01',
+                    titel: 'Sorgfalt',
+                    text: 'Vermögenswerte werden vollständig erfasst, eingeordnet und mit der gebotenen Genauigkeit bewertet.',
+                  },
+                  {
+                    nummer: '02',
+                    titel: 'Transparenz',
+                    text: 'Bestand, Vermarktung und Abwicklung bleiben für die Beteiligten nachvollziehbar.',
+                  },
+                  {
+                    nummer: '03',
+                    titel: 'Verbindlichkeit',
+                    text: 'Abläufe und Zuständigkeiten sind von der Beauftragung bis zur Dokumentation klar.',
+                  },
+                ].map((wert) => (
+                  <div key={wert.nummer} className="grid grid-cols-[2.5rem_1fr] gap-x-3 border-b border-border py-5 sm:grid-cols-[3rem_0.55fr_1.45fr] sm:gap-x-5 sm:py-6">
+                    <dt className="font-serif text-xl font-semibold text-accent sm:text-2xl">
+                      {wert.nummer}
+                    </dt>
+                    <dd className="contents">
+                      <h3 className="text-base font-semibold text-foreground sm:text-lg">{wert.titel}</h3>
+                      <p className="col-start-2 mt-1 text-sm leading-relaxed text-muted-foreground sm:col-start-3 sm:mt-0">
+                        {wert.text}
+                      </p>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </div>
