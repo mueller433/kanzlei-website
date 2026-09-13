@@ -6,7 +6,7 @@ import React from 'react'
 import { FaqSection } from '@/components/faq-section'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
-import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
+import { NEWS_BEITRAEGE, TEAM_GRUPPENFOTO } from '@/lib/kanzlei-daten'
 import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
@@ -507,44 +507,68 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* ÜBER DPSS — Teaser mit Bild */}
-      {/* ============================================================= */}
+      {/* ÜBER DPSS / VERTRAUEN */}
       <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto grid max-w-6xl items-stretch gap-0 px-6 py-16 md:grid-cols-2 md:gap-14 md:px-10 md:py-24">
-          <div className="relative order-last min-h-[280px] overflow-hidden border border-border md:order-first md:min-h-full">
-            <Image
-              src="/warum-dpss-editorial.png"
-              alt="Industrielagerhalle mit hohen Palettenregalen in warmem Licht"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
-
-          <div className="flex flex-col justify-center py-10 md:py-0">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">Über DPSS</p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              Verwertung aus einer Hand
+        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch lg:gap-12 lg:px-10 lg:py-16">
+          <div className="flex min-w-0 flex-col justify-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+              Über DPSS
+            </p>
+            <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+              Persönlich, verbindlich und nachvollziehbar
             </h2>
-            <div className="mt-6 flex flex-col gap-5 text-lg leading-relaxed text-muted-foreground text-pretty">
-              <p>
-                DPSS Management übernimmt die operative Verwertung von Vermögenswerten im Auftrag von
-                Insolvenzverwaltern, Unternehmen und weiteren Verfahrensbeteiligten.
-              </p>
-              <p>
-                Wir verbinden eine strukturierte Bestandsaufnahme und Bewertung mit einer
-                zielgerichteten Vermarktung – von der ersten Aufnahme bis zur transparent
-                dokumentierten Abwicklung.
-              </p>
-            </div>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              DPSS Management unterstützt Insolvenzverwalter, Unternehmen und weitere
+              Verfahrensbeteiligte bei der professionellen Verwertung von Vermögenswerten.
+              Käufer erhalten klar dokumentierte Positionen und einen verlässlichen Ansprechpartner.
+            </p>
+
+            <dl className="mt-7 border-t border-border">
+              {[
+                {
+                  titel: 'Sorgfalt',
+                  text: 'Vermögenswerte werden vollständig erfasst, eingeordnet und mit der gebotenen Genauigkeit bewertet.',
+                },
+                {
+                  titel: 'Transparenz',
+                  text: 'Bestand, Vermarktung und Abwicklung bleiben für die Beteiligten nachvollziehbar.',
+                },
+                {
+                  titel: 'Verbindlichkeit',
+                  text: 'Abläufe und Zuständigkeiten sind von der Beauftragung bis zur Dokumentation klar.',
+                },
+              ].map((wert) => (
+                <div key={wert.titel} className="grid grid-cols-[1fr] gap-1 border-b border-border py-4 sm:grid-cols-[0.38fr_1fr] sm:gap-5">
+                  <dt className="font-semibold text-foreground">{wert.titel}</dt>
+                  <dd className="text-sm leading-relaxed text-muted-foreground">{wert.text}</dd>
+                </div>
+              ))}
+            </dl>
+
             <Link
               href="/unternehmen"
-              className="group mt-8 inline-flex w-fit items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-fit"
             >
-              Mehr über DPSS
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              Unternehmen kennenlernen <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+          </div>
+
+          <div className="relative order-first min-h-[300px] overflow-hidden border border-border bg-[#e8e3d9] sm:min-h-[420px] lg:order-last lg:min-h-full">
+            <Image
+              src={TEAM_GRUPPENFOTO}
+              alt="Team der DPSS Management GmbH"
+              fill
+              sizes="(max-width: 1024px) 100vw, 48vw"
+              className="object-contain object-bottom px-3 pt-5 sm:px-6 sm:pt-8"
+            />
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#17130f]/75 to-transparent" aria-hidden="true" />
+            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-2 text-white sm:bottom-5 sm:left-5 sm:right-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70">Das Team</p>
+                <p className="mt-1 font-serif text-xl font-semibold">Menschen hinter der Verwertung</p>
+              </div>
+              <span className="text-sm text-white/75">Göttingen</span>
+            </div>
           </div>
         </div>
       </section>
