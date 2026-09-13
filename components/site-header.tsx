@@ -38,7 +38,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
         width={800}
         height={400}
         priority
-        className="h-auto w-[184px] object-contain md:w-[232px]"
+        className="h-auto w-[140px] object-contain sm:w-[172px] xl:w-[200px]"
       />
     </Link>
   )
@@ -47,7 +47,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
 // Feste Header-Höhe. Der Header ist durchgängig sehr hell/transparent und
 // liegt daher im normalen Seitenfluss über dem Hero (kein Overlay-Trick
 // nötig, da das Logo immer auf hellem Grund steht).
-export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[104px]'
+export const HEADER_HOEHE_KLASSE = 'h-16 sm:h-20 xl:h-[88px]'
 
 /**
  * Schlanke Utility-Bar oberhalb der Hauptnavigation. Nur ab dem lg-Breakpoint
@@ -57,8 +57,8 @@ export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[104px]'
  */
 function UtilityTopBar() {
   return (
-    <div className="hidden bg-topbar text-topbar-foreground lg:block">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-8 py-2 md:px-16 lg:px-24">
+    <div className="hidden bg-topbar text-topbar-foreground xl:block">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-12 py-2 2xl:px-16">
         <div className="flex items-center gap-4 whitespace-nowrap text-xs font-medium tracking-wide text-topbar-foreground/90">
           <a
             href={KANZLEI.telefon.href}
@@ -105,11 +105,6 @@ export function SiteHeader() {
   const [offen, setOffen] = React.useState(false)
   const [gescrollt, setGescrollt] = React.useState(false)
 
-  // Menü bei Navigationswechsel schließen
-  React.useEffect(() => {
-    setOffen(false)
-  }, [pathname])
-
   // Ruhiges Scrollverhalten: am Seitenanfang transparent & ohne Trennlinie,
   // ab einer kleinen Scrolldistanz kompakter mit dezenter Border/Backdrop.
   // Kein Ein-/Ausblenden je nach Richtung – nur ein sanfter Zustandswechsel.
@@ -138,35 +133,36 @@ export function SiteHeader() {
         }`}
       >
         <div
-          className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-8 md:px-16 lg:px-24`}
+          className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-10 xl:px-12 2xl:px-16`}
         >
-          <Logo />
+          <Logo onClick={() => setOffen(false)} />
 
-        <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
-          <ul className="flex items-center gap-14">
-            {NAV_LINKS.map((link) => {
-              const aktiv = istAktiv(pathname, link.href)
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    aria-current={aktiv ? 'page' : undefined}
-                    className={`text-[15px] transition-colors ${
-                      aktiv ? 'text-accent' : 'text-foreground hover:text-accent'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
+          <nav aria-label="Hauptnavigation" className="hidden justify-center xl:flex">
+            <ul className="flex items-center gap-6 2xl:gap-10">
+              {NAV_LINKS.map((link) => {
+                const aktiv = istAktiv(pathname, link.href)
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOffen(false)}
+                      aria-current={aktiv ? 'page' : undefined}
+                      className={`text-[15px] transition-colors ${
+                        aktiv ? 'text-accent' : 'text-foreground hover:text-accent'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
 
         <div className="flex items-center justify-end gap-2">
           <Link
             href="/katalog"
-            className="hidden bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-block"
+            className="hidden min-h-11 items-center bg-accent px-4 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-flex xl:px-5"
           >
             Verwertungskatalog
           </Link>
@@ -177,7 +173,7 @@ export function SiteHeader() {
             aria-expanded={offen}
             aria-controls="mobile-navigation"
             aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
-            className="inline-flex h-10 w-10 items-center justify-center border border-border text-foreground lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center border border-border text-foreground xl:hidden"
           >
             {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -188,15 +184,16 @@ export function SiteHeader() {
         <nav
           id="mobile-navigation"
           aria-label="Mobile Navigation"
-          className="border-t border-border bg-background lg:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background xl:hidden"
         >
-          <ul className="mx-auto flex max-w-6xl flex-col px-6 py-2 md:px-10">
+          <ul className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6 lg:px-10">
             {NAV_LINKS.map((link) => {
               const aktiv = istAktiv(pathname, link.href)
               return (
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    onClick={() => setOffen(false)}
                     aria-current={aktiv ? 'page' : undefined}
                     className={`block border-b border-border py-3 text-base transition-colors hover:text-accent ${
                       aktiv ? 'text-accent' : 'text-foreground'
@@ -210,6 +207,7 @@ export function SiteHeader() {
             <li className="py-3">
               <Link
                 href="/katalog"
+                onClick={() => setOffen(false)}
                 className="inline-block bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
               >
                 Verwertungskatalog
