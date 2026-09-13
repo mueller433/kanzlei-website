@@ -158,21 +158,40 @@ export default async function Startseite() {
     })
     return { key, anzahl: ergebnis.totalDocs, bild: ersteBildUrl(ergebnis.docs[0]?.bilder) }
   }))
-  const titelbild = docs.map((posten) => ({ posten, bild: ersteBildUrl(posten.bilder) })).find((eintrag) => eintrag.bild)
+  // Zwei unterschiedliche Kategorien, nur verfügbare, veröffentlichte Angebote mit Bild.
+  const heroAuswahl = await Promise.all((['fahrzeuge', 'maschinen'] as Kategorie[]).map(async (kategorie) => {
+    const { docs: auswahl } = await payload.find({
+      collection: 'posten',
+      where: { and: [
+        { veroeffentlicht: { equals: true } },
+        { status: { equals: 'verfuegbar' } },
+        { kategorie: { equals: kategorie } },
+        { bilder: { exists: true } },
+      ] },
+      sort: '-createdAt', depth: 1, limit: 1,
+    })
+    return auswahl[0]
+  }))
+  const heroAssets = heroAuswahl
+    .filter((posten): posten is Posten => Boolean(posten && ersteBildUrl(posten.bilder)))
+  if (heroAssets.length === 0) {
+    const fallback = docs.find((posten) => posten.status === 'verfuegbar' && ersteBildUrl(posten.bilder))
+    if (fallback) heroAssets.push(fallback)
+  }
   return (
     <div>
       <section className="border-b border-border">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:px-10 lg:py-12">
+        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 md:px-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-24 lg:py-10">
           <div className="min-w-0 self-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-accent">DPSS Management · Verwertungskatalog</p>
-            <h1 className="max-w-2xl font-serif text-[clamp(2rem,5vw,3.75rem)] font-semibold leading-[1.06] tracking-tight text-foreground">
-              Vermögenswerte<br className="hidden sm:block" /> professionell verwerten.
+            <h1 className="max-w-2xl font-serif text-[clamp(1.875rem,3.3vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-foreground">
+              Vermögenswerte professionell verwerten.
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
               Fahrzeuge, Maschinen und Betriebsausstattung entdecken.
               Oder die Verwertung Ihrer Vermögenswerte mit DPSS organisieren.
             </p>
-            <form action="/katalog" method="get" className="mt-6 flex min-w-0 border border-border bg-card p-1.5">
+            <form action="/katalog" method="get" className="mt-5 flex min-w-0 border border-accent/40 bg-card p-1.5">
               <label htmlFor="startseite-suche" className="sr-only">Vermögenswerte durchsuchen</label>
               <input id="startseite-suche" type="search" name="q" placeholder="Was suchen Sie?"
                 className="h-12 min-w-0 flex-1 bg-transparent px-3 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" />
@@ -185,26 +204,39 @@ export default async function Startseite() {
                 <Link key={key} href={`/katalog?kategorie=${key}`} className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline">{KATEGORIE_LABELS[key]}</Link>
               ))}
             </div>
-            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-3">
-              <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-              <Link href="/kontakt?betreff=Verwertungsauftrag" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground">Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
+              <Link href="/katalog" className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+              <Link href="/kontakt?betreff=Verwertungsauftrag" className="inline-flex min-h-12 items-center justify-center gap-2 border border-accent px-4 py-3 text-sm font-medium text-accent hover:bg-accent/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
             </div>
           </div>
-          {titelbild && (
-            <Link href={`/katalog/${titelbild.posten.id}`} className="group relative hidden min-w-0 overflow-hidden border border-border bg-card lg:flex lg:flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-              <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4 text-xs">
-                <span className="font-medium uppercase tracking-[0.14em] text-accent">Einblick in den Bestand</span>
-                <span className="text-muted-foreground">{STATUS_LABELS[titelbild.posten.status]}</span>
+          {heroAssets.length > 0 && (
+            <div className="min-w-0 self-center">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">Aus dem aktuellen Bestand</p>
+                <span className="text-xs text-muted-foreground">Verfügbar</span>
               </div>
-              <div className="relative min-h-64 flex-1 bg-muted">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={titelbild.bild!} alt={titelbild.posten.titel} fetchPriority="high" className="absolute inset-0 h-full w-full object-contain p-5" />
+              <div className="grid gap-3">
+                {heroAssets.map((posten, index) => (
+                  <Link key={posten.id} href={`/katalog/${posten.id}`}
+                    className={`group min-w-0 overflow-hidden border border-border bg-card transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${index === 0 ? 'block' : 'grid grid-cols-[38%_1fr]'}`}>
+                    <div className={index === 0 ? 'aspect-[16/9] overflow-hidden bg-muted' : 'min-h-28 overflow-hidden bg-muted'}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={ersteBildUrl(posten.bilder)!} alt={posten.titel}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                        className="h-full w-full object-cover" />
+                    </div>
+                    <div className={`min-w-0 p-3 sm:p-4 ${index === 0 ? 'flex flex-wrap items-end justify-between gap-2' : 'flex flex-col justify-center gap-1'}`}>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[posten.kategorie]}</p>
+                        <h2 className="mt-1 line-clamp-2 break-words text-sm font-semibold leading-snug sm:text-base">{posten.titel}</h2>
+                      </div>
+                      <p className="text-lg font-semibold tracking-tight text-foreground">{homepagePreis(posten)}</p>
+                    </div>
+                  </Link>
+                ))}
               </div>
-              <div className="flex flex-wrap items-end justify-between gap-3 p-5">
-                <div className="min-w-0 flex-1"><p className="text-xs text-muted-foreground">{KATEGORIE_LABELS[titelbild.posten.kategorie]}</p><h2 className="mt-1 text-lg font-semibold leading-snug">{titelbild.posten.titel}</h2></div>
-                <span className="text-xl font-semibold">{homepagePreis(titelbild.posten)}</span>
-              </div>
-            </Link>
+            </div>
           )}
         </div>
       </section>
