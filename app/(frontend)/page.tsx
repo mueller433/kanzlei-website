@@ -461,28 +461,46 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* ============================================================= */}
-      {/* SO FUNKTIONIERT ES — 5-stufige Timeline */}
-      {/* ============================================================= */}
-      <section className="border-b border-border bg-background">
-        <div className="reveal mx-auto max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
-          <div className="mb-8 max-w-2xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">Ablauf</p>
-            <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-              So funktioniert es
+      {/* ABLAUF */}
+      <section className="border-b border-border bg-card">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14 lg:px-10 lg:py-16">
+          <div className="lg:pt-2">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+              Ablauf
+            </p>
+            <h2 className="max-w-xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+              Von der Aufnahme bis zur Übergabe
             </h2>
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground">
+              Ein klar strukturierter Prozess schafft verlässliche Zuständigkeiten und eine
+              nachvollziehbare Abwicklung für alle Beteiligten.
+            </p>
+            <Link
+              href="/verwertung"
+              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-accent px-5 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Ablauf im Detail <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
 
-          <ol className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
-            {ABLAUF.map((schritt) => (
-              <li key={schritt.nummer} className="flex flex-col gap-4 border-t-2 border-accent pt-6">
-                <span className="font-serif text-4xl leading-none text-foreground">
+          <ol className="border-t border-border">
+            {ABLAUF.map((schritt, index) => (
+              <li
+                key={schritt.nummer}
+                className="relative grid grid-cols-[2.75rem_1fr] gap-x-3 border-b border-border py-4 sm:grid-cols-[3.25rem_0.8fr_1.3fr] sm:items-start sm:gap-x-5 sm:py-5"
+              >
+                <span className="font-serif text-xl font-semibold text-accent sm:text-2xl">
                   {schritt.nummer}
                 </span>
-                <h3 className="font-serif text-xl text-foreground">{schritt.titel}</h3>
-                <p className="text-base leading-relaxed text-muted-foreground text-pretty">
+                <h3 className="text-base font-semibold leading-snug text-foreground sm:text-lg">
+                  {schritt.titel}
+                </h3>
+                <p className="col-start-2 mt-1 text-sm leading-relaxed text-muted-foreground sm:col-start-3 sm:mt-0">
                   {schritt.beschreibung}
                 </p>
+                {index < ABLAUF.length - 1 && (
+                  <span className="absolute bottom-[-5px] left-[1.05rem] z-10 h-2.5 w-2.5 rotate-45 border-b border-r border-border bg-card sm:left-[1.3rem]" aria-hidden="true" />
+                )}
               </li>
             ))}
           </ol>
