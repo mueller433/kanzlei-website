@@ -238,9 +238,9 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group inline-flex items-center justify-center gap-2 border border-accent bg-transparent px-6 py-3 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+        className="group inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
       >
-        Jetzt Kaufen
+        Sofortkauf anfragen
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </button>
 
@@ -618,112 +618,3 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                         </div>
                       )}
 
-                      <div>
-                        <h3 className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                          Hochgeladene Dokumente
-                        </h3>
-                        <ul className="flex flex-col gap-2 border-t border-border pt-3 text-sm">
-                          {slots.map((slot) => (
-                            <li key={slot.key} className="flex items-center gap-2 text-foreground">
-                              <Paperclip className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                              <span className="text-muted-foreground">{slot.label}:</span>
-                              <span className="truncate">{dateien[slot.key]?.name}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="flex flex-col gap-3 border-t border-border pt-5">
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtRichtig}
-                            onChange={(e) => setBestaetigtRichtig(e.target.checked)}
-                          />
-                          Ich bestätige, dass meine Angaben vollständig und richtig sind.
-                        </label>
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtUebermittlung}
-                            onChange={(e) => setBestaetigtUebermittlung(e.target.checked)}
-                          />
-                          Ich möchte die Kaufanfrage an DPSS Management übermitteln.
-                        </label>
-                      </div>
-
-                      {serverFehler && (
-                        <div className="flex items-start gap-2.5 border border-accent bg-accent/5 px-4 py-3 text-sm text-accent">
-                          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                          <span>{serverFehler}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Fußzeile */}
-            {!erfolgId && (
-              <div className="flex items-center justify-between gap-4 border-t border-border px-6 py-4">
-                {step > 1 ? (
-                  <button
-                    type="button"
-                    onClick={zurueck}
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Zurück
-                  </button>
-                ) : (
-                  <span />
-                )}
-
-                {step < 3 ? (
-                  <button
-                    type="button"
-                    onClick={weiter}
-                    className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-                  >
-                    Weiter
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={absenden}
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-                  >
-                    {isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <ArrowRight className="h-4 w-4" />
-                    )}
-                    Kaufanfrage absenden
-                  </button>
-                )}
-              </div>
-            )}
-
-            {erfolgId && (
-              <div className="flex justify-end border-t border-border px-6 py-4">
-                <button
-                  type="button"
-                  onClick={schliessen}
-                  className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-                >
-                  Schließen
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </>
-  )
-}
