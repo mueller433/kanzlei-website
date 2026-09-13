@@ -79,7 +79,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   return (
     <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-hidden">
       <div
-        className="relative aspect-[4/3] w-full touch-pan-y select-none overflow-hidden border border-border bg-card"
+        className="relative aspect-[4/3] w-full touch-pan-y select-none overflow-hidden border border-border bg-[#efede7]"
         onTouchStart={zeigeNavigation ? onTouchStart : undefined}
         onTouchEnd={zeigeNavigation ? onTouchEnd : undefined}
       >
@@ -94,7 +94,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
             src={aktuelles.url || '/placeholder.svg'}
             alt={aktuelles.alt}
             draggable={false}
-            className="h-full min-w-0 max-w-full object-cover"
+            className="h-full w-full min-w-0 max-w-full object-contain object-center"
           />
           <span className="absolute bottom-3 left-3 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-xs text-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
             <Maximize2 className="h-4 w-4" aria-hidden="true" />
