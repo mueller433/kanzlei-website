@@ -246,7 +246,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/55 backdrop-blur-[2px] sm:items-center sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-foreground/55 backdrop-blur-[2px] sm:items-center sm:p-6"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) schliessen()
           }}
