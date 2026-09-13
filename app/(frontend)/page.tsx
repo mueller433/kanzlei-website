@@ -4,7 +4,6 @@ import Link from 'next/link'
 import React from 'react'
 
 import { FaqSection } from '@/components/faq-section'
-import { KontaktCta } from '@/components/kontakt-cta'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
@@ -608,15 +607,60 @@ export default async function Startseite() {
         </div>
       </section>
 
-      {/* ============================================================= */}
       {/* ABSCHLUSS-CTA */}
-      {/* ============================================================= */}
-      <KontaktCta
-        eyebrow="Kontakt"
-        titel="Sie möchten Vermögenswerte professionell verwerten?"
-        text="Sprechen Sie mit DPSS Management über Ihr Vorhaben."
-        buttonLabel="Verwertung anfragen"
-      />
+      <section className="-mb-24 border-t border-white/10 bg-[#17130f] text-white">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+          <div className="mb-7 max-w-2xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#c56a80]">
+              Nächster Schritt
+            </p>
+            <h2 className="font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl">
+              Kaufen oder professionell verwerten
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-white/65">
+              Wählen Sie den passenden Einstieg für Ihr Anliegen.
+            </p>
+          </div>
+
+          <div className="grid gap-px border border-white/15 bg-white/15 md:grid-cols-2">
+            <div className="flex flex-col bg-[#17130f] p-5 sm:p-7 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c56a80]">
+                Für Käufer
+              </p>
+              <h3 className="mt-3 font-serif text-2xl font-semibold text-white">
+                Vermögenswerte entdecken
+              </h3>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+                Aktuelle Fahrzeuge, Maschinen und weitere Positionen durchsuchen und direkt anfragen.
+              </p>
+              <Link
+                href="/katalog"
+                className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-semibold text-[#17130f] transition-colors hover:bg-white/90 sm:w-fit"
+              >
+                Zum Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="flex flex-col bg-[#17130f] p-5 sm:p-7 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c56a80]">
+                Für Auftraggeber
+              </p>
+              <h3 className="mt-3 font-serif text-2xl font-semibold text-white">
+                Verwertung anfragen
+              </h3>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+                Sprechen Sie mit DPSS über die Erfassung, Bewertung, Vermarktung und Abwicklung Ihrer Vermögenswerte.
+              </p>
+              <Link
+                href="/kontakt?betreff=Verwertungsauftrag"
+                className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-fit"
+              >
+                Verwertung besprechen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
