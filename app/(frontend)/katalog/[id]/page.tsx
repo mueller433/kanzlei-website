@@ -21,6 +21,33 @@ const STATUS_LABELS: Record<Posten['status'], string> = {
   verkauft: 'Verkauft',
 }
 
+const KAUFABWICKLUNG = [
+  {
+    nummer: '01',
+    titel: 'Kaufanfrage senden',
+    beschreibung:
+      'Kontaktdaten und erforderliche Nachweise über „Sofort kaufen“ übermitteln.',
+  },
+  {
+    nummer: '02',
+    titel: 'Prüfung und Bestätigung',
+    beschreibung:
+      'DPSS prüft Verfügbarkeit, Käuferdaten und Verkaufsbedingungen und bestätigt den möglichen Verkauf.',
+  },
+  {
+    nummer: '03',
+    titel: 'Rechnung und Überweisung',
+    beschreibung:
+      'Sie erhalten die Rechnung. Die Zahlung erfolgt ausschließlich per Überweisung – keine Barzahlung.',
+  },
+  {
+    nummer: '04',
+    titel: 'Termin und Übergabe',
+    beschreibung:
+      'Besichtigung und Abholung erfolgen erst nach vollständigem Zahlungseingang und Terminvereinbarung.',
+  },
+] as const
+
 function formatiertePreis(preis: number): string {
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
@@ -274,6 +301,54 @@ export default async function AssetDetailSeite({
             <div className="order-2 min-w-0 lg:order-1 lg:col-start-1 lg:row-start-1">
               <AssetGalerie bilder={bilder} />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Kaufabwicklung direkt nach Galerie und Kaufbox */}
+      <section aria-labelledby="kaufabwicklung" className="border-t border-border bg-card">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
+          <div className="mb-8 max-w-3xl sm:mb-10">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+              Sicher und transparent
+            </p>
+            <h2
+              id="kaufabwicklung"
+              className="font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl"
+            >
+              So funktioniert die Kaufabwicklung
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Von der Kaufanfrage bis zur vereinbarten Übergabe in vier klaren Schritten.
+            </p>
+          </div>
+
+          <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {KAUFABWICKLUNG.map((schritt) => (
+              <li
+                key={schritt.nummer}
+                className="relative border border-border bg-background p-5 sm:p-6"
+              >
+                <span className="font-serif text-3xl font-semibold leading-none text-accent/35" aria-hidden="true">
+                  {schritt.nummer}
+                </span>
+                <h3 className="mt-5 text-base font-semibold leading-snug text-foreground sm:text-lg">
+                  {schritt.titel}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {schritt.beschreibung}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-6 border-l-4 border-accent bg-[#f4f0e8] px-5 py-4 sm:px-6 sm:py-5">
+            <p className="text-sm leading-relaxed text-foreground sm:text-base">
+              <strong className="font-semibold">Wichtiger Hinweis:</strong>{' '}
+              Die Katalogdarstellung ist kein verbindliches Angebot. Das Absenden der Kaufanfrage
+              stellt noch keinen Kaufvertrag dar. Ein Verkauf erfolgt vorbehaltlich Verfügbarkeit,
+              Prüfung und Bestätigung durch DPSS Management.
+            </p>
           </div>
         </div>
       </section>
