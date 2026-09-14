@@ -89,8 +89,8 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="mt-7 flex flex-col gap-5 sm:mt-8 sm:gap-6">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
         <div className="flex flex-col gap-2">
           <label
             htmlFor="vorname"
@@ -107,7 +107,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
             placeholder="Ihr Vorname"
             value={werte.vorname}
             onChange={(event) => aktualisiereFeld('vorname', event.target.value)}
-            className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+            className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
           />
           {feldFehler.vorname && <p className="text-xs text-destructive">{feldFehler.vorname}</p>}
         </div>
@@ -127,12 +127,12 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
             placeholder="Ihr Nachname"
             value={werte.nachname}
             onChange={(event) => aktualisiereFeld('nachname', event.target.value)}
-            className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+            className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
           />
           {feldFehler.nachname && <p className="text-xs text-destructive">{feldFehler.nachname}</p>}
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
         <div className="flex flex-col gap-2">
           <label
             htmlFor="email"
@@ -149,7 +149,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
             placeholder="ihre@email.de"
             value={werte.email}
             onChange={(event) => aktualisiereFeld('email', event.target.value)}
-            className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+            className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
           />
           {feldFehler.email && <p className="text-xs text-destructive">{feldFehler.email}</p>}
         </div>
@@ -169,7 +169,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
             placeholder="+49 30 12345678"
             value={werte.telefon}
             onChange={(event) => aktualisiereFeld('telefon', event.target.value)}
-            className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+            className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
           />
           {feldFehler.telefon && <p className="text-xs text-destructive">{feldFehler.telefon}</p>}
         </div>
@@ -179,17 +179,17 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
           htmlFor="firma"
           className="text-xs font-medium uppercase tracking-[0.16em] text-foreground"
         >
-          Firma / Kanzlei
+          Firma / Organisation
         </label>
         <input
           id="firma"
           name="firma"
           type="text"
           autoComplete="organization"
-          placeholder="Firma oder Kanzlei"
+          placeholder="Firma oder Organisation"
           value={werte.firma}
           onChange={(event) => aktualisiereFeld('firma', event.target.value)}
-          className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+          className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -207,7 +207,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
           placeholder="z. B. Aktenzeichen oder Betreff Ihrer Anfrage"
           value={werte.betreff}
           onChange={(event) => aktualisiereFeld('betreff', event.target.value)}
-          className="border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+          className="min-h-12 border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
         />
         {feldFehler.betreff && <p className="text-xs text-destructive">{feldFehler.betreff}</p>}
       </div>
@@ -226,7 +226,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
           placeholder="Ihre Nachricht an uns"
           value={werte.nachricht}
           onChange={(event) => aktualisiereFeld('nachricht', event.target.value)}
-          className="resize-y border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+          className="min-h-36 resize-y border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/15"
         />
         {feldFehler.nachricht && <p className="text-xs text-destructive">{feldFehler.nachricht}</p>}
       </div>
@@ -237,16 +237,22 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={status === 'sendet'}
-        className="inline-flex items-center justify-center bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {status === 'sendet' ? 'Wird gesendet …' : 'Nachricht senden'}
-      </button>
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        <span className="text-accent">*</span> Pflichtfelder.
-      </p>
+      <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
+          Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben gemäß unserer{' '}
+          <a href="/datenschutz" className="underline decoration-border underline-offset-4 hover:text-accent">
+            Datenschutzerklärung
+          </a>{' '}
+          zu. <span className="text-accent">*</span> Pflichtfelder.
+        </p>
+        <button
+          type="submit"
+          disabled={status === 'sendet'}
+          className="inline-flex min-h-12 w-full shrink-0 items-center justify-center bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        >
+          {status === 'sendet' ? 'Wird gesendet …' : 'Nachricht senden'}
+        </button>
+      </div>
     </form>
   )
 }

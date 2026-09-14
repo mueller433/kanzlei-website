@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowRight, Clock, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
 import React from 'react'
 
 import { KontaktFormular } from '@/components/kontakt-formular'
@@ -10,8 +10,7 @@ export const metadata = {
     'Kontaktieren Sie DPSS Management GmbH zu einer Verwertungsposition, einem Auftrag oder einer allgemeinen Frage.',
 }
 
-// Kontaktkanäle – Werte stammen zentral aus lib/kanzlei-daten.ts (Platzhalter),
-// nur Icon und Beschriftung werden hier als Darstellung ergänzt.
+// Kontaktdaten stammen zentral aus lib/kanzlei-daten.ts.
 const KONTAKTDATEN = [
   {
     Icon: MapPin,
@@ -43,33 +42,59 @@ export default async function KontaktSeite({
 
   return (
     <div>
-      {/* HERO */}
-      {/* Großzügiges pt sorgt dafür, dass die Headline unter dem sticky Header
-          immer vollständig sichtbar ist und nicht angeschnitten wirkt. */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 pb-24 pt-16 md:px-10 md:pb-32 md:pt-24">
-          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            Kontakt
-          </p>
-          <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl">
-            Sprechen Sie uns an
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
-            Ob Anfrage zu einer Verwertungsposition, einem Verwertungsauftrag oder allgemeine Frage – wir
-            sind für Sie erreichbar und melden uns kurzfristig zurück.
-          </p>
+      <section className="border-b border-border bg-[#17130f] text-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_0.65fr] lg:items-end lg:gap-16 lg:px-10 lg:py-20">
+          <div>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
+              Kontakt · DPSS Management
+            </p>
+            <h1 className="max-w-3xl font-serif text-[clamp(2.5rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-tight text-balance">
+              Wie können wir Sie unterstützen?
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/72 sm:text-lg">
+              Fragen Sie eine Katalogposition an oder sprechen Sie mit uns über die strukturierte
+              Verwertung Ihrer Vermögenswerte.
+            </p>
+          </div>
+
+          <div className="border-l-2 border-accent bg-white/5 px-5 py-5 sm:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/55">
+              Direkter Kontakt
+            </p>
+            <a
+              href={KANZLEI.telefon.href}
+              className="mt-3 block font-serif text-2xl text-white transition-colors hover:text-white/75"
+            >
+              {KANZLEI.telefon.anzeige}
+            </a>
+            <p className="mt-2 flex items-center gap-2 text-sm text-white/65">
+              <Clock className="h-4 w-4 text-accent" aria-hidden="true" />
+              Montag bis Freitag · 8:00–17:00 Uhr
+            </p>
+          </div>
         </div>
       </section>
 
       {/* KONTAKTDATEN + FORMULAR */}
       <section>
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-12">
             {/* Kontaktdaten */}
-            <div className="flex flex-col gap-10">
-              <div className="flex flex-col gap-8">
+            <aside className="flex flex-col gap-8 lg:sticky lg:top-32 lg:self-start">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                  Erreichbarkeit
+                </p>
+                <h2 className="mt-2 font-serif text-3xl text-foreground">Direkt zu DPSS</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Wählen Sie den passenden Kontaktweg. Für Katalogpositionen können Sie den Titel
+                  oder die Positionsnummer direkt im Betreff nennen.
+                </p>
+              </div>
+
+              <div className="flex flex-col border border-border bg-card">
                 {KONTAKTDATEN.map(({ Icon, label, zeilen, href }) => (
-                  <div key={label} className="flex items-start gap-4">
+                  <div key={label} className="flex items-start gap-4 border-b border-border p-5 last:border-b-0">
                     <span
                       className="flex h-11 w-11 shrink-0 items-center justify-center border border-border text-accent"
                       aria-hidden="true"
@@ -83,7 +108,7 @@ export default async function KontaktSeite({
                       {href ? (
                         <a
                           href={href}
-                          className="text-base leading-relaxed text-foreground hover:text-accent"
+                          className="break-all text-base leading-relaxed text-foreground transition-colors hover:text-accent"
                         >
                           {zeilen[0]}
                         </a>
@@ -101,27 +126,47 @@ export default async function KontaktSeite({
                 ))}
               </div>
 
-              {/* Ansprechpartner */}
-              <div className="border-t border-border pt-8">
-                <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                  Ansprechpartnerin
+              <div className="border border-border bg-muted/45 p-5">
+                <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <ShieldCheck className="h-4 w-4 text-accent" aria-hidden="true" />
+                  Persönlich und vertraulich bearbeitet
                 </p>
-                <div className="flex flex-col gap-1">
-                  <span className="font-serif text-lg text-foreground">Monika Schymura</span>
-                  <span className="text-sm text-muted-foreground">Ihre Kontaktperson</span>
-                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Ihre Anfrage wird direkt an das zuständige Team von DPSS Management übermittelt.
+                </p>
               </div>
-            </div>
+            </aside>
 
             {/* Formular */}
-            <div className="border border-border bg-card p-8 md:p-10">
-              <h2 className="font-serif text-2xl text-card-foreground">Anfrage senden</h2>
+            <div className="min-w-0 border border-border bg-card p-5 sm:p-8 lg:p-10">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                Online-Anfrage
+              </p>
+              <h2 className="mt-2 font-serif text-3xl text-card-foreground">Anfrage senden</h2>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Füllen Sie das Formular aus – wir setzen uns zeitnah mit Ihnen in Verbindung.
+                Beschreiben Sie kurz Ihr Anliegen. Die mit einem Stern markierten Angaben benötigen
+                wir für die Bearbeitung.
               </p>
               <KontaktFormular betreffVorbelegung={betreffVorbelegung} />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-muted/35">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-center lg:px-10">
+          <div>
+            <p className="font-serif text-xl text-foreground">Sie möchten Vermögenswerte verwerten?</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Senden Sie uns direkt eine Anfrage mit dem passenden Betreff.
+            </p>
+          </div>
+          <a
+            href="/kontakt?betreff=Verwertungsauftrag"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-auto"
+          >
+            Verwertung anfragen <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
       </section>
     </div>
