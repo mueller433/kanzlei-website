@@ -36,8 +36,9 @@ export default function DatenschutzSeite() {
           <p>Die Angaben werden nicht für andere Zwecke verwendet, sofern keine gesetzliche Verpflichtung besteht oder Sie ausdrücklich eingewilligt haben.</p>
         </LegalSection>
         <LegalSection nummer="06" titel="Verwertung, Katalog und Anfragen">
-          <p>Über den Verwertungskatalog können Informationen zu angebotenen Vermögenswerten abgerufen und Anfragen zu einzelnen Positionen gestellt werden. Die dabei übermittelten Angaben werden zur Bearbeitung der Anfrage, zur Kommunikation und zur Durchführung der gewünschten Verwertung verarbeitet.</p>
-          <p>Wir verarbeiten nur die Daten, die Sie uns im Rahmen Ihrer Anfrage tatsächlich mitteilen.</p>
+          <p>Über den Verwertungskatalog können Informationen zu angebotenen Vermögenswerten abgerufen und Kaufanfragen zu einzelnen Positionen übermittelt werden. Dabei verarbeiten wir die von Ihnen angegebenen Kontakt-, Adress- und gegebenenfalls Unternehmensdaten zur Prüfung und Bearbeitung Ihrer Anfrage sowie zur weiteren Kommunikation.</p>
+          <p>Wenn für eine Sofortkaufanfrage Identitäts- oder Unternehmensnachweise hochgeladen werden, verarbeiten wir diese ausschließlich zur Zuordnung und Prüfung der anfragenden Person beziehungsweise des Unternehmens und zur Vorbereitung der angefragten Transaktion. Der Zugriff wird auf die mit der Bearbeitung befassten Personen beschränkt.</p>
+          <p>Die Daten und Unterlagen werden gelöscht, sobald sie für diese Zwecke nicht mehr erforderlich sind, soweit keine gesetzlichen Aufbewahrungspflichten oder berechtigten Gründe für eine weitere Speicherung bestehen.</p>
         </LegalSection>
         <LegalSection nummer="07" titel="Cookies und ähnliche Technologien">
           <p>Diese Website verwendet technisch notwendige Speichermechanismen, die für den Betrieb und die Darstellung der Website erforderlich sind. Ihre Auswahl im Consent-System kann lokal in Ihrem Browser gespeichert werden.</p>

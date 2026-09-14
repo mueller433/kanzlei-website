@@ -32,7 +32,7 @@ const sections = [
   {
     title: '§ 4 Besichtigung',
     paragraphs: [
-      'Eine Besichtigung ist möglich, wenn sie im jeweiligen Angebot vorgesehen wird. Besichtigungstermine sind vorab zu vereinbaren. Der Interessent ist für die Prüfung des Vermögenswerts vor Vertragsschluss selbst verantwortlich und hat die geltenden Zugangs- und Sicherheitsvorgaben einzuhalten.',
+      'Eine Besichtigung beziehungsweise Prüfung vor Ort ist erst nach vollständigem Zahlungseingang und nach vorheriger Terminvereinbarung möglich, soweit im jeweiligen Angebot nichts Abweichendes bestimmt ist. Bei Zutritt zum Standort sind die dort geltenden Zugangs- und Sicherheitsvorgaben einzuhalten.',
     ],
   },
   {

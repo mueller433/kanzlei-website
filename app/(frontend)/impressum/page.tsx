@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
+import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const metadata = {
   title: 'Impressum | DPSS Management GmbH',
@@ -16,7 +17,7 @@ const IMPRESSUM = {
   registergericht: 'Amtsgericht Göttingen',
   handelsregisternummer: 'HRB 207736',
   ustId: 'DE452777224',
-  email: 'info@dpss-management.com',
+  email: KANZLEI.email.anzeige,
   telefon: '+4932212243813',
 } as const
 
@@ -79,9 +80,6 @@ export default function ImpressumSeite() {
           <p>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
         </LegalSection>
 
-        <LegalSection nummer="08" titel="Online-Streitbeilegung">
-          <p>Die EU-Kommission wird im ersten Quartal 2016 eine Internetplattform zur Online-Beilegung von Streitigkeiten (sog. „OS-Plattform”) bereitstellen. Die OS-Plattform soll als Anlaufstelle zur außergerichtlichen Beilegung von Streitigkeiten betreffend vertragliche Verpflichtungen, die aus Online-Kaufverträgen erwachsen, dienen. Die OS-Plattform wird unter folgendem Link erreichbar sein: <a href="http://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="break-all underline decoration-border underline-offset-4 hover:text-accent">http://ec.europa.eu/consumers/odr</a></p>
-        </LegalSection>
       </LegalSections>
     </LegalPageLayout>
   )
