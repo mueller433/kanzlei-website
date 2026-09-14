@@ -84,6 +84,18 @@ const KATEGORIE_ANZEIGE: Kategorie[] = [
   'smartphones', 'energie-gebaeudetechnik', 'sonstiges',
 ]
 
+const KATEGORIE_BILDER: Record<Kategorie, string> = {
+  fahrzeuge: '/images/kategorien/fahrzeuge.webp',
+  maschinen: '/images/kategorien/maschinen.webp',
+  'lager-logistik-reinigung': '/images/kategorien/lager-logistik-reinigung.webp',
+  'it-bueroelektronik': '/images/kategorien/it-bueroelektronik.webp',
+  gastronomie: '/images/kategorien/gastronomie.webp',
+  'moebel-einrichtung': '/images/kategorien/moebel-einrichtung.webp',
+  smartphones: '/images/kategorien/smartphones.webp',
+  'energie-gebaeudetechnik': '/images/kategorien/energie-gebaeudetechnik.webp',
+  sonstiges: '/images/kategorien/sonstiges.webp',
+}
+
 // Bestehende Berechnung unverändert. Fachliche Preis-/Provisionsklärung separat.
 function homepagePreis(posten: Posten) {
   if (posten.preisAufAnfrage) return 'Preis auf Anfrage'
@@ -178,7 +190,8 @@ export default async function Startseite() {
     limit: 6,
   })
 
-  // Pro Kategorie nur ein veröffentlichtes Vorschaudokument, keine Vollbestands-Abfrage.
+  // Pro Kategorie nur die Anzahl laden. Die Vorschaubilder sind bewusst fest
+  // zugeordnet, damit neue Produktbilder die Kategoriegestaltung nicht verändern.
   const kategorien = await Promise.all(KATEGORIE_ANZEIGE.map(async (key) => {
     const ergebnis = await payload.find({
       collection: 'posten',
@@ -187,11 +200,10 @@ export default async function Startseite() {
         { kategorie: { equals: key } },
       ] },
       sort: '-createdAt',
-      depth: 1,
       limit: 1,
-      select: { bilder: true },
+      select: { titel: true },
     })
-    return { key, anzahl: ergebnis.totalDocs, bild: ersteBildUrl(ergebnis.docs[0]?.bilder) }
+    return { key, anzahl: ergebnis.totalDocs, bild: KATEGORIE_BILDER[key] }
   }))
   return (
     <div>
@@ -321,21 +333,13 @@ export default async function Startseite() {
                   href={`/katalog?kategorie=${key}`}
                   className={`group relative aspect-[4/3] w-[78vw] max-w-[310px] shrink-0 snap-start overflow-hidden border border-border bg-[#24201b] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent sm:w-[44vw] lg:w-auto lg:max-w-none ${hervorgehoben ? 'lg:col-span-6 lg:aspect-[16/8]' : 'lg:col-span-3 lg:aspect-[4/3]'}`}
                 >
-                  {bild ? (
-                    // Das Bild ist dekorativ; Kategorie und Anzahl stehen als Text darüber.
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={bild}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#24201b]">
-                      <Package className="h-10 w-10 text-white/35" aria-hidden="true" />
-                    </div>
-                  )}
+                  <Image
+                    src={bild}
+                    alt=""
+                    fill
+                    sizes={hervorgehoben ? '(min-width: 1024px) 50vw, 78vw' : '(min-width: 1024px) 25vw, 78vw'}
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/5 transition-colors group-hover:from-black/90" aria-hidden="true" />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
                     <div className="min-w-0">
