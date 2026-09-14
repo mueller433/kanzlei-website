@@ -3,16 +3,8 @@ import Link from 'next/link'
 import React from 'react'
 
 import { MerklisteButton } from '@/components/merkliste-button'
-import { ersteBildUrl, STATUS_LABELS } from '@/lib/katalog'
+import { ersteBildUrl, formatierterBruttopreis, STATUS_LABELS } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
-
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
-}
 
 const STATUS_BADGE_KLASSE: Record<Posten['status'], string> = {
   verfuegbar: 'border-accent text-accent',
@@ -33,7 +25,7 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
-      ? formatiertePreis(Math.round(posten.preis * 1.19))
+      ? formatierterBruttopreis(posten.preis)
       : '—'
 
   const mengeText =
