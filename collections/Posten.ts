@@ -63,43 +63,10 @@ export const Posten: CollectionConfig = {
       name: 'preis',
       type: 'number',
       min: 0,
-      hooks: {
-        beforeValidate: [
-          ({ value, siblingData }) => {
-            if (siblingData?.preisAufAnfrage || value === null || value === undefined) {
-              return value
-            }
-
-            const preis = Number(value)
-
-            if (!Number.isFinite(preis)) {
-              return value
-            }
-
-            return Math.ceil(preis / 100) * 100
-          },
-        ],
-        afterRead: [
-          ({ value }) => {
-            if (value === null || value === undefined) {
-              return value
-            }
-
-            const preis = Number(value)
-
-            if (!Number.isFinite(preis)) {
-              return value
-            }
-
-            return Math.ceil(preis / 100) * 100
-          },
-        ],
-      },
       admin: {
         description:
-          'Bruttopreis in Euro. Wird beim Speichern automatisch auf den nächsten vollen 100-Euro-Betrag aufgerundet (z. B. 21.889 € → 21.900 €). Leer lassen, wenn "Preis auf Anfrage" aktiv ist.',
+          'Nettopreis in Euro. Auf der Website werden 19 % USt. hinzugerechnet und der fertige Bruttopreis automatisch auf den nächsten vollen 100-Euro-Betrag aufgerundet.',
         condition: (data) => !data?.preisAufAnfrage,
-        step: 100,
       },
     },
     {
