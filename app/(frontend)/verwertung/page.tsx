@@ -12,9 +12,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
-import React from 'react'
 
-import { KontaktCta } from '@/components/kontakt-cta'
 import { KATEGORIE_LABELS, KATEGORIE_REIHENFOLGE, type Kategorie } from '@/lib/katalog'
 import config from '@/payload.config'
 import { SeitenHero } from '@/components/seiten-hero'
@@ -78,14 +76,14 @@ const KATEGORIEN: ReadonlyArray<{ kategorie: Kategorie; beschreibung: string }> 
 
 const ZIELGRUPPEN = [
   {
-    titel: 'Für Interessenten',
+    titel: 'Für Auftraggeber',
     beschreibung:
-      'Käufer und Investoren, die verwertbare Vermögenswerte suchen und eine nachvollziehbare, marktgerechte Preisbildung erwarten.',
+      'Insolvenzverwalter, Verfahrensbeteiligte und Unternehmen erhalten einen klar strukturierten Ablauf von der Bestandsaufnahme bis zur Abrechnung.',
   },
   {
-    titel: 'Für Gläubiger & Gerichte',
+    titel: 'Für Käufer',
     beschreibung:
-      'Beteiligte, die eine transparente, dokumentierte Verwertung und einen bestmöglichen Erlös zur Masse benötigen.',
+      'Interessenten finden nachvollziehbar aufbereitete Positionen und eindeutige Wege für Rückfragen, Besichtigung und Kaufanfrage.',
   },
 ] as const
 
@@ -120,14 +118,14 @@ const PROZESS: readonly ProzessSchritt[] = [
     punkte: [
       'Angebot über geeignete Vertriebskanäle',
       'Öffentlicher Verwertungskatalog als Schaufenster',
-      'Ziel: bestmöglicher Erlös zur Masse',
+      'Marktorientierte Ansprache geeigneter Käufergruppen',
     ],
   },
   {
     schritt: '04',
     titel: 'Dokumentation',
     punkte: [
-      'Lückenlose Protokollierung aller Verfahrensschritte',
+      'Strukturierte Protokollierung der Verwertungsschritte',
       'Nachvollziehbare Erlös- und Kaufübersicht',
       'Transparente Offenlegung gegenüber Beteiligten',
     ],
@@ -163,7 +161,7 @@ export default async function VerwertungSeite() {
 
       {/* EINORDNUNG – Transparenz als Kernversprechen, zweispaltig */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
             <h2 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
               Transparenz als Kernversprechen
@@ -186,7 +184,7 @@ export default async function VerwertungSeite() {
 
       {/* LEISTUNGEN IM DETAIL – interaktive Kategorie-Cards mit Icon und Trefferzahl */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Was wir verwerten
@@ -235,7 +233,7 @@ export default async function VerwertungSeite() {
 
       {/* ZIELGRUPPEN – zwei Bordered-Cards */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Für wen relevant
@@ -262,7 +260,7 @@ export default async function VerwertungSeite() {
 
       {/* VORGEHENSWEISE – edles, horizontales Prozess-Band mit Stichpunkten */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               Der Prozess
@@ -297,7 +295,7 @@ export default async function VerwertungSeite() {
 
       {/* KATALOG-TEASER – markanter Übergang zum Katalog (Alleinstellung) */}
       <section className="border-b border-border">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="border border-border bg-card p-10 md:p-16">
             <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
@@ -324,15 +322,9 @@ export default async function VerwertungSeite() {
         </div>
       </section>
 
-      <KontaktCta
-        titel="Interesse an einer Position?"
-        text="Sie möchten eine Position genauer prüfen oder ein Angebot abgeben? Sprechen Sie uns an – wir begleiten die Verwertung transparent und beantworten Ihre Fragen zum Bestand."
-        buttonLabel="Anfrage stellen"
-      />
-
       {/* B2B-BANNER – gezielt an Insolvenzverwalter und Verfahrensbeteiligte */}
       <section className="border-b border-accent/20 bg-accent">
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-24">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <p className="mb-5 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-white/65">
