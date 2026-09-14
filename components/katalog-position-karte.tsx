@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import { MerklisteButton } from '@/components/merkliste-button'
 import { ersteBildUrl, KATEGORIE_LABELS, STATUS_LABELS } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 
@@ -34,8 +35,17 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
       ? formatiertePreis(Math.round(posten.preis * 1.19))
       : '—'
 
+  const merklistenPosition = {
+    id: String(posten.id),
+    titel: posten.titel,
+    bildUrl: bildUrl || undefined,
+    preisText,
+    standort: posten.standort || undefined,
+  }
+
   return (
-    <Link
+    <article className="relative h-full">
+      <Link
       href={`/katalog/${posten.id}`}
       className="group flex h-full flex-col overflow-hidden border border-border bg-card transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:gap-5"
       data-posten-id={posten.id}
@@ -81,6 +91,11 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
           />
         </div>
       </div>
-    </Link>
+      </Link>
+      <MerklisteButton
+        position={merklistenPosition}
+        className="absolute right-3 top-3 z-10"
+      />
+    </article>
   )
 }
