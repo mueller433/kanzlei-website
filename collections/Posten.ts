@@ -79,6 +79,21 @@ export const Posten: CollectionConfig = {
             return Math.ceil(preis / 100) * 100
           },
         ],
+        afterRead: [
+          ({ value }) => {
+            if (value === null || value === undefined) {
+              return value
+            }
+
+            const preis = Number(value)
+
+            if (!Number.isFinite(preis)) {
+              return value
+            }
+
+            return Math.ceil(preis / 100) * 100
+          },
+        ],
       },
       admin: {
         description:
