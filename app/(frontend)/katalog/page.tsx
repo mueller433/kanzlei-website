@@ -11,6 +11,7 @@ import { KatalogPositionZeile } from '@/components/katalog-position-zeile'
 import { KontaktCta } from '@/components/kontakt-cta'
 import {
   type Ansicht,
+  formatierterBruttopreis,
   KATEGORIE_LABELS,
   KATEGORIE_REIHENFOLGE,
   PREIS_RANGES,
@@ -59,14 +60,6 @@ function gruppiereNachKategorie(posten: Posten[]): KategorieGruppe[] {
       minimalpreis: preise.length > 0 ? Math.min(...preise) : null,
     }
   })
-}
-
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
 }
 
 export default async function KatalogSeite({
@@ -233,7 +226,7 @@ export default async function KatalogSeite({
                         </span>
                         {gruppe.minimalpreis !== null && (
                           <span className="font-medium text-accent">
-                            {formatiertePreis(Math.round(gruppe.minimalpreis * 1.19))}
+                            {formatierterBruttopreis(gruppe.minimalpreis)}
                           </span>
                         )}
                       </div>
