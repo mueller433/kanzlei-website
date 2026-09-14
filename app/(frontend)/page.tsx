@@ -162,7 +162,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
       </Link>
       <MerklisteButton
         position={merklistenPosition}
-        className="absolute right-3 top-3 z-10"
+        className="absolute right-3 top-14 z-10"
       />
     </article>
   )
