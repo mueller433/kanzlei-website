@@ -22,7 +22,13 @@ type SendeStatus = 'ruhend' | 'sendet' | 'erfolg' | 'fehler'
  * Action. Bei einem Fehler bleiben die eingegebenen Daten erhalten, bei
  * Erfolg wird eine Erfolgsmeldung im bestehenden Formularlayout angezeigt.
  */
-export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: string }) {
+export function KontaktFormular({
+  betreffVorbelegung,
+  nachrichtVorbelegung = '',
+}: {
+  betreffVorbelegung: string
+  nachrichtVorbelegung?: string
+}) {
   const [werte, setWerte] = React.useState<FormZustand>({
     vorname: '',
     nachname: '',
@@ -30,7 +36,7 @@ export function KontaktFormular({ betreffVorbelegung }: { betreffVorbelegung: st
     telefon: '',
     firma: '',
     betreff: betreffVorbelegung,
-    nachricht: '',
+    nachricht: nachrichtVorbelegung,
   })
   const [status, setStatus] = React.useState<SendeStatus>('ruhend')
   const [fehlermeldung, setFehlermeldung] = React.useState<string | null>(null)
