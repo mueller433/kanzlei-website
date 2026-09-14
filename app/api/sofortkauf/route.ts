@@ -2,7 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
 import { KANZLEI } from '@/lib/kanzlei-daten'
-import { KATEGORIE_LABELS } from '@/lib/katalog'
+import { formatierterBruttopreis, gerundeterBruttopreis, KATEGORIE_LABELS } from '@/lib/katalog'
 import { sendeInterneBenachrichtigung, sendeKaeuferBestaetigung } from '@/lib/sofortkauf/email'
 import {
   DOKUMENT_SLOTS_PRIVATPERSON,
@@ -19,14 +19,6 @@ import {
 // übertragen. Der Client sendet ausschließlich ein normales multipart/form-data
 // per fetch() an diese Route – keine React Server Action mehr für den finalen Submit.
 export const runtime = 'nodejs'
-
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
-}
 
 function textFeld(formData: FormData, name: string): string {
   const wert = formData.get(name)
@@ -178,7 +170,7 @@ export async function POST(request: Request): Promise<Response> {
   const preisText = produkt.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof produkt.preis === 'number'
-      ? formatiertePreis(produkt.preis)
+      ? formatierterBruttopreis(produkt.preis)
       : 'Preis auf Anfrage'
 
   // 5. Interne Benachrichtigung MIT den Dokumenten als E-Mail-Anhang versenden. Dies ist
@@ -235,7 +227,10 @@ export async function POST(request: Request): Promise<Response> {
         produktTitel: produkt.titel,
         produktKategorie: KATEGORIE_LABELS[produkt.kategorie],
         produktStandort: produkt.standort || '',
-        preis: produkt.preisAufAnfrage ? null : (produkt.preis ?? null),
+        preis:
+          produkt.preisAufAnfrage || typeof produkt.preis !== 'number'
+            ? null
+            : gerundeterBruttopreis(produkt.preis),
         kaeuferTyp: kaeufer.kaeuferTyp,
         vorname: kaeufer.vorname,
         nachname: kaeufer.nachname,
