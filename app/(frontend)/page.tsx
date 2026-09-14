@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import { FaqSection } from '@/components/faq-section'
+import { MerklisteButton } from '@/components/merkliste-button'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
 import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
@@ -79,8 +80,18 @@ function homepagePreis(posten: Posten) {
 
 function HomepageAsset({ posten }: { posten: Posten }) {
   const bild = ersteBildUrl(posten.bilder)
+  const preisText = homepagePreis(posten)
+  const merklistenPosition = {
+    id: String(posten.id),
+    titel: posten.titel,
+    bildUrl: bild || undefined,
+    preisText,
+    standort: posten.standort || undefined,
+  }
+
   return (
-    <Link
+    <article className="relative h-full">
+      <Link
       href={`/katalog/${posten.id}`}
       className="group flex min-w-0 flex-col overflow-hidden border border-border bg-card transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
     >
@@ -140,7 +151,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
               {posten.preisAufAnfrage ? 'Kaufpreis' : 'Preis'}
             </p>
             <p className="mt-1 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-              {homepagePreis(posten)}
+              {preisText}
             </p>
           </div>
           <span className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
@@ -148,7 +159,12 @@ function HomepageAsset({ posten }: { posten: Posten }) {
           </span>
         </div>
       </div>
-    </Link>
+      </Link>
+      <MerklisteButton
+        position={merklistenPosition}
+        className="absolute right-3 top-3 z-10"
+      />
+    </article>
   )
 }
 
