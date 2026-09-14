@@ -1,7 +1,6 @@
 'use client'
 
 import { ArrowRight, Clock, Mail, MapPin, Phone } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { openCookieSettings } from '@/components/cookie-consent'
@@ -43,14 +42,14 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 bg-accent text-accent-foreground sm:mt-20">
+    <footer className="mt-12 bg-accent text-accent-foreground sm:mt-16">
       <div className="border-b border-white/12">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-9 sm:px-6 sm:py-11 lg:grid-cols-[1fr_auto] lg:items-center lg:px-10">
+        <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 sm:px-6 sm:py-8 lg:grid-cols-[1fr_auto] lg:items-center lg:px-10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.17em] text-white/50">
               Kaufen oder verwerten
             </p>
-            <h2 className="mt-2 max-w-2xl font-serif text-2xl leading-tight text-white sm:text-3xl">
+            <h2 className="mt-2 max-w-2xl font-serif text-2xl leading-tight text-white">
               Vermögenswerte professionell in den Markt bringen.
             </h2>
           </div>
@@ -71,27 +70,17 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-10">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-[1.35fr_repeat(3,0.75fr)] lg:gap-10">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-10">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-3 lg:grid-cols-[1.25fr_repeat(3,0.75fr)] lg:gap-9">
           <div className="col-span-2 max-w-sm md:col-span-3 lg:col-span-1">
-            <Link
-              href="/"
-              aria-label="Zur Startseite"
-              className="inline-flex bg-[#f7f5f0] px-3 py-2"
-            >
-              <Image
-                src="/dpss-logo-horizontal.svg"
-                alt="DPSS Management GmbH"
-                width={800}
-                height={400}
-                className="h-auto w-40 object-contain"
-              />
-            </Link>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/58">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white">
+              DPSS Management GmbH
+            </p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/58">
               Bewertung, Vermarktung und strukturierte Verwertung von Fahrzeugen, Maschinen und
               betrieblichem Anlagevermögen.
             </p>
-            <address className="mt-5 flex flex-col gap-2.5 text-sm not-italic text-white/70">
+            <address className="mt-4 flex flex-col gap-2 text-sm not-italic text-white/70">
               <span className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/75" aria-hidden="true" />
                 <span>{KANZLEI.adresse.strasse}, {KANZLEI_ORT}</span>
@@ -119,7 +108,7 @@ export function SiteFooter() {
               <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-white">
                 {spalte.titel}
               </h2>
-              <ul className="mt-4 flex flex-col gap-3">
+              <ul className="mt-3 flex flex-col gap-2.5">
                 {spalte.links.map((link) => (
                   <li key={`${link.href}-${link.label}`}>
                     <Link
@@ -135,7 +124,7 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-white/12 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-4 border-t border-white/12 pt-5 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1">
             <p>© {new Date().getFullYear()} {KANZLEI.name}</p>
             <p>{KANZLEI.taetigkeit}</p>
