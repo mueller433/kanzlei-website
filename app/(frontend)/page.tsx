@@ -6,7 +6,16 @@ import React from 'react'
 import { FaqSection } from '@/components/faq-section'
 import { MerklisteButton } from '@/components/merkliste-button'
 import { findeFaqEintraege, STARTSEITE_FAQ_IDS } from '@/lib/faq-daten'
-import { type Kategorie, ersteBildUrl, KATEGORIE_LABELS, PREIS_RANGES, STATUS_LABELS, ZUSTAND_LABELS, ZUSTAND_REIHENFOLGE } from '@/lib/katalog'
+import {
+  type Kategorie,
+  ersteBildUrl,
+  formatierterBruttopreis,
+  KATEGORIE_LABELS,
+  PREIS_RANGES,
+  STATUS_LABELS,
+  ZUSTAND_LABELS,
+  ZUSTAND_REIHENFOLGE,
+} from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 import config from '@/payload.config'
 import { getPayload } from 'payload'
@@ -69,13 +78,10 @@ const KATEGORIE_BILDER: Record<Kategorie, string> = {
   sonstiges: '/images/kategorien/sonstiges.webp',
 }
 
-// Bestehende Berechnung unverändert. Fachliche Preis-/Provisionsklärung separat.
 function homepagePreis(posten: Posten) {
   if (posten.preisAufAnfrage) return 'Preis auf Anfrage'
   if (typeof posten.preis !== 'number') return '—'
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
-  }).format(Math.round(posten.preis * 1.19))
+  return formatierterBruttopreis(posten.preis)
 }
 
 function HomepageAsset({ posten }: { posten: Posten }) {
