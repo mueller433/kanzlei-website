@@ -10,7 +10,8 @@ import {
   ShieldAlert,
   X,
 } from 'lucide-react'
-import React, { useEffect, useId, useRef, useState, useTransition } from 'react'
+import React, { useCallback, useEffect, useId, useRef, useState, useTransition } from 'react'
+import { createPortal } from 'react-dom'
 
 import {
   dokumentSlotsFuer,
@@ -65,7 +66,7 @@ const LEERE_FORMWERTE: Formwerte = {
 }
 
 const eingabeKlasse =
-  'w-full border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent'
+  'min-h-12 w-full border border-border bg-background px-3.5 py-2.5 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent sm:text-sm'
 
 const labelKlasse = 'text-xs font-medium uppercase tracking-[0.14em] text-foreground'
 
@@ -110,6 +111,24 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
 
   const slots: DokumentSlot[] = dokumentSlotsFuer(kaeuferTyp)
 
+  const zuruecksetzen = useCallback(() => {
+    setStep(1)
+    setKaeuferTyp('privatperson')
+    setWerte(LEERE_FORMWERTE)
+    setDateien({})
+    setFeldFehler({})
+    setServerFehler(null)
+    setBestaetigtRichtig(false)
+    setBestaetigtUebermittlung(false)
+    setErfolgId(null)
+  }, [])
+
+  const schliessen = useCallback(() => {
+    setOpen(false)
+    // Kurze Verzögerung, damit ein eventuell laufender Übergang nicht abrupt springt.
+    setTimeout(zuruecksetzen, 200)
+  }, [zuruecksetzen])
+
   useEffect(() => {
     if (!open) return
     document.body.style.overflow = 'hidden'
@@ -121,25 +140,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
       document.body.style.overflow = ''
       window.removeEventListener('keydown', handler)
     }
-  }, [open])
-
-  function zuruecksetzen() {
-    setStep(1)
-    setKaeuferTyp('privatperson')
-    setWerte(LEERE_FORMWERTE)
-    setDateien({})
-    setFeldFehler({})
-    setServerFehler(null)
-    setBestaetigtRichtig(false)
-    setBestaetigtUebermittlung(false)
-    setErfolgId(null)
-  }
-
-  function schliessen() {
-    setOpen(false)
-    // Kurze Verzögerung, damit ein eventuell laufender Übergang nicht abrupt springt.
-    setTimeout(zuruecksetzen, 200)
-  }
+  }, [open, schliessen])
 
   function feldAendern<K extends keyof Formwerte>(feld: K, wert: string) {
     setWerte((prev) => ({ ...prev, [feld]: wert }))
@@ -238,15 +239,15 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group inline-flex items-center justify-center gap-2 border border-accent bg-transparent px-6 py-3 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+        className="group inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
       >
-        Jetzt Kaufen
+        Sofort kaufen
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/50 backdrop-blur-[2px] sm:items-center sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-foreground/55 backdrop-blur-[2px] sm:items-center sm:p-6"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) schliessen()
           }}
@@ -256,42 +257,45 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
             role="dialog"
             aria-modal="true"
             aria-labelledby={`${idBasis}-titel`}
-            className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden border border-border bg-card shadow-xl sm:max-h-[88vh]"
+            className="flex h-[100dvh] max-h-[100dvh] w-full max-w-3xl flex-col overflow-hidden border border-border bg-card shadow-xl sm:h-auto sm:max-h-[88dvh]"
           >
             {/* Kopfzeile */}
-            <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
-              <div>
-  <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent">
-  Sofortkauf anfragen
-  </p>
-                <h2 id={`${idBasis}-titel`} className="mt-1 font-serif text-xl text-card-foreground">
+            <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-4 sm:px-6 sm:py-5">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                  Sofortkauf anfragen
+                </p>
+                <h2 id={`${idBasis}-titel`} className="mt-1 line-clamp-2 font-serif text-xl leading-snug text-card-foreground">
                   {produktTitel}
                 </h2>
                 {!erfolgId && (
-                  <div className="mt-3 flex items-center gap-2">
-                    {[1, 2, 3].map((n) => (
-                      <span
-                        key={n}
-                        className={`h-1.5 w-8 ${n <= step ? 'bg-accent' : 'bg-border'}`}
-                        aria-hidden="true"
-                      />
-                    ))}
-                    <span className="ml-1 text-xs text-muted-foreground">Schritt {step} von 3</span>
-                  </div>
+                  <ol className="mt-4 grid grid-cols-3 gap-2" aria-label={`Schritt ${step} von 3`}>
+                    {['Ihre Daten', 'Nachweise', 'Prüfen'].map((label, index) => {
+                      const nummer = index + 1
+                      return (
+                        <li key={label} className="min-w-0">
+                          <span className={`block h-1.5 ${nummer <= step ? 'bg-accent' : 'bg-border'}`} aria-hidden="true" />
+                          <span className={`mt-1.5 block truncate text-[11px] ${nummer === step ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                            {nummer}. {label}
+                          </span>
+                        </li>
+                      )
+                    })}
+                  </ol>
                 )}
               </div>
               <button
                 type="button"
                 onClick={schliessen}
                 aria-label="Dialog schließen"
-                className="shrink-0 text-muted-foreground transition-colors hover:text-accent"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-accent hover:text-accent"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Inhalt */}
-            <div className="flex-1 overflow-y-auto px-6 py-6">
+            <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
               {erfolgId ? (
                 <div className="flex flex-col items-center gap-4 py-8 text-center">
                   <span className="flex h-14 w-14 items-center justify-center border border-accent text-accent">
@@ -312,7 +316,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                     <div className="flex flex-col gap-6">
                       <div>
                         <p className={`${labelKlasse} mb-2`}>Käufertyp</p>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
                           {(
                             [
                               { value: 'privatperson', label: 'Privatperson' },
@@ -323,7 +327,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               key={option.value}
                               type="button"
                               onClick={() => setKaeuferTyp(option.value)}
-                              className={`border px-4 py-3 text-sm font-medium transition-colors ${
+                              className={`min-h-12 border px-4 py-3 text-sm font-medium transition-colors ${
                                 kaeuferTyp === option.value
                                   ? 'border-accent bg-accent text-accent-foreground'
                                   : 'border-border text-foreground hover:border-accent'
@@ -492,7 +496,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               {slot.label} <span className="text-accent">*</span>
                             </label>
                             <div
-                              className={`flex items-center justify-between gap-3 border px-4 py-3 text-sm transition-colors ${
+                              className={`flex flex-col items-stretch gap-3 border px-4 py-3 text-sm transition-colors sm:flex-row sm:items-center sm:justify-between ${
                                 feldFehler[slot.key] ? 'border-accent' : 'border-border'
                               }`}
                             >
@@ -504,7 +508,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               </span>
                               <label
                                 htmlFor={slot.key}
-                                className="shrink-0 cursor-pointer border border-border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.1em] text-foreground transition-colors hover:border-accent hover:text-accent"
+                                className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center border border-border px-3 py-2 text-xs font-medium uppercase tracking-[0.1em] text-foreground transition-colors hover:border-accent hover:text-accent"
                               >
                                 Datei wählen
                               </label>
@@ -633,27 +637,6 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                         </ul>
                       </div>
 
-                      <div className="flex flex-col gap-3 border-t border-border pt-5">
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtRichtig}
-                            onChange={(e) => setBestaetigtRichtig(e.target.checked)}
-                          />
-                          Ich bestätige, dass meine Angaben vollständig und richtig sind.
-                        </label>
-                        <label className="flex items-start gap-2.5 text-sm text-foreground">
-                          <input
-                            type="checkbox"
-                            className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
-                            checked={bestaetigtUebermittlung}
-                            onChange={(e) => setBestaetigtUebermittlung(e.target.checked)}
-                          />
-                          Ich möchte die Kaufanfrage an DPSS Management übermitteln.
-                        </label>
-                      </div>
-
                       {serverFehler && (
                         <div className="flex items-start gap-2.5 border border-accent bg-accent/5 px-4 py-3 text-sm text-accent">
                           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -668,61 +651,100 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
 
             {/* Fußzeile */}
             {!erfolgId && (
-              <div className="flex items-center justify-between gap-4 border-t border-border px-6 py-4">
-                {step > 1 ? (
-                  <button
-                    type="button"
-                    onClick={zurueck}
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Zurück
-                  </button>
-                ) : (
-                  <span />
+              <div className="shrink-0 border-t border-border bg-card">
+                {step === 3 && (
+                  <div className="grid gap-2 border-b border-border bg-accent/5 px-4 py-3 sm:grid-cols-2 sm:gap-5 sm:px-6">
+                    <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-foreground sm:text-sm">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
+                        checked={bestaetigtRichtig}
+                        onChange={(e) => {
+                          setBestaetigtRichtig(e.target.checked)
+                          setServerFehler(null)
+                        }}
+                      />
+                      Angaben sind vollständig und richtig.
+                    </label>
+                    <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-foreground sm:text-sm">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
+                        checked={bestaetigtUebermittlung}
+                        onChange={(e) => {
+                          setBestaetigtUebermittlung(e.target.checked)
+                          setServerFehler(null)
+                        }}
+                      />
+                      Kaufanfrage an DPSS Management übermitteln.
+                    </label>
+                  </div>
                 )}
 
-                {step < 3 ? (
-                  <button
-                    type="button"
-                    onClick={weiter}
-                    className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-                  >
-                    Weiter
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={absenden}
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-                  >
-                    {isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
+                <div className="flex flex-col-reverse items-stretch gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+                  {step > 1 ? (
+                    <button
+                      type="button"
+                      onClick={zurueck}
+                      disabled={isPending}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 border border-border px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground hover:text-foreground disabled:opacity-50 sm:border-0 sm:px-0"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Zurück
+                    </button>
+                  ) : (
+                    <span />
+                  )}
+
+                  {step < 3 ? (
+                    <button
+                      type="button"
+                      onClick={weiter}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+                    >
+                      Weiter
                       <ArrowRight className="h-4 w-4" />
-                    )}
-                    Kaufanfrage absenden
-                  </button>
-                )}
+                    </button>
+                  ) : (
+                    <div className="flex flex-col gap-1.5 sm:items-end">
+                      {(!bestaetigtRichtig || !bestaetigtUebermittlung) && (
+                        <p className="text-center text-xs font-medium text-accent sm:text-right">
+                          Bitte beide Bestätigungen auswählen.
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        onClick={absenden}
+                        disabled={isPending || !bestaetigtRichtig || !bestaetigtUebermittlung}
+                        className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-45"
+                      >
+                        {isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <ArrowRight className="h-4 w-4" />
+                        )}
+                        Kaufanfrage absenden
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
             {erfolgId && (
-              <div className="flex justify-end border-t border-border px-6 py-4">
+              <div className="flex justify-end border-t border-border px-4 py-3 sm:px-6 sm:py-4">
                 <button
                   type="button"
                   onClick={schliessen}
-                  className="inline-flex items-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-auto"
                 >
                   Schließen
                 </button>
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )

@@ -42,11 +42,11 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
   return (
     <Link
       href={`/katalog/${posten.id}`}
-      className="group flex gap-4 border-b border-border bg-background px-4 py-3 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5"
+      className="group flex gap-3 border-b border-border bg-background py-4 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5"
       data-posten-id={posten.id}
     >
       {/* Thumbnail – erstes Bild aus dem bestehenden Upload-Feld, sonst dezenter Platzhalter */}
-      <div className="relative h-16 w-16 shrink-0 overflow-hidden border border-border bg-card sm:h-20 sm:w-20">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-border bg-card sm:h-20 sm:w-20">
         {bildUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -61,7 +61,7 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+      <div className="flex min-w-0 flex-1 flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-5">
         <span
           className={`inline-flex w-fit shrink-0 items-center border px-2.5 py-1 text-[11px] uppercase tracking-[0.12em] sm:w-24 sm:justify-center ${STATUS_BADGE_KLASSE[posten.status]}`}
         >
@@ -69,18 +69,18 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
         </span>
 
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h3 className="truncate font-serif text-lg leading-snug text-foreground sm:text-xl">
+          <h3 className="line-clamp-2 font-serif text-base leading-snug text-foreground sm:truncate sm:text-xl">
             {posten.titel}
           </h3>
           {(nebeninfo || posten.kurzspezifikation) && (
-            <p className="truncate text-sm text-muted-foreground">
+            <p className="line-clamp-1 text-xs text-muted-foreground sm:text-sm">
               {nebeninfo || posten.kurzspezifikation}
             </p>
           )}
         </div>
 
         <div className="flex items-center justify-between gap-4 sm:shrink-0 sm:justify-end sm:gap-8">
-          <span className="whitespace-nowrap font-medium text-foreground">{preisText}</span>
+          <span className="whitespace-nowrap text-sm font-semibold text-foreground sm:text-base sm:font-medium">{preisText}</span>
           <ArrowRight
             className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-accent"
             aria-hidden="true"

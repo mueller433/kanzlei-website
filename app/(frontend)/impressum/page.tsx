@@ -1,86 +1,111 @@
 import React from 'react'
 
 import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
+import { KANZLEI, KANZLEI_ORT } from '@/lib/kanzlei-daten'
 
 export const metadata = {
   title: 'Impressum | DPSS Management GmbH',
-  description: 'Impressum der DPSS Management GmbH in Göttingen.',
+  description: 'Anbieterkennzeichnung und rechtliche Angaben der DPSS Management GmbH in Göttingen.',
 }
 
 const IMPRESSUM = {
-  firma: 'DPSS Management GmbH',
-  strasse: 'Herzberger Landstr. 63',
-  plzOrt: '37085 Göttingen',
-  land: 'Deutschland',
   geschaeftsfuehrer: ['Dirk Schymura', 'Phillip Schaper', 'Monika Schymura'],
   registergericht: 'Amtsgericht Göttingen',
   handelsregisternummer: 'HRB 207736',
   ustId: 'DE452777224',
-  email: 'info@dpss-management.com',
-  telefon: '+4932212243813',
 } as const
 
 function Feld({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{label}</span>
-      <div className="text-base leading-relaxed text-foreground text-pretty break-words">{children}</div>
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <span className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+        {label}
+      </span>
+      <div className="break-words text-base leading-relaxed text-foreground">{children}</div>
     </div>
   )
 }
 
 export default function ImpressumSeite() {
   return (
-    <LegalPageLayout titel="Impressum" beschreibung="Angaben gemäß § 5 DDG">
+    <LegalPageLayout
+      titel="Impressum"
+      beschreibung="Anbieterkennzeichnung und rechtliche Informationen zur DPSS Management GmbH."
+      current="impressum"
+      stand="14. September 2026"
+    >
       <LegalSections>
-        <LegalSection nummer="01" titel="Unternehmen und Anschrift">
+        <LegalSection nummer="01" titel="Anbieter und Anschrift">
           <address className="not-italic">
-            <span className="block">{IMPRESSUM.firma}</span>
-            <span className="block">{IMPRESSUM.strasse}</span>
-            <span className="block">{IMPRESSUM.plzOrt}</span>
-            <span className="block">{IMPRESSUM.land}</span>
+            <strong className="block">{KANZLEI.name}</strong>
+            <span className="block">{KANZLEI.adresse.strasse}</span>
+            <span className="block">{KANZLEI_ORT}</span>
+            <span className="block">Deutschland</span>
           </address>
+          <p className="text-sm text-muted-foreground">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG).</p>
         </LegalSection>
 
-        <LegalSection nummer="02" titel="Vertreten durch die Geschäftsführer">
-          <div className="flex flex-col gap-1">
-            {IMPRESSUM.geschaeftsfuehrer.map((name) => <span key={name}>{name}</span>)}
+        <LegalSection nummer="02" titel="Vertretungsberechtigte Geschäftsführung">
+          <div className="grid gap-2 sm:grid-cols-2">
+            {IMPRESSUM.geschaeftsfuehrer.map((name) => (
+              <span key={name} className="border border-border bg-muted/25 px-4 py-3">
+                {name}
+              </span>
+            ))}
           </div>
         </LegalSection>
 
         <LegalSection nummer="03" titel="Kontakt">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <Feld label="E-Mail"><a href={`mailto:${IMPRESSUM.email}`} className="hover:text-accent">{IMPRESSUM.email}</a></Feld>
-            <Feld label="Telefon">{IMPRESSUM.telefon}</Feld>
-          </div>
-        </LegalSection>
-
-        <LegalSection nummer="04" titel="Registereintrag">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <Feld label="Registergericht">{IMPRESSUM.registergericht}</Feld>
-            <Feld label="Handelsregisternummer">{IMPRESSUM.handelsregisternummer}</Feld>
-          </div>
-        </LegalSection>
-
-        <LegalSection nummer="05" titel="Umsatzsteuer-Identifikationsnummer">
-          <Feld label="Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG">{IMPRESSUM.ustId}</Feld>
-        </LegalSection>
-
-        <LegalSection nummer="06" titel="Verantwortlich für den Inhalt">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <Feld label="Unternehmen und Anschrift">
-              <address className="not-italic"><span className="block">{IMPRESSUM.firma}</span><span className="block">{IMPRESSUM.strasse}</span><span className="block">{IMPRESSUM.plzOrt}</span><span className="block">{IMPRESSUM.land}</span></address>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <Feld label="E-Mail">
+              <a href={KANZLEI.email.href}>{KANZLEI.email.anzeige}</a>
             </Feld>
-            <Feld label="Vertreten durch"><div className="flex flex-col gap-1">{IMPRESSUM.geschaeftsfuehrer.map((name) => <span key={name}>{name}</span>)}</div></Feld>
+            <Feld label="Telefon">
+              <a href={KANZLEI.telefon.href}>{KANZLEI.telefon.anzeige}</a>
+            </Feld>
           </div>
         </LegalSection>
 
-        <LegalSection nummer="07" titel="Haftungshinweis">
-          <p>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+        <LegalSection nummer="04" titel="Register und Umsatzsteuer">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <Feld label="Registergericht">{IMPRESSUM.registergericht}</Feld>
+            <Feld label="Handelsregister">{IMPRESSUM.handelsregisternummer}</Feld>
+            <Feld label="Umsatzsteuer-Identifikationsnummer">
+              {IMPRESSUM.ustId}
+            </Feld>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz.
+          </p>
         </LegalSection>
 
-        <LegalSection nummer="08" titel="Online-Streitbeilegung">
-          <p>Die EU-Kommission wird im ersten Quartal 2016 eine Internetplattform zur Online-Beilegung von Streitigkeiten (sog. „OS-Plattform”) bereitstellen. Die OS-Plattform soll als Anlaufstelle zur außergerichtlichen Beilegung von Streitigkeiten betreffend vertragliche Verpflichtungen, die aus Online-Kaufverträgen erwachsen, dienen. Die OS-Plattform wird unter folgendem Link erreichbar sein: <a href="http://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="break-all underline decoration-border underline-offset-4 hover:text-accent">http://ec.europa.eu/consumers/odr</a></p>
+        <LegalSection nummer="05" titel="Verantwortlich für redaktionelle Inhalte">
+          <p>
+            Verantwortlich für journalistisch-redaktionelle Inhalte gemäß § 18 Abs. 2
+            Medienstaatsvertrag sind die oben genannten Geschäftsführer der DPSS Management GmbH.
+          </p>
+          <address className="not-italic">
+            {KANZLEI.adresse.strasse}
+            <br />
+            {KANZLEI_ORT}
+            <br />
+            Deutschland
+          </address>
+        </LegalSection>
+
+        <LegalSection nummer="06" titel="Verbraucherstreitbeilegung">
+          <p>
+            Die DPSS Management GmbH ist nicht bereit und nicht verpflichtet, an
+            Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+          </p>
+        </LegalSection>
+
+        <LegalSection nummer="07" titel="Externe Links">
+          <p>
+            Diese Website kann Links zu externen Angeboten enthalten. Für deren Inhalte sind die
+            jeweiligen Anbieter verantwortlich. Rechtswidrige Inhalte werden nach Kenntniserlangung
+            und Prüfung des Einzelfalls entfernt.
+          </p>
         </LegalSection>
       </LegalSections>
     </LegalPageLayout>

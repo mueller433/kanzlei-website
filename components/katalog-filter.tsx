@@ -57,7 +57,7 @@ export function KatalogFilter({
     : 'Preis'
 
   return (
-    <div className="flex flex-col gap-4 border border-border bg-card p-4 md:p-5">
+    <div className="flex flex-col gap-4 border border-border bg-card p-3 sm:p-4 md:p-5">
       {/* Kategorie + Ansicht bleiben beim Absenden dieses Formulars erhalten */}
       {selectedKategorien.map((k) => (
         <input key={k} type="hidden" name="kategorie" value={k} />
@@ -77,14 +77,14 @@ export function KatalogFilter({
             type="search"
             defaultValue={q}
             placeholder="Position oder Detail suchen …"
-            className="h-11 w-full border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+            className="h-12 w-full border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none lg:h-11"
           />
         </label>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
           {/* Zustand – kompakter Aufklapper, native <details> ohne Client-JS */}
-          <details className="group relative">
-            <summary className="flex h-11 min-w-0 cursor-pointer list-none items-center gap-2 border border-border bg-background px-4 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+          <details className="group relative min-w-0 sm:min-w-fit">
+            <summary className="flex h-11 w-full min-w-0 cursor-pointer list-none items-center justify-between gap-2 border border-border bg-background px-3 text-sm text-foreground sm:w-auto sm:px-4 [&::-webkit-details-marker]:hidden">
               {zustandLabel}
               <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
             </summary>
@@ -105,12 +105,12 @@ export function KatalogFilter({
           </details>
 
           {/* Preis – kompakter Aufklapper */}
-          <details className="group relative">
-            <summary className="flex h-11 min-w-0 cursor-pointer list-none items-center gap-2 border border-border bg-background px-4 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+          <details className="group relative min-w-0 sm:min-w-fit">
+            <summary className="flex h-11 w-full min-w-0 cursor-pointer list-none items-center justify-between gap-2 border border-border bg-background px-3 text-sm text-foreground sm:w-auto sm:px-4 [&::-webkit-details-marker]:hidden">
               {preisLabel}
               <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
             </summary>
-            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-10 flex w-56 flex-col gap-3 border border-border bg-card p-4 shadow-sm">
+            <div className="absolute right-0 top-[calc(100%+0.5rem)] z-10 flex w-56 flex-col gap-3 border border-border bg-card p-4 shadow-sm sm:left-0 sm:right-auto">
               <label className="flex min-h-6 items-center gap-3 text-sm text-foreground">
                 <input
                   type="radio"
@@ -137,12 +137,12 @@ export function KatalogFilter({
           </details>
 
           {/* Sortierung */}
-          <label className="relative">
+          <label className="relative col-span-2 sm:col-span-1">
             <span className="sr-only">Sortierung</span>
             <select
               name="sort"
               defaultValue={selectedSort}
-              className="h-11 border border-border bg-background px-3 text-sm text-foreground focus:border-accent focus:outline-none"
+              className="h-11 w-full border border-border bg-background px-3 text-sm text-foreground focus:border-accent focus:outline-none sm:w-auto"
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.key} value={option.key}>
@@ -154,14 +154,14 @@ export function KatalogFilter({
 
           <button
             type="submit"
-            className="inline-flex h-11 items-center justify-center bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            className="col-span-2 inline-flex h-12 items-center justify-center bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:col-span-1 sm:h-11"
           >
             Anwenden
           </button>
 
           <Link
             href="/katalog"
-            className="inline-flex h-11 items-center justify-center px-2 text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline"
+            className="col-span-2 inline-flex h-11 items-center justify-center px-2 text-sm text-muted-foreground underline-offset-4 hover:text-accent hover:underline sm:col-span-1"
           >
             Zurücksetzen
           </Link>
@@ -184,7 +184,7 @@ export function KatalogFilter({
                 key={option}
                 href={`/katalog?${buildKatalogQuery(sp, { ansicht: option })}`}
                 aria-current={aktiv}
-                className={`inline-flex h-9 items-center gap-2 px-3 text-sm transition-colors ${
+                className={`inline-flex h-11 items-center gap-2 px-3 text-sm transition-colors ${
                   aktiv
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:text-accent'

@@ -21,6 +21,29 @@ const STATUS_LABELS: Record<Posten['status'], string> = {
   verkauft: 'Verkauft',
 }
 
+const KAUFABWICKLUNG = [
+  {
+    nummer: '01',
+    titel: 'Kaufanfrage senden',
+    text: 'Kontaktdaten und erforderliche Nachweise über das Sofortkauf-Formular übermitteln.',
+  },
+  {
+    nummer: '02',
+    titel: 'Prüfung und Bestätigung',
+    text: 'DPSS prüft Verfügbarkeit, Käuferdaten und die Bedingungen der angefragten Position.',
+  },
+  {
+    nummer: '03',
+    titel: 'Rechnung und Überweisung',
+    text: 'Nach Bestätigung erhalten Sie die Rechnung. Die Zahlung erfolgt ausschließlich per Überweisung.',
+  },
+  {
+    nummer: '04',
+    titel: 'Termin und Übergabe',
+    text: 'Besichtigung beziehungsweise Abholung erfolgt nach Zahlungseingang und Terminvereinbarung.',
+  },
+] as const
+
 function formatiertePreis(preis: number): string {
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
@@ -155,9 +178,8 @@ export default async function AssetDetailSeite({
       ? formatiertePreis(Math.round(posten.preis * 1.19))
       : 'Preis auf Anfrage'
 
-  // Kompakte Kerninformationen im Hero – nur befüllte Felder (Sektion 5 der Vorgabe)
+  // Kompakte Kerninformationen in der Kaufbox – nur befüllte Felder.
   const kerninfo = [
-    { label: 'Preis', wert: preisText },
     { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
     { label: 'MwSt.', wert: '19 %' },
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
@@ -177,8 +199,8 @@ export default async function AssetDetailSeite({
 
   return (
     <div>
-      <section>
-        <div className="mx-auto max-w-6xl px-6 pt-8 md:px-10 md:pt-10">
+      <section className="border-b border-border bg-card">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
           <Link
             href="/katalog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
@@ -189,33 +211,22 @@ export default async function AssetDetailSeite({
         </div>
       </section>
 
-      <section>
-        <div className="mx-auto max-w-6xl px-6 py-6 md:px-10 md:py-8">
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-12">
           {/*
             Layout: flex-col auf Mobile (DOM-Reihenfolge = visuelle Reihenfolge:
             Titel/Status vor Bildgalerie), ab lg: 2-spaltiges Grid mit Bild links
             über die volle Höhe und Titel/Kerninfo rechts gestapelt.
           */}
-          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-12">
-            {/* Titel-Block */}
-            <div className="order-1 lg:order-2 lg:col-start-2 lg:row-start-1">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <div className="flex min-w-0 flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start lg:gap-10 xl:gap-14">
+            {/* Kauf- und Informationsbox */}
+            <aside id="kaufanfrage" className="order-1 min-w-0 scroll-mt-32 overflow-hidden border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
 
-              <h1 className="font-serif text-3xl leading-tight text-foreground text-balance md:text-4xl">
-                {posten.titel}
-              </h1>
-
-              {posten.kurzspezifikation && (
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty md:text-lg">
-                  {posten.kurzspezifikation}
-                </p>
-              )}
-
-              {/* Status + Zustand – Kategorie steht bereits in der Eyebrow-Zeile */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="whitespace-nowrap border border-accent px-3 py-1 text-xs uppercase tracking-[0.15em] text-accent">
+              <div className="mb-4 flex flex-wrap gap-2">
+                <span className="whitespace-nowrap border border-accent px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-accent">
                   {STATUS_LABELS[posten.status]}
                 </span>
                 <span className="whitespace-nowrap border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">
@@ -223,15 +234,46 @@ export default async function AssetDetailSeite({
                 </span>
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/kontakt"
-                  className="group inline-flex items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-                >
-                  Fragen?
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+              <h1 className="break-words font-serif text-3xl font-semibold leading-tight text-foreground text-balance [overflow-wrap:anywhere] sm:text-4xl">
+                {posten.titel}
+              </h1>
 
+              {posten.kurzspezifikation && (
+                <p className="mt-4 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg">
+                  {posten.kurzspezifikation}
+                </p>
+              )}
+
+              <div className="mt-6 border-y border-border py-5">
+                <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  {hatNettoPreis ? 'Kaufpreis inkl. 19 % USt.' : 'Kaufpreis'}
+                </p>
+                <p className="mt-1 font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                  {preisText}
+                </p>
+              </div>
+
+              <dl className="grid grid-cols-2 border-b border-border">
+                {kerninfo.map((eintrag) => (
+                  <div
+                    key={eintrag.label}
+                    className={`py-4 ${
+                      eintrag.label === 'Standort'
+                        ? 'col-span-2 border-t border-border'
+                        : 'pr-4 first:border-r first:border-border first:pr-4 [&:nth-child(2)]:pl-4'
+                    }`}
+                  >
+                    <dt className="text-xs uppercase tracking-[0.13em] text-muted-foreground">
+                      {eintrag.label}
+                    </dt>
+                    <dd className="mt-1 break-words text-sm font-medium text-foreground sm:text-base">
+                      {eintrag.wert}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-6 flex flex-col gap-3">
                 {posten.status === 'verfuegbar' && (
                   <SofortkaufDialog
                     produktId={String(posten.id)}
@@ -240,32 +282,73 @@ export default async function AssetDetailSeite({
                     standort={posten.standort}
                   />
                 )}
+
+                <Link
+                  href="/kontakt"
+                  className="group inline-flex min-h-12 w-full items-center justify-center gap-2 border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Frage zur Position
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
-            </div>
+            </aside>
 
             {/* Bildergalerie */}
-            <div className="order-2 lg:order-1 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+            <div className="order-2 min-w-0 lg:order-1 lg:col-start-1 lg:row-start-1">
               <AssetGalerie bilder={bilder} />
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Kerninformationen */}
-            <div className="order-3 lg:order-3 lg:col-start-2 lg:row-start-2">
-              <dl
-                className={`grid grid-cols-2 gap-px overflow-hidden border border-border bg-border ${
-                  kerninfo.length >= 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3'
-                }`}
-              >
-                {kerninfo.map((eintrag) => (
-                  <div key={eintrag.label} className="bg-background p-4">
-                    <dt className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                      {eintrag.label}
-                    </dt>
-                    <dd className="mt-1.5 break-words font-serif text-lg leading-snug text-foreground text-balance md:text-xl">
-                      {eintrag.wert}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+      {/* Kaufabwicklung */}
+      <section className="border-y border-border bg-muted/35">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+              Kaufabwicklung
+            </p>
+            <h2 className="mt-3 font-serif text-3xl leading-tight text-foreground sm:text-4xl">
+              In vier klaren Schritten zum Kauf
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Die Kaufanfrage startet die Prüfung der Position und Ihrer Angaben. Sie stellt noch
+              keinen verbindlichen Kaufvertrag dar.
+            </p>
+          </div>
+
+          <ol className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {KAUFABWICKLUNG.map((schritt) => (
+              <li key={schritt.nummer} className="border-t-2 border-accent bg-card p-5 sm:p-6">
+                <span className="font-serif text-2xl text-accent">{schritt.nummer}</span>
+                <h3 className="mt-4 font-serif text-xl leading-snug text-foreground">
+                  {schritt.titel}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {schritt.text}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-5 grid border border-border bg-card sm:grid-cols-3">
+            <div className="border-b border-border p-4 sm:border-b-0 sm:border-r sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Zahlung</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Ausschließlich per Überweisung. Keine Barzahlung.
+              </p>
+            </div>
+            <div className="border-b border-border p-4 sm:border-b-0 sm:border-r sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Termin</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Besichtigung und Abholung erst nach vollständigem Zahlungseingang.
+              </p>
+            </div>
+            <div className="p-4 sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Hinweis</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Verkauf vorbehaltlich Verfügbarkeit, Prüfung und Bestätigung durch DPSS.
+              </p>
             </div>
           </div>
         </div>
@@ -273,7 +356,7 @@ export default async function AssetDetailSeite({
 
       {/* Beschreibung + Eckdaten */}
       <section className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
             {/* Beschreibung (richText) */}
             <div>
@@ -344,7 +427,7 @@ export default async function AssetDetailSeite({
 
       {aehnlichePositionen.length > 0 && (
         <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <h2 className="font-serif text-2xl text-foreground md:text-3xl">
                 Andere Positionen

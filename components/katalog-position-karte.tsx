@@ -20,7 +20,7 @@ const STATUS_BADGE_KLASSE: Record<Posten['status'], string> = {
 }
 
 /**
- * Horizontale Premium-Listenzeile einer Position für den Katalog. Zeigt
+ * Bildstarke Premium-Karte einer Position für den Katalog. Zeigt
  * Status, Kategorie, Titel, Standort, Preis und das erste hinterlegte Bild
  * zurückhaltend ohne Shop-Optik. Nutzt ausschließlich bestehende Felder der
  * Collection `posten`.
@@ -37,10 +37,10 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
   return (
     <Link
       href={`/katalog/${posten.id}`}
-      className="group flex flex-col gap-5 border-b border-border py-6 transition-colors hover:bg-muted/35 focus:outline-none focus-visible:bg-muted/35 md:flex-row md:items-center md:gap-8 md:py-7"
+      className="group flex h-full flex-col overflow-hidden border border-border bg-card transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:gap-5"
       data-posten-id={posten.id}
     >
-      <div className="relative h-28 w-full shrink-0 overflow-hidden bg-card md:h-24 md:w-36">
+      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-muted">
         {bildUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -55,7 +55,7 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-8">
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 sm:p-5">
         <div className="min-w-0">
           <div className="mb-2 flex flex-wrap items-center gap-3">
             <span
@@ -67,16 +67,16 @@ export function KatalogPositionKarte({ posten }: { posten: Posten }) {
               {KATEGORIE_LABELS[posten.kategorie]}
             </span>
           </div>
-          <h3 className="truncate font-serif text-xl leading-snug text-foreground md:text-2xl">
+          <h3 className="line-clamp-2 font-serif text-xl leading-snug text-foreground">
             {posten.titel}
           </h3>
           {posten.standort && <p className="mt-1 text-sm text-muted-foreground">{posten.standort}</p>}
         </div>
 
-        <div className="flex shrink-0 items-center justify-between gap-8 md:justify-end">
-          <span className="text-base font-medium text-foreground">{preisText}</span>
+        <div className="mt-auto flex shrink-0 items-center justify-between gap-6 border-t border-border pt-4">
+          <span className="text-base font-semibold text-foreground">{preisText}</span>
           <ArrowRight
-            className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent"
+            className="h-5 w-5 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent"
             aria-hidden="true"
           />
         </div>

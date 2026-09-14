@@ -1,127 +1,140 @@
-import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
+import Link from 'next/link'
 
+import { LegalPageLayout, LegalSection, LegalSections } from '@/components/legal-page-layout'
 
 export const metadata = {
   title: 'AGB | DPSS Management GmbH',
   description:
-    'Allgemeine Geschäftsbedingungen der DPSS Management GmbH für die Verwertung und den Verkauf von Vermögenswerten.',
+    'Allgemeine Geschäftsbedingungen der DPSS Management GmbH für Kaufanfragen und die Verwertung von Vermögenswerten.',
 }
 
 const sections = [
   {
-    title: '§ 1 Geltungsbereich und Allgemeines',
+    title: 'Geltungsbereich',
     paragraphs: [
-      'Diese Allgemeinen Geschäftsbedingungen gelten für Verträge über die Verwertung und den Verkauf von Maschinen, technischen Anlagen, Betriebsausstattung, Warenbeständen, Fahrzeugen und sonstigen Vermögenswerten durch die DPSS Management GmbH, Herzberger Landstr. 63, 37085 Göttingen.',
-      'Sie gelten gegenüber Käufern und Interessenten, soweit im jeweiligen Angebot oder Vertrag nichts Abweichendes vereinbart ist. Individuelle Vereinbarungen haben Vorrang. Rechtserhebliche Erklärungen bedürfen der Textform, soweit gesetzlich keine strengere Form vorgeschrieben ist.',
+      'Diese Allgemeinen Geschäftsbedingungen gelten für Verträge und vorvertragliche Anfragen über die Verwertung und den Verkauf von Maschinen, technischen Anlagen, Betriebsausstattung, Warenbeständen, Fahrzeugen und sonstigen Vermögenswerten durch die DPSS Management GmbH, Herzberger Landstr. 63, 37085 Göttingen.',
+      'DPSS kann je nach Angebot selbst Verkäuferin sein oder im Auftrag eines Dritten handeln. Die konkrete Verkäuferrolle und etwaige Zustimmungsvorbehalte ergeben sich aus dem individuellen Angebot, der Auftragsbestätigung oder dem Kaufvertrag.',
+      'Individuelle Vereinbarungen haben Vorrang. Zwingende gesetzliche Rechte, insbesondere von Verbrauchern, bleiben unberührt.',
     ],
   },
   {
-    title: '§ 2 Angebote und Vertragsschluss',
+    title: 'Katalogangaben und Verfügbarkeit',
     paragraphs: [
-      'Darstellungen im Online-Katalog, in Exposés, auf der Website oder in sonstigen Unterlagen dienen der Information und stellen nicht automatisch ein verbindliches Angebot dar. Maßgeblich sind die Angaben im jeweiligen Angebot und die dort beschriebene Vertragsmechanik.',
-      'Ein Vertrag kommt durch die Annahme eines Kaufangebots, durch eine Auftragsbestätigung oder durch eine sonstige im jeweiligen Angebot bestimmte Erklärung zustande. Die Verkäuferrolle der DPSS Management GmbH sowie etwaige Zustimmungsvorbehalte werden im konkreten Angebot oder Vertrag festgelegt.',
+      'Darstellungen im Online-Katalog, Fotos, Beschreibungen, technische Daten, Mengen- und Preisangaben dienen zunächst der Information. Sie stellen kein verbindliches Angebot dar, soweit sie nicht ausdrücklich als solches bezeichnet sind.',
+      'Positionen können zwischenzeitlich reserviert, anderweitig verwertet oder verkauft werden. DPSS prüft die Verfügbarkeit nach Eingang einer Anfrage. Irrtümer und Aktualisierungsverzögerungen bleiben vorbehalten, soweit gesetzlich zulässig.',
     ],
   },
   {
-    title: '§ 3 Beschreibung und Zustand der Vermögenswerte',
+    title: 'Kaufanfrage und Vertragsschluss',
     paragraphs: [
-      'Beschreibungen, Fotos, technische Angaben, Mengenangaben und sonstige Informationen werden nach bestem Wissen erstellt. Bei gebrauchten Vermögenswerten sind alters- und nutzungsbedingte Gebrauchsspuren sowie Abweichungen möglich.',
-      'Der Käufer hat die Angaben und die Eignung des Vermögenswerts für seine Zwecke eigenverantwortlich zu prüfen. Beschaffenheitsvereinbarungen und bekannte Mängel ergeben sich ausschließlich aus dem jeweiligen Angebot, Vertrag und den ausdrücklich vereinbarten Unterlagen.',
+      'Der Button „Sofort kaufen“ öffnet ein Formular zur Übermittlung einer Kaufanfrage. Das Absenden des Formulars und die automatische Eingangsbestätigung führen noch nicht zum Abschluss eines Kaufvertrags.',
+      'Ein Vertrag kommt erst durch eine ausdrückliche Auftragsbestätigung, die Annahme eines Kaufangebots oder eine andere im konkreten Angebot bestimmte Erklärung zustande. DPSS ist berechtigt, Anfragen insbesondere im Hinblick auf Verfügbarkeit, Käuferdaten und Verwertungsbedingungen zu prüfen.',
     ],
   },
   {
-    title: '§ 4 Besichtigung',
+    title: 'Identifikation und Nachweise',
     paragraphs: [
-      'Eine Besichtigung ist möglich, wenn sie im jeweiligen Angebot vorgesehen wird. Besichtigungstermine sind vorab zu vereinbaren. Der Interessent ist für die Prüfung des Vermögenswerts vor Vertragsschluss selbst verantwortlich und hat die geltenden Zugangs- und Sicherheitsvorgaben einzuhalten.',
-    ],
-  },
-  {
-    title: '§ 5 Preise und Umsatzsteuer',
-    paragraphs: [
-      'Der im jeweiligen Angebot ausgewiesene Preis kann neben dem Kaufpreis weitere Kosten, eine Provision oder ein Aufgeld enthalten. Die jeweils anfallenden Beträge und die umsatzsteuerliche Behandlung werden im konkreten Angebot angegeben.',
-      'Je nach Vermögenswert und gesetzlicher Voraussetzung kann die Umsatzsteuer gesondert ausgewiesen werden oder eine andere steuerliche Behandlung Anwendung finden. Maßgeblich sind die Angaben im jeweiligen Angebot und in der Rechnung.',
-    ],
-  },
-  {
-    title: '§ 6 Zahlungsbedingungen',
-    paragraphs: [
-      'Die Zahlung ist innerhalb der im Angebot oder Vertrag bestimmten Frist und auf das dort angegebene Konto zu leisten. Soweit nichts anderes vereinbart ist, erfolgt die Übergabe erst nach vollständigem Zahlungseingang.',
-      'Bei verspäteter Zahlung gelten die gesetzlichen Folgen. Weitergehende Rechte der jeweils berechtigten Vertragspartei bleiben unberührt.',
-    ],
-  },
-  {
-    title: '§ 7 Übergabe und Abholung',
-    paragraphs: [
-      'Übergabe und Abholung erfolgen am im Angebot bezeichneten Standort und innerhalb des vereinbarten Zeitraums. Der Käufer trägt die Kosten und organisiert den Transport, die Demontage und die Verladung, soweit im Einzelfall nichts anderes vereinbart ist.',
-      'Erforderliche Genehmigungen, Hilfsmittel und Versicherungen für Transport und Abholung sind vom Käufer zu beschaffen. Der Gefahrübergang richtet sich nach den gesetzlichen Vorschriften und den Vereinbarungen im konkreten Vertrag.',
-    ],
-  },
-  {
-    title: '§ 8 Eigentumsvorbehalt',
-    paragraphs: [
-      'Das Eigentum am verkauften Vermögenswert geht erst mit vollständiger Zahlung des Kaufpreises und aller vereinbarten Nebenforderungen auf den Käufer über, soweit ein Eigentumsvorbehalt wirksam vereinbart wurde.',
-      'Bis zum Eigentumsübergang darf der Käufer den Vermögenswert nicht ohne Zustimmung verpfänden, sicherungsübereignen oder anderweitig darüber verfügen.',
-    ],
-  },
-  {
-    title: '§ 9 Gewährleistung und Sachmängelhaftung',
-    paragraphs: [
-      'Die Rechte des Käufers bei Sach- und Rechtsmängeln richten sich nach den gesetzlichen Vorschriften sowie den ausdrücklich vereinbarten Beschaffenheitsangaben. Bei gebrauchten Vermögenswerten sind Alter, Nutzung und Zustand bei der Bewertung zu berücksichtigen.',
-      'Abweichende Vereinbarungen zur Sachmängelhaftung gelten nur, soweit sie gegenüber der jeweiligen Käufergruppe gesetzlich zulässig sind. Zwingende Rechte von Verbrauchern bleiben unberührt.',
-    ],
-  },
-  {
-    title: '§ 10 Haftung',
-    paragraphs: [
-      'Die DPSS Management GmbH haftet nach den gesetzlichen Vorschriften für Schäden aus Vorsatz und grober Fahrlässigkeit sowie für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit.',
-      'Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vorhersehbaren, typischerweise eintretenden Schaden begrenzt. Zwingende gesetzliche Haftung bleibt unberührt.',
-    ],
-  },
-  {
-    title: '§ 11 Rücktritt, Nichtabnahme und Zahlungsverzug',
-    paragraphs: [
-      'Bei Zahlungsverzug, Nichtabnahme oder sonstiger erheblicher Pflichtverletzung stehen der jeweils berechtigten Vertragspartei die gesetzlichen Rechte zu. Dazu können insbesondere Rücktritt, Schadensersatz und die anderweitige Verwertung des Vermögenswerts gehören.',
-      'Weitergehende Folgen und eine etwaige Anrechnung bereits geleisteter Zahlungen richten sich nach den gesetzlichen Vorschriften und dem konkreten Vertrag.',
-    ],
-  },
-  {
-    title: '§ 12 Online-Verkäufe und Online-Versteigerungen',
-    paragraphs: [
-      'Für Online-Verkäufe gelten die Angaben und die Vertragsmechanik des jeweiligen Angebots. Eine Darstellung auf der Website begründet keine Verpflichtung zur Durchführung eines Verkaufs.',
-      'Sofern künftig Online-Versteigerungen angeboten werden, werden Gebotsabgabe, Bindungswirkung, Auktionsende, Mindestpreis, Zuschlag und der Umgang mit technischen Störungen in den jeweiligen Teilnahmebedingungen geregelt. Die Website bietet derzeit keine eigenständige Online-Auktionsfunktion.',
-    ],
-  },
-  {
-    title: '§ 13 Technische Verfügbarkeit',
-    paragraphs: [
-      'Die Website wird mit angemessener Sorgfalt betrieben. Vorübergehende Einschränkungen durch Wartung, technische Störungen, höhere Gewalt oder Störungen der Internetübertragung bleiben möglich. Gesetzliche Ansprüche bleiben unberührt.',
-    ],
-  },
-  {
-    title: '§ 14 Datenschutz',
-    paragraphs: [
-      'Informationen zur Verarbeitung personenbezogener Daten finden sich in der Datenschutzerklärung der DPSS Management GmbH.',
+      'Zur Prüfung einer Kaufanfrage kann DPSS erforderliche Identitäts- und bei gewerblichen Käufern Unternehmensnachweise verlangen. Die Angaben müssen vollständig, richtig und aktuell sein.',
+      'Nicht erforderliche Angaben auf Nachweisen sollen – soweit rechtlich und für die Prüfung möglich – geschwärzt werden. Einzelheiten zur Datenverarbeitung ergeben sich aus der Datenschutzerklärung.',
     ],
     link: { href: '/datenschutz', label: 'Zur Datenschutzerklärung' },
   },
   {
-    title: '§ 15 Verbraucherstreitbeilegung',
+    title: 'Beschreibung und Zustand',
     paragraphs: [
-      'Informationen zur Teilnahme an Verfahren der Verbraucherschlichtung werden im jeweiligen Angebot oder an anderer geeigneter Stelle bereitgestellt. Die gesetzlichen Informationspflichten bleiben unberührt.',
+      'Beschreibungen, Fotos und technische Angaben werden nach bestem Wissen erstellt. Bei gebrauchten Vermögenswerten sind alters-, gebrauchs- und standortbedingte Spuren sowie Abweichungen möglich.',
+      'Maßgeblich für eine vereinbarte Beschaffenheit sind ausschließlich die ausdrücklichen Angaben im individuellen Angebot oder Vertrag. Der Käufer ist dafür verantwortlich, die Eignung des Vermögenswerts für seinen vorgesehenen Zweck zu prüfen.',
     ],
   },
   {
-    title: '§ 16 Rechtswahl und Gerichtsstand',
+    title: 'Preise, Umsatzsteuer und Nebenkosten',
     paragraphs: [
-      'Es gilt deutsches Recht. Gegenüber Verbrauchern gilt diese Rechtswahl nur, soweit dadurch nicht der Schutz zwingender Bestimmungen des Staates eingeschränkt wird, in dem der Verbraucher seinen gewöhnlichen Aufenthalt hat.',
-      'Für Unternehmer ist Gerichtsstand, soweit gesetzlich zulässig, der Sitz der DPSS Management GmbH. Im Übrigen gelten die gesetzlichen Gerichtsstände.',
+      'Maßgeblich ist der im jeweiligen Angebot oder Vertrag ausgewiesene Preis. Ob Umsatzsteuer enthalten ist oder gesondert ausgewiesen wird, ergibt sich aus der konkreten Preisangabe und der Rechnung.',
+      'Provisionen, Aufgelder, Demontage-, Verlade-, Transport- oder sonstige Nebenkosten fallen nur an, wenn sie im Angebot oder Vertrag ausgewiesen beziehungsweise vereinbart sind.',
     ],
   },
   {
-    title: '§ 17 Schlussbestimmungen',
+    title: 'Zahlung',
     paragraphs: [
-      'Änderungen und Ergänzungen des Vertrags bedürfen der vereinbarten Form. Sollten einzelne Bestimmungen unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. An die Stelle der unwirksamen Bestimmung tritt die gesetzliche Regelung.',
-      'Vertragssprache ist Deutsch, soweit im jeweiligen Angebot nichts anderes angegeben ist.',
+      'Soweit im Angebot oder Vertrag nichts anderes vereinbart ist, ist der Rechnungsbetrag unmittelbar nach Erhalt der Rechnung ohne Abzug per Überweisung auf das angegebene Konto zu zahlen. Barzahlungen werden nicht angenommen.',
+      'Eine Zahlung gilt erst mit vollständiger Gutschrift auf dem angegebenen Konto als erfolgt. Bei Zahlungsverzug gelten die gesetzlichen Vorschriften.',
+    ],
+  },
+  {
+    title: 'Besichtigung, Termin und Abholung',
+    paragraphs: [
+      'Besichtigung und Abholung sind erst nach vollständigem Zahlungseingang und ausschließlich nach vorheriger Terminvereinbarung möglich, soweit im individuellen Vertrag nichts Abweichendes festgelegt ist.',
+      'Der Käufer organisiert und trägt die Kosten von Demontage, Verladung und Transport, sofern nichts anderes vereinbart wurde. Er hat geeignetes Personal, Fahrzeuge, Hilfsmittel, Genehmigungen und Versicherungen bereitzustellen sowie die Zugangs- und Sicherheitsvorgaben am Standort einzuhalten.',
+    ],
+  },
+  {
+    title: 'Übergabe und Gefahrübergang',
+    paragraphs: [
+      'Übergabeort und Abholzeitraum ergeben sich aus dem Angebot oder Vertrag. Die Gefahr geht nach den gesetzlichen Vorschriften und den im konkreten Vertrag getroffenen Vereinbarungen auf den Käufer über.',
+      'Verzögert der Käufer eine vereinbarte Abholung, können nach vorheriger Mitteilung angemessene Stand-, Lager- oder zusätzliche Bearbeitungskosten berechnet werden, soweit die gesetzlichen Voraussetzungen vorliegen.',
+    ],
+  },
+  {
+    title: 'Eigentumsvorbehalt',
+    paragraphs: [
+      'Soweit wirksam vereinbart, bleibt der Vermögenswert bis zur vollständigen Zahlung des Kaufpreises und aller vereinbarten Nebenforderungen im Eigentum des jeweiligen Verkäufers.',
+      'Vor Eigentumsübergang darf der Käufer den Vermögenswert ohne Zustimmung weder verpfänden noch sicherungsübereignen oder anderweitig darüber verfügen.',
+    ],
+  },
+  {
+    title: 'Sachmängel und Gewährleistung',
+    paragraphs: [
+      'Für Sach- und Rechtsmängel gelten die gesetzlichen Vorschriften, soweit im individuellen Vertrag keine gesetzlich zulässige abweichende Vereinbarung getroffen wird.',
+      'Gegenüber Unternehmern kann die Haftung für Sachmängel bei gebrauchten Vermögenswerten im konkreten Vertrag beschränkt oder ausgeschlossen werden. Gegenüber Verbrauchern bleiben zwingende Gewährleistungsrechte unberührt.',
+    ],
+  },
+  {
+    title: 'Haftung',
+    paragraphs: [
+      'DPSS haftet unbeschränkt für Vorsatz und grobe Fahrlässigkeit, für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit sowie in Fällen zwingender gesetzlicher Haftung.',
+      'Bei leicht fahrlässiger Verletzung einer wesentlichen Vertragspflicht ist die Haftung auf den bei Vertragsschluss vorhersehbaren, vertragstypischen Schaden begrenzt. Wesentliche Vertragspflichten sind solche, deren Erfüllung die ordnungsgemäße Vertragsdurchführung erst ermöglicht und auf deren Einhaltung die andere Partei regelmäßig vertrauen darf.',
+    ],
+  },
+  {
+    title: 'Zahlungsverzug und Nichtabnahme',
+    paragraphs: [
+      'Bei Zahlungsverzug, Nichtabnahme oder einer sonstigen erheblichen Pflichtverletzung stehen der berechtigten Vertragspartei die gesetzlichen Rechte zu. Hierzu können insbesondere Rücktritt und Schadensersatz gehören.',
+      'Nach wirksamem Rücktritt kann der Vermögenswert anderweitig verwertet werden. Die Abrechnung bereits geleisteter Zahlungen und eines nachweisbaren Schadens richtet sich nach den gesetzlichen Vorschriften.',
+    ],
+  },
+  {
+    title: 'Verbraucher und Widerrufsrecht',
+    paragraphs: [
+      'Verbraucher im Sinne des § 13 BGB erhalten die gesetzlich erforderlichen Informationen, wenn ein Vertrag unter ausschließlicher Verwendung von Fernkommunikationsmitteln oder außerhalb von Geschäftsräumen geschlossen wird.',
+      'Soweit ein gesetzliches Widerrufsrecht besteht, wird hierüber einschließlich Muster-Widerrufsformular gesondert belehrt. Gesetzliche Ausnahmen vom Widerrufsrecht bleiben unberührt. Diese AGB ersetzen keine im Einzelfall erforderliche Widerrufsbelehrung.',
+    ],
+  },
+  {
+    title: 'Technische Verfügbarkeit',
+    paragraphs: [
+      'Wir betreiben die Website mit angemessener Sorgfalt, schulden jedoch keine jederzeit unterbrechungsfreie Verfügbarkeit. Wartung, technische Störungen, höhere Gewalt oder Störungen außerhalb unseres Einflussbereichs können den Zugriff vorübergehend beeinträchtigen.',
+      'Ist eine elektronische Übermittlung nicht möglich, kann DPSS über die im Impressum genannten Kontaktdaten erreicht werden.',
+    ],
+  },
+  {
+    title: 'Datenschutz',
+    paragraphs: [
+      'Informationen zur Verarbeitung personenbezogener Daten, insbesondere bei Kontakt- und Kaufanfragen sowie beim Hochladen von Nachweisen, finden Sie in unserer Datenschutzerklärung.',
+    ],
+    link: { href: '/datenschutz', label: 'Datenschutzerklärung öffnen' },
+  },
+  {
+    title: 'Verbraucherstreitbeilegung',
+    paragraphs: [
+      'Die DPSS Management GmbH ist nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.',
+    ],
+  },
+  {
+    title: 'Rechtswahl, Gerichtsstand und Schlussbestimmungen',
+    paragraphs: [
+      'Es gilt deutsches Recht. Gegenüber Verbrauchern gilt diese Rechtswahl nur, soweit dadurch nicht der Schutz zwingender Vorschriften des Staates eingeschränkt wird, in dem der Verbraucher seinen gewöhnlichen Aufenthalt hat.',
+      'Für Unternehmer ist, soweit gesetzlich zulässig, der Sitz der DPSS Management GmbH Gerichtsstand. Im Übrigen gelten die gesetzlichen Gerichtsstände.',
+      'Sollte eine Bestimmung unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. An die Stelle der unwirksamen Bestimmung treten die gesetzlichen Vorschriften. Vertragssprache ist Deutsch, soweit nichts anderes vereinbart ist.',
     ],
   },
 ] as const
@@ -130,22 +143,33 @@ export default function AGBPage() {
   return (
     <LegalPageLayout
       titel="Allgemeine Geschäftsbedingungen"
-      beschreibung="Für die Verwertung und den Verkauf von Vermögenswerten."
+      beschreibung="Regelungen für Kaufanfragen, Vertragsschluss, Zahlung und Abholung von Vermögenswerten."
+      current="agb"
+      stand="14. September 2026"
     >
+      <div className="mb-10 border border-border bg-muted/35 p-5 sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+          Das Wichtigste vorab
+        </p>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-foreground sm:text-base">
+          <li>„Sofort kaufen“ übermittelt zunächst eine Kaufanfrage – noch keinen Kaufvertrag.</li>
+          <li>Die Zahlung erfolgt ausschließlich per Überweisung.</li>
+          <li>Besichtigung und Abholung erfolgen erst nach Zahlungseingang und Terminvereinbarung.</li>
+        </ul>
+      </div>
+
       <LegalSections>
         {sections.map((section, index) => (
           <LegalSection
             key={section.title}
             nummer={String(index + 1).padStart(2, '0')}
-            titel={section.title.replace(/^§ \d+ /, '')}
+            titel={section.title}
           >
             {section.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
             {'link' in section && section.link ? (
-              <a href={section.link.href} className="underline decoration-border underline-offset-4 hover:text-accent">
-                {section.link.label}
-              </a>
+              <Link href={section.link.href}>{section.link.label}</Link>
             ) : null}
           </LegalSection>
         ))}

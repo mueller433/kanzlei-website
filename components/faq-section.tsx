@@ -49,7 +49,7 @@ export function FaqSection({
                 onClick={() => toggle(eintrag.id)}
                 aria-expanded={offen}
                 aria-controls={antwortId}
-                className="flex w-full items-center justify-between gap-4 py-6 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex min-h-16 w-full items-center justify-between gap-4 py-5 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:py-6"
               >
                 <span className="font-serif text-lg leading-snug text-foreground text-pretty md:text-xl">
                   {eintrag.frage}
@@ -73,7 +73,7 @@ export function FaqSection({
               }`}
             >
               <div className="overflow-hidden">
-                <div className="flex flex-col gap-3 pb-6 pr-12 text-base leading-relaxed text-muted-foreground text-pretty md:pr-16">
+                <div className="flex flex-col gap-3 pb-6 pr-2 text-sm leading-relaxed text-muted-foreground text-pretty sm:pr-12 sm:text-base md:pr-16">
                   {eintrag.antwort.map((absatz, index) => (
                     <p key={index}>{absatz}</p>
                   ))}

@@ -86,7 +86,7 @@ export default async function KatalogSeite({
   const preisRange = PREIS_RANGES.find((r) => r.key === selectedPreis) ?? null
   const selectedSort = typeof sp.sort === 'string' ? sp.sort : SORT_OPTIONS[0].key
   const sortOption = SORT_OPTIONS.find((s) => s.key === selectedSort) ?? SORT_OPTIONS[0]
-  const ansicht: Ansicht = sp.ansicht === 'karten' ? 'karten' : 'liste'
+  const ansicht: Ansicht = sp.ansicht === 'liste' ? 'liste' : 'karten'
 
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
@@ -120,6 +120,7 @@ export default async function KatalogSeite({
     if (doc.kategorie in kategorieCounts) kategorieCounts[doc.kategorie] += 1
   }
   const alleAnzahl = facetDocs.length
+  const aktiveKategorien = Object.values(kategorieCounts).filter((anzahl) => anzahl > 0).length
 
   // Endgültige Ergebnis-Abfrage: Basis-where + Kategorie-Auswahl, sortiert
   const finalWhere: Where = selectedKategorien.length
@@ -138,28 +139,39 @@ export default async function KatalogSeite({
 
   return (
     <div>
-      {/* INTRO – kompakter Katalog-Einstieg mit dynamischer Bestandsanzeige */}
-      <section className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10 md:py-12">
-          <div>
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+      {/* INTRO – markanter Marketplace-Einstieg mit dynamischer Bestandsanzeige */}
+      <section className="relative overflow-hidden border-b border-accent/20 bg-accent text-accent-foreground">
+        <div className="absolute -right-24 -top-28 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="absolute bottom-0 right-[18%] h-px w-72 bg-gradient-to-r from-transparent via-white/25 to-transparent" aria-hidden="true" />
+
+        <div className="relative mx-auto grid max-w-7xl gap-8 px-4 pb-14 pt-10 sm:px-6 sm:pb-16 sm:pt-12 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10 lg:pb-20 lg:pt-16">
+          <div className="max-w-3xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
               Verwertung · Katalog
             </p>
-            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-4xl">
+            <h1 className="font-serif text-4xl font-semibold leading-[1.05] tracking-tight text-white text-balance sm:text-5xl">
               Aktuelle Vermögenswerte
             </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
-              Aktuell{' '}
-              <span className="font-medium text-foreground tabular-nums">
-                {totalDocs} veröffentlichte {totalDocs === 1 ? 'Position' : 'Positionen'}
-              </span>{' '}
-              aus laufenden Insolvenz- und Auflösungsverfahren.
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/65 text-pretty sm:text-lg">
+              Geprüfte Fahrzeuge, Maschinen und Betriebsausstattung aus laufenden Insolvenz- und
+              Auflösungsverfahren entdecken.
             </p>
+
+            <dl className="mt-7 grid max-w-md grid-cols-2 border-y border-white/15">
+              <div className="py-4 pr-4">
+                <dt className="text-xs uppercase tracking-[0.14em] text-white/45">Veröffentlicht</dt>
+                <dd className="mt-1 font-serif text-3xl font-semibold tabular-nums text-white">{totalDocs}</dd>
+              </div>
+              <div className="border-l border-white/15 py-4 pl-5">
+                <dt className="text-xs uppercase tracking-[0.14em] text-white/45">Kategorien</dt>
+                <dd className="mt-1 font-serif text-3xl font-semibold tabular-nums text-white">{aktiveKategorien}</dd>
+              </div>
+            </dl>
           </div>
 
           <Link
             href="/verwertung"
-            className="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+            className="group inline-flex min-h-12 w-fit shrink-0 items-center justify-center gap-2 border border-white/30 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/60"
           >
             So funktioniert die Verwertung
             <ArrowRight
@@ -171,27 +183,29 @@ export default async function KatalogSeite({
       </section>
 
       {/* BESTAND – Kategorien, Filterleiste, Ergebnisse */}
-      <section>
-        <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-12">
-          <KatalogKategorieNav
-            sp={sp}
-            selectedKategorien={selectedKategorien}
-            kategorieCounts={kategorieCounts}
-            alleAnzahl={alleAnzahl}
-          />
-
-          <form method="get" className="mt-5">
-            <KatalogFilter
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 md:pb-12 lg:px-10">
+          <div className="relative -mt-6 bg-background p-4 shadow-sm ring-1 ring-border sm:p-5">
+            <KatalogKategorieNav
               sp={sp}
-              q={q}
               selectedKategorien={selectedKategorien}
-              selectedZustaende={selectedZustaende}
-              selectedPreis={selectedPreis}
-              selectedSort={selectedSort}
-              ansicht={ansicht}
-              totalDocs={totalDocs}
+              kategorieCounts={kategorieCounts}
+              alleAnzahl={alleAnzahl}
             />
-          </form>
+
+            <form method="get" className="mt-5">
+              <KatalogFilter
+                sp={sp}
+                q={q}
+                selectedKategorien={selectedKategorien}
+                selectedZustaende={selectedZustaende}
+                selectedPreis={selectedPreis}
+                selectedSort={selectedSort}
+                ansicht={ansicht}
+                totalDocs={totalDocs}
+              />
+            </form>
+          </div>
 
           <div className="mt-8">
             {totalDocs === 0 ? (

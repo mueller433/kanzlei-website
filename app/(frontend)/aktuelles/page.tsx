@@ -1,6 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
-
 import { NEWS_BEITRAEGE } from '@/lib/kanzlei-daten'
 
 export const metadata = {
@@ -12,16 +10,15 @@ export const metadata = {
 export default function AktuellesSeite() {
   return (
     <div>
-      {/* HERO */}
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+      <section className="border-b border-border bg-muted/35">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             Aktuelles
           </p>
-          <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-foreground text-balance md:text-6xl">
-            Neuigkeiten &amp; Fachbeiträge
+          <h1 className="max-w-4xl font-serif text-[clamp(2.55rem,5vw,4.6rem)] font-semibold leading-[1.02] tracking-tight text-foreground text-balance">
+            Einblicke aus Bewertung und Verwertung
           </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg">
             Fachliche Einblicke und aktuelle Meldungen rund um Insolvenzverfahren, Restrukturierung
             und die strukturierte Verwertung von Vermögenswerten.
           </p>
@@ -30,13 +27,13 @@ export default function AktuellesSeite() {
 
       {/* BEITRÄGE */}
       <section>
-        <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+        <div className="reveal mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {NEWS_BEITRAEGE.map((beitrag) => (
               <Link
                 key={beitrag.slug}
                 href={`/aktuelles/${beitrag.slug}`}
-                className="group flex h-full flex-col gap-5 border border-border bg-card p-8 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:p-10"
+                className="group flex h-full flex-col gap-5 border-t-2 border-accent bg-card p-6 transition-colors hover:bg-muted/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-8"
               >
                 <div className="flex items-center gap-4 text-xs uppercase tracking-[0.16em]">
                   <span className="text-accent">{beitrag.kategorie}</span>

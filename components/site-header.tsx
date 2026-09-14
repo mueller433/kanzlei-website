@@ -38,7 +38,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
         width={800}
         height={400}
         priority
-        className="h-auto w-[184px] object-contain md:w-[232px]"
+        className="h-auto w-[140px] object-contain sm:w-[172px] xl:w-[200px]"
       />
     </Link>
   )
@@ -47,7 +47,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
 // Feste Header-Höhe. Der Header ist durchgängig sehr hell/transparent und
 // liegt daher im normalen Seitenfluss über dem Hero (kein Overlay-Trick
 // nötig, da das Logo immer auf hellem Grund steht).
-export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[104px]'
+export const HEADER_HOEHE_KLASSE = 'h-16 sm:h-20 xl:h-[88px]'
 
 /**
  * Schlanke Utility-Bar oberhalb der Hauptnavigation. Nur ab dem lg-Breakpoint
@@ -57,8 +57,8 @@ export const HEADER_HOEHE_KLASSE = 'h-20 md:h-[104px]'
  */
 function UtilityTopBar() {
   return (
-    <div className="hidden bg-topbar text-topbar-foreground lg:block">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-8 py-2 md:px-16 lg:px-24">
+    <div className="hidden bg-topbar text-topbar-foreground xl:block">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-12 py-2 2xl:px-16">
         <div className="flex items-center gap-4 whitespace-nowrap text-xs font-medium tracking-wide text-topbar-foreground/90">
           <a
             href={KANZLEI.telefon.href}
@@ -84,17 +84,14 @@ function UtilityTopBar() {
             <Clock className="h-3.5 w-3.5 shrink-0 text-topbar-foreground/60" aria-hidden="true" />
             Mo–Fr 8:00–17:00 Uhr
           </span>
-          <span className="text-topbar-foreground/30" aria-hidden="true">
-            ·
-          </span>
-          <Link
-            href="/kontakt?betreff=Verwertungsauftrag"
-            className="group flex items-center gap-1.5 font-semibold text-topbar-highlight transition-opacity hover:opacity-80"
-          >
-            Verwertungsauftrag anfragen
-            <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-          </Link>
         </div>
+        <Link
+          href="/kontakt?betreff=Verwertungsauftrag"
+          className="group flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold tracking-wide text-topbar-highlight transition-opacity hover:opacity-80"
+        >
+          Verwertungsauftrag anfragen
+          <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </Link>
       </div>
     </div>
   )
@@ -104,11 +101,6 @@ export function SiteHeader() {
   const pathname = usePathname()
   const [offen, setOffen] = React.useState(false)
   const [gescrollt, setGescrollt] = React.useState(false)
-
-  // Menü bei Navigationswechsel schließen
-  React.useEffect(() => {
-    setOffen(false)
-  }, [pathname])
 
   // Ruhiges Scrollverhalten: am Seitenanfang transparent & ohne Trennlinie,
   // ab einer kleinen Scrolldistanz kompakter mit dezenter Border/Backdrop.
@@ -133,89 +125,115 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50">
       <UtilityTopBar />
       <header
-        className={`bg-background/85 backdrop-blur transition-[border-color,box-shadow] duration-300 ${
+        className={`relative bg-background/95 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
           kompakt ? 'border-b border-border shadow-sm' : 'border-b border-transparent'
         }`}
       >
         <div
-          className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-8 px-8 md:px-16 lg:px-24`}
+          className={`mx-auto grid ${HEADER_HOEHE_KLASSE} w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-10 xl:px-12 2xl:px-16`}
         >
-          <Logo />
+          <Logo onClick={() => setOffen(false)} />
 
-        <nav aria-label="Hauptnavigation" className="hidden justify-center lg:flex">
-          <ul className="flex items-center gap-14">
-            {NAV_LINKS.map((link) => {
-              const aktiv = istAktiv(pathname, link.href)
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    aria-current={aktiv ? 'page' : undefined}
-                    className={`text-[15px] transition-colors ${
-                      aktiv ? 'text-accent' : 'text-foreground hover:text-accent'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
+          <nav aria-label="Hauptnavigation" className="hidden h-full justify-center xl:flex">
+            <ul className="flex h-full items-center gap-6 2xl:gap-9">
+              {NAV_LINKS.map((link) => {
+                const aktiv = istAktiv(pathname, link.href)
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOffen(false)}
+                      aria-current={aktiv ? 'page' : undefined}
+                      className={`flex h-full items-center border-b-2 px-0.5 text-[15px] font-medium transition-colors ${
+                        aktiv
+                          ? 'border-accent text-accent'
+                          : 'border-transparent text-foreground hover:border-border hover:text-accent'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
 
-        <div className="flex items-center justify-end gap-2">
-          <Link
-            href="/katalog"
-            className="hidden bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-block"
-          >
-            Verwertungskatalog
-          </Link>
+          <div className="flex items-center justify-end gap-2">
+            <Link
+              href="/katalog"
+              aria-current={istAktiv(pathname, '/katalog') ? 'page' : undefined}
+              className="hidden min-h-11 items-center justify-center bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex xl:px-5"
+            >
+              Verwertungskatalog
+            </Link>
 
-          <button
-            type="button"
-            onClick={() => setOffen((v) => !v)}
-            aria-expanded={offen}
-            aria-controls="mobile-navigation"
-            aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
-            className="inline-flex h-10 w-10 items-center justify-center border border-border text-foreground lg:hidden"
-          >
-            {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+            <button
+              type="button"
+              onClick={() => setOffen((v) => !v)}
+              aria-expanded={offen}
+              aria-controls="mobile-navigation"
+              aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
+              className="inline-flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:border-accent hover:text-accent xl:hidden"
+            >
+              {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </div>
 
-      {offen && (
-        <nav
-          id="mobile-navigation"
-          aria-label="Mobile Navigation"
-          className="border-t border-border bg-background lg:hidden"
-        >
-          <ul className="mx-auto flex max-w-6xl flex-col px-6 py-2 md:px-10">
-            {NAV_LINKS.map((link) => {
-              const aktiv = istAktiv(pathname, link.href)
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    aria-current={aktiv ? 'page' : undefined}
-                    className={`block border-b border-border py-3 text-base transition-colors hover:text-accent ${
-                      aktiv ? 'text-accent' : 'text-foreground'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              )
-            })}
-            <li className="py-3">
+        {offen && (
+          <nav
+            id="mobile-navigation"
+            aria-label="Mobile Navigation"
+            className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background shadow-xl sm:max-h-[calc(100dvh-5rem)] xl:hidden"
+          >
+            <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
               <Link
                 href="/katalog"
-                className="inline-block bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
+                onClick={() => setOffen(false)}
+                className="mb-2 inline-flex min-h-12 w-full items-center justify-between bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground sm:hidden"
               >
                 Verwertungskatalog
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              </li>
-            </ul>
+
+              <ul className="flex flex-col">
+                {NAV_LINKS.map((link) => {
+                  const aktiv = istAktiv(pathname, link.href)
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setOffen(false)}
+                        aria-current={aktiv ? 'page' : undefined}
+                        className={`flex min-h-12 items-center justify-between border-b border-border py-3 text-base font-medium transition-colors hover:text-accent ${
+                          aktiv ? 'text-accent' : 'text-foreground'
+                        }`}
+                      >
+                        {link.label}
+                        {aktiv && <span className="h-1.5 w-1.5 bg-accent" aria-hidden="true" />}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+
+              <div className="grid gap-2 border-t border-border pt-4 sm:grid-cols-2">
+                <a
+                  href={KANZLEI.telefon.href}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground hover:text-accent"
+                >
+                  <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
+                  {KANZLEI.telefon.anzeige}
+                </a>
+                <a
+                  href={KANZLEI.email.href}
+                  className="inline-flex min-h-11 items-center gap-2 break-all text-sm font-medium text-foreground hover:text-accent"
+                >
+                  <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                  {KANZLEI.email.anzeige}
+                </a>
+              </div>
+            </div>
           </nav>
         )}
       </header>
