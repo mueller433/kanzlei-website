@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
+import { MerklisteLink } from '@/components/merkliste-link'
 import { KANZLEI } from '@/lib/kanzlei-daten'
 
 export const NAV_LINKS = [
@@ -159,6 +160,8 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center justify-end gap-2">
+            <MerklisteLink />
+
             <Link
               href="/katalog"
               aria-current={istAktiv(pathname, '/katalog') ? 'page' : undefined}
