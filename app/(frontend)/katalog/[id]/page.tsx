@@ -7,6 +7,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import { AssetGalerie, type GalerieBild } from '@/components/asset-galerie'
+import { AusklappbarerInhalt } from '@/components/ausklappbarer-inhalt'
 import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
@@ -80,6 +81,53 @@ function medienObjekte(feld: Posten['bilder']): Media[] {
   return feld.filter((eintrag): eintrag is Media => typeof eintrag === 'object' && eintrag !== null)
 }
 
+function textAusLexicalKnoten(knoten: unknown): string {
+  if (!knoten || typeof knoten !== 'object') return ''
+  const objekt = knoten as Record<string, unknown>
+  const eigenerText = typeof objekt.text === 'string' ? objekt.text : ''
+  const kinderText = Array.isArray(objekt.children)
+    ? objekt.children.map(textAusLexicalKnoten).join(' ')
+    : ''
+  return `${eigenerText} ${kinderText}`.trim()
+}
+
+/**
+ * Normalisiert importierte CMS-Inhalte für die Produktseite. Vorhandene H1
+ * werden zu H2, leere Überschriften entfallen. Zudem werden nur solche
+ * Besichtigungs-/Probefahrt-Absätze entfernt, die eine Besichtigung ohne den
+ * vorgeschriebenen Zahlungseingang in Aussicht stellen.
+ */
+function bereinigteBeschreibung(
+  beschreibung: NonNullable<Posten['beschreibung']>,
+): NonNullable<Posten['beschreibung']> {
+  function bereinige(knoten: unknown): unknown | null {
+    if (!knoten || typeof knoten !== 'object') return knoten
+    const objekt = knoten as Record<string, unknown>
+    const text = textAusLexicalKnoten(objekt).replace(/\s+/g, ' ').trim()
+
+    if (objekt.type === 'heading' && !text) return null
+
+    const nenntBesichtigung = /besichtigung|probefahrt/i.test(text)
+    const erlaubtOhneZahlung = /nach (vorheriger )?absprache|möglich/i.test(text)
+    const bindetAnZahlung = /zahlungseingang|bezahlt|bezahlung|vollständige zahlung/i.test(text)
+    if (objekt.type === 'paragraph' && nenntBesichtigung && erlaubtOhneZahlung && !bindetAnZahlung) {
+      return null
+    }
+
+    const kinder = Array.isArray(objekt.children)
+      ? objekt.children.map(bereinige).filter((kind) => kind !== null)
+      : objekt.children
+
+    return {
+      ...objekt,
+      ...(objekt.type === 'heading' && objekt.tag === 'h1' ? { tag: 'h2' } : {}),
+      ...(Array.isArray(objekt.children) ? { children: kinder } : {}),
+    }
+  }
+
+  return bereinige(beschreibung) as NonNullable<Posten['beschreibung']>
+}
+
 /** Lädt das einzelne, veröffentlichte Dokument – oder null, wenn nicht vorhanden/nicht öffentlich. */
 async function ladePosten(id: string): Promise<Posten | null> {
   const payloadConfig = await config
@@ -113,6 +161,7 @@ async function ladeAehnlichePositionen(posten: Posten): Promise<Posten[]> {
     where: {
       and: [
         { veroeffentlicht: { equals: true } },
+        { status: { equals: 'verfuegbar' } },
         { kategorie: { equals: posten.kategorie } },
         { id: { not_equals: posten.id } },
       ],
@@ -129,6 +178,7 @@ async function ladeAehnlichePositionen(posten: Posten): Promise<Posten[]> {
     where: {
       and: [
         { veroeffentlicht: { equals: true } },
+        { status: { equals: 'verfuegbar' } },
         { id: { not_equals: posten.id } },
         { id: { not_in: passende.map((p) => p.id) } },
       ],
@@ -173,6 +223,7 @@ export default async function AssetDetailSeite({
     .map((m) => ({ url: m.url as string, alt: posten.titel }))
 
   const dokumente = medienObjekte(posten.dokumente).filter((m) => typeof m.url === 'string')
+  const beschreibung = posten.beschreibung ? bereinigteBeschreibung(posten.beschreibung) : null
 
   const hatNettoPreis = !posten.preisAufAnfrage && typeof posten.preis === 'number'
 
@@ -189,17 +240,16 @@ export default async function AssetDetailSeite({
     posten.standort ? { label: 'Standort', wert: posten.standort } : null,
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
 
-  // Eckdaten-Tabelle: echte Verwertungs-Details ohne Dopplungen zu Titel-Block/Kacheln
+  // Ergänzende Eckdaten ohne Wiederholung von Kaufpreis und Stückzahl aus der Kaufbox.
   const eckdaten = [
-    hatNettoPreis
-      ? {
-          label: 'Preis (brutto, inkl. 19 % USt.)',
-          wert: formatiertePreis(Math.round((posten.preis as number) * 1.19)),
-        }
-      : null,
-    { label: 'Stückzahl', wert: `${posten.stueckzahl} Stück` },
     { label: 'Pos.-Nr.', wert: positionsnummer(posten.id) },
+    { label: 'Kategorie', wert: KATEGORIE_LABELS[posten.kategorie] },
+    posten.standort
+      ? { label: 'Standort', wert: posten.standort }
+      : { label: 'Zustand', wert: ZUSTAND_LABELS[posten.zustand] },
   ].filter((eintrag): eintrag is { label: string; wert: string } => Boolean(eintrag))
+
+  const kontaktBetreff = `Frage zu ${positionsnummer(posten.id)} – ${posten.titel}`
 
   return (
     <div>
@@ -243,9 +293,17 @@ export default async function AssetDetailSeite({
               </h1>
 
               {posten.kurzspezifikation && (
-                <p className="mt-4 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg">
-                  {posten.kurzspezifikation}
-                </p>
+                <div className="mt-4">
+                  <p className="line-clamp-4 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg lg:line-clamp-5">
+                    {posten.kurzspezifikation}
+                  </p>
+                  <a
+                    href="#produktbeschreibung"
+                    className="mt-2 inline-flex min-h-10 items-center text-sm font-semibold text-accent hover:underline hover:underline-offset-4"
+                  >
+                    Vollständige Beschreibung ansehen
+                  </a>
+                </div>
               )}
 
               <div className="mt-6 border-y border-border py-5">
@@ -287,11 +345,21 @@ export default async function AssetDetailSeite({
                   />
                 )}
 
+                {posten.status === 'verkauft' && aehnlichePositionen.length > 0 && (
+                  <a
+                    href="#aehnliche-positionen"
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+                  >
+                    Ähnliche Positionen ansehen
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                )}
+
                 <Link
-                  href="/kontakt"
+                  href={{ pathname: '/kontakt', query: { betreff: kontaktBetreff } }}
                   className="group inline-flex min-h-12 w-full items-center justify-center gap-2 border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
                 >
-                  Frage zur Position
+                  {posten.status === 'reserviert' ? 'Interesse vormerken' : 'Frage zur Position'}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
@@ -354,7 +422,7 @@ export default async function AssetDetailSeite({
       </section>
 
       {/* CMS-Beschreibung + kompakte Eckdaten */}
-      <section className="border-t border-border bg-[#f4f0e8]">
+      <section id="produktbeschreibung" className="scroll-mt-28 border-t border-border bg-[#f4f0e8]">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
           <div className="mb-7 sm:mb-9">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
@@ -384,10 +452,12 @@ export default async function AssetDetailSeite({
           )}
 
           <div className="border border-border bg-card p-5 shadow-[0_18px_50px_-42px_rgba(23,19,15,0.45)] sm:p-8 lg:p-10">
-            {posten.beschreibung ? (
-              <div className="max-w-5xl text-[15px] leading-7 text-muted-foreground sm:text-base sm:leading-8 [&_a]:font-medium [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:border-b [&_h2]:border-border [&_h2]:pb-3 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h2:first-child]:mt-0 [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-foreground [&_ol]:my-6 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:mb-5 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-foreground [&_ul]:my-6 [&_ul]:grid [&_ul]:list-none [&_ul]:gap-2 [&_ul]:pl-0 sm:[&_ul]:grid-cols-2 [&_ul_li]:relative [&_ul_li]:m-0 [&_ul_li]:border-l-2 [&_ul_li]:border-accent/35 [&_ul_li]:bg-[#f8f5ef] [&_ul_li]:px-4 [&_ul_li]:py-2.5 [&_ul_li]:leading-6">
-                <RichText data={posten.beschreibung} />
-              </div>
+            {beschreibung ? (
+              <AusklappbarerInhalt>
+                <div className="max-w-5xl text-[15px] leading-7 text-muted-foreground sm:text-base sm:leading-8 [&_a]:font-medium [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_h1]:mb-4 [&_h1]:mt-10 [&_h1]:border-b [&_h1]:border-border [&_h1]:pb-3 [&_h1]:font-serif [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:text-foreground [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:border-b [&_h2]:border-border [&_h2]:pb-3 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h2:first-child]:mt-0 [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-foreground [&_ol]:my-6 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:mb-5 [&_p:empty]:hidden [&_p:has(>_strong:only-child)]:mb-1 [&_p:has(>_strong:only-child)]:mt-5 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-foreground [&_ul]:my-6 [&_ul]:grid [&_ul]:list-none [&_ul]:gap-2 [&_ul]:pl-0 sm:[&_ul]:grid-cols-2 [&_ul_li]:relative [&_ul_li]:m-0 [&_ul_li]:border-l-2 [&_ul_li]:border-accent/35 [&_ul_li]:bg-[#f8f5ef] [&_ul_li]:px-4 [&_ul_li]:py-2.5 [&_ul_li]:leading-6">
+                  <RichText data={beschreibung} />
+                </div>
+              </AusklappbarerInhalt>
             ) : (
               <p className="max-w-3xl leading-relaxed text-muted-foreground">
                 Für diese Position liegt derzeit keine ausführliche Beschreibung vor. Sprechen Sie
@@ -426,7 +496,7 @@ export default async function AssetDetailSeite({
       </section>
 
       {aehnlichePositionen.length > 0 && (
-        <section className="border-t border-border">
+        <section id="aehnliche-positionen" className="scroll-mt-28 border-t border-border">
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <h2 className="font-serif text-2xl text-foreground md:text-3xl">
@@ -453,6 +523,7 @@ export default async function AssetDetailSeite({
         titel="Interesse an dieser Position?"
         text={`Sie möchten „${posten.titel}“ genauer prüfen oder ein Angebot abgeben? Sprechen Sie uns an – wir begleiten die Verwertung transparent und beantworten Ihre Fragen.`}
         buttonLabel="Anfrage stellen"
+        href={{ pathname: '/kontakt', query: { betreff: kontaktBetreff } }}
       />
     </div>
   )
