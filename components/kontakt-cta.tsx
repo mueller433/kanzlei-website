@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import React from 'react'
 
 /**
@@ -12,11 +12,13 @@ export function KontaktCta({
   text = 'Wir ordnen Ihre Situation ein und zeigen Ihnen die möglichen nächsten Schritte – vertraulich und unverbindlich.',
   buttonLabel = 'Kontakt aufnehmen',
   eyebrow,
+  href = '/kontakt',
 }: {
   titel?: string
   text?: string
   buttonLabel?: string
   eyebrow?: string
+  href?: LinkProps['href']
 }) {
   return (
     <section className="border-t border-border">
@@ -34,7 +36,7 @@ export function KontaktCta({
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-pretty">{text}</p>
           </div>
           <Link
-            href="/kontakt"
+            href={href}
             className="cta-button-verzoegert group inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
           >
             {buttonLabel}
