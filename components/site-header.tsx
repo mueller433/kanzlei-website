@@ -84,17 +84,14 @@ function UtilityTopBar() {
             <Clock className="h-3.5 w-3.5 shrink-0 text-topbar-foreground/60" aria-hidden="true" />
             Mo–Fr 8:00–17:00 Uhr
           </span>
-          <span className="text-topbar-foreground/30" aria-hidden="true">
-            ·
-          </span>
-          <Link
-            href="/kontakt?betreff=Verwertungsauftrag"
-            className="group flex items-center gap-1.5 font-semibold text-topbar-highlight transition-opacity hover:opacity-80"
-          >
-            Verwertungsauftrag anfragen
-            <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-          </Link>
         </div>
+        <Link
+          href="/kontakt?betreff=Verwertungsauftrag"
+          className="group flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold tracking-wide text-topbar-highlight transition-opacity hover:opacity-80"
+        >
+          Verwertungsauftrag anfragen
+          <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </Link>
       </div>
     </div>
   )
@@ -128,7 +125,7 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50">
       <UtilityTopBar />
       <header
-        className={`bg-background/85 backdrop-blur transition-[border-color,box-shadow] duration-300 ${
+        className={`relative bg-background/95 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
           kompakt ? 'border-b border-border shadow-sm' : 'border-b border-transparent'
         }`}
       >
@@ -137,8 +134,8 @@ export function SiteHeader() {
         >
           <Logo onClick={() => setOffen(false)} />
 
-          <nav aria-label="Hauptnavigation" className="hidden justify-center xl:flex">
-            <ul className="flex items-center gap-6 2xl:gap-10">
+          <nav aria-label="Hauptnavigation" className="hidden h-full justify-center xl:flex">
+            <ul className="flex h-full items-center gap-6 2xl:gap-9">
               {NAV_LINKS.map((link) => {
                 const aktiv = istAktiv(pathname, link.href)
                 return (
@@ -147,8 +144,10 @@ export function SiteHeader() {
                       href={link.href}
                       onClick={() => setOffen(false)}
                       aria-current={aktiv ? 'page' : undefined}
-                      className={`text-[15px] transition-colors ${
-                        aktiv ? 'text-accent' : 'text-foreground hover:text-accent'
+                      className={`flex h-full items-center border-b-2 px-0.5 text-[15px] font-medium transition-colors ${
+                        aktiv
+                          ? 'border-accent text-accent'
+                          : 'border-transparent text-foreground hover:border-border hover:text-accent'
                       }`}
                     >
                       {link.label}
@@ -159,61 +158,82 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-        <div className="flex items-center justify-end gap-2">
-          <Link
-            href="/katalog"
-            className="hidden min-h-11 items-center bg-accent px-4 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 sm:inline-flex xl:px-5"
-          >
-            Verwertungskatalog
-          </Link>
+          <div className="flex items-center justify-end gap-2">
+            <Link
+              href="/katalog"
+              aria-current={istAktiv(pathname, '/katalog') ? 'page' : undefined}
+              className="hidden min-h-11 items-center justify-center bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex xl:px-5"
+            >
+              Verwertungskatalog
+            </Link>
 
-          <button
-            type="button"
-            onClick={() => setOffen((v) => !v)}
-            aria-expanded={offen}
-            aria-controls="mobile-navigation"
-            aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
-            className="inline-flex h-11 w-11 items-center justify-center border border-border text-foreground xl:hidden"
-          >
-            {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+            <button
+              type="button"
+              onClick={() => setOffen((v) => !v)}
+              aria-expanded={offen}
+              aria-controls="mobile-navigation"
+              aria-label={offen ? 'Menü schließen' : 'Menü öffnen'}
+              className="inline-flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:border-accent hover:text-accent xl:hidden"
+            >
+              {offen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </div>
 
-      {offen && (
-        <nav
-          id="mobile-navigation"
-          aria-label="Mobile Navigation"
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background xl:hidden"
-        >
-          <ul className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6 lg:px-10">
-            {NAV_LINKS.map((link) => {
-              const aktiv = istAktiv(pathname, link.href)
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOffen(false)}
-                    aria-current={aktiv ? 'page' : undefined}
-                    className={`block border-b border-border py-3 text-base transition-colors hover:text-accent ${
-                      aktiv ? 'text-accent' : 'text-foreground'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              )
-            })}
-            <li className="py-3">
+        {offen && (
+          <nav
+            id="mobile-navigation"
+            aria-label="Mobile Navigation"
+            className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background shadow-xl sm:max-h-[calc(100dvh-5rem)] xl:hidden"
+          >
+            <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
               <Link
                 href="/katalog"
                 onClick={() => setOffen(false)}
-                className="inline-block bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
+                className="mb-2 inline-flex min-h-12 w-full items-center justify-between bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground sm:hidden"
               >
                 Verwertungskatalog
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              </li>
-            </ul>
+
+              <ul className="flex flex-col">
+                {NAV_LINKS.map((link) => {
+                  const aktiv = istAktiv(pathname, link.href)
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setOffen(false)}
+                        aria-current={aktiv ? 'page' : undefined}
+                        className={`flex min-h-12 items-center justify-between border-b border-border py-3 text-base font-medium transition-colors hover:text-accent ${
+                          aktiv ? 'text-accent' : 'text-foreground'
+                        }`}
+                      >
+                        {link.label}
+                        {aktiv && <span className="h-1.5 w-1.5 bg-accent" aria-hidden="true" />}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+
+              <div className="grid gap-2 border-t border-border pt-4 sm:grid-cols-2">
+                <a
+                  href={KANZLEI.telefon.href}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground hover:text-accent"
+                >
+                  <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
+                  {KANZLEI.telefon.anzeige}
+                </a>
+                <a
+                  href={KANZLEI.email.href}
+                  className="inline-flex min-h-11 items-center gap-2 break-all text-sm font-medium text-foreground hover:text-accent"
+                >
+                  <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                  {KANZLEI.email.anzeige}
+                </a>
+              </div>
+            </div>
           </nav>
         )}
       </header>
