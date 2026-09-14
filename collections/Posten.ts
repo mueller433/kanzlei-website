@@ -1,3 +1,4 @@
+import { HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { CollectionConfig } from 'payload'
 
 export const Posten: CollectionConfig = {
@@ -31,6 +32,16 @@ export const Posten: CollectionConfig = {
     {
       name: 'beschreibung',
       type: 'richText',
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+        ],
+      }),
+      admin: {
+        description:
+          'Ausführliche Produktdetails. Für Abschnitte bitte Überschrift 2 oder 3 verwenden; der Produkttitel ist bereits die Hauptüberschrift.',
+      },
     },
     {
       name: 'kategorie',
