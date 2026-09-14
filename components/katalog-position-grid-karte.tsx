@@ -2,16 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 
 import { MerklisteButton } from '@/components/merkliste-button'
-import { ersteBildUrl, KATEGORIE_LABELS, STATUS_LABELS } from '@/lib/katalog'
+import { ersteBildUrl, formatierterBruttopreis, KATEGORIE_LABELS, STATUS_LABELS } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
-
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
-}
 
 const STATUS_BADGE_KLASSE: Record<Posten['status'], string> = {
   verfuegbar: 'border-accent/40 bg-accent/10 text-accent',
@@ -31,7 +23,7 @@ export function KatalogPositionGridKarte({ posten }: { posten: Posten }) {
   const preisText = posten.preisAufAnfrage
     ? 'Auf Anfrage'
     : typeof posten.preis === 'number'
-      ? formatiertePreis(Math.round(posten.preis * 1.19))
+      ? formatierterBruttopreis(posten.preis)
       : '—'
 
   const merklistenPosition = {
