@@ -43,7 +43,7 @@ const FOOTER_SPALTEN: FooterSpalte[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 bg-[#17130f] text-white sm:mt-20">
+    <footer className="mt-16 bg-accent text-accent-foreground sm:mt-20">
       <div className="border-b border-white/12">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-9 sm:px-6 sm:py-11 lg:grid-cols-[1fr_auto] lg:items-center lg:px-10">
           <div>
@@ -57,7 +57,7 @@ export function SiteFooter() {
           <div className="grid gap-3 sm:flex">
             <Link
               href="/katalog"
-              className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+              className="inline-flex min-h-12 items-center justify-center gap-2 bg-white px-5 py-3 text-sm font-semibold text-accent transition-opacity hover:opacity-90"
             >
               Katalog ansehen <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
@@ -93,22 +93,22 @@ export function SiteFooter() {
             </p>
             <address className="mt-5 flex flex-col gap-2.5 text-sm not-italic text-white/70">
               <span className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/75" aria-hidden="true" />
                 <span>{KANZLEI.adresse.strasse}, {KANZLEI_ORT}</span>
               </span>
               <a href={KANZLEI.telefon.href} className="flex items-center gap-2.5 hover:text-white">
-                <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                <Phone className="h-4 w-4 shrink-0 text-white/75" aria-hidden="true" />
                 {KANZLEI.telefon.anzeige}
               </a>
               <a
                 href={KANZLEI.email.href}
                 className="flex items-center gap-2.5 break-all hover:text-white"
               >
-                <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                <Mail className="h-4 w-4 shrink-0 text-white/75" aria-hidden="true" />
                 {KANZLEI.email.anzeige}
               </a>
               <span className="flex items-center gap-2.5">
-                <Clock className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                <Clock className="h-4 w-4 shrink-0 text-white/75" aria-hidden="true" />
                 Mo–Fr · 8:00–17:00 Uhr
               </span>
             </address>

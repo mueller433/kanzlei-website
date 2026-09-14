@@ -330,12 +330,12 @@ export default async function VerwertungSeite() {
         buttonLabel="Anfrage stellen"
       />
 
-      {/* B2B-BANNER – gezielt an Insolvenzverwalter und Verfahrensbeteiligte, dunkel abgesetzt */}
-      <section className="border-b border-border bg-foreground">
+      {/* B2B-BANNER – gezielt an Insolvenzverwalter und Verfahrensbeteiligte */}
+      <section className="border-b border-accent/20 bg-accent">
         <div className="reveal mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-24">
           <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-5 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              <p className="mb-5 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-white/65">
                 <Search className="h-3.5 w-3.5" aria-hidden="true" />
                 Für Insolvenzverwalter
               </p>
@@ -344,12 +344,12 @@ export default async function VerwertungSeite() {
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-background/70 text-pretty">
                 Wir übernehmen die strukturierte Erfassung, Bewertung und Verwertung von
-                Vermögenswerten – rechtssicher, transparent und erlösoptimiert.
+                Vermögenswerten – nachvollziehbar, transparent und marktorientiert.
               </p>
             </div>
             <Link
               href="/kontakt?betreff=Verwertungsauftrag"
-              className="group inline-flex shrink-0 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              className="group inline-flex shrink-0 items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-semibold text-accent transition-opacity hover:opacity-90"
             >
               Verwertungsauftrag anfragen
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

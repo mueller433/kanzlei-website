@@ -140,13 +140,13 @@ export default async function KatalogSeite({
   return (
     <div>
       {/* INTRO – markanter Marketplace-Einstieg mit dynamischer Bestandsanzeige */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#17130f] text-white">
-        <div className="absolute -right-24 -top-28 h-80 w-80 rounded-full bg-accent/20 blur-3xl" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-accent/20 bg-accent text-accent-foreground">
+        <div className="absolute -right-24 -top-28 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-0 right-[18%] h-px w-72 bg-gradient-to-r from-transparent via-white/25 to-transparent" aria-hidden="true" />
 
         <div className="relative mx-auto grid max-w-7xl gap-8 px-4 pb-14 pt-10 sm:px-6 sm:pb-16 sm:pt-12 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10 lg:pb-20 lg:pt-16">
           <div className="max-w-3xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#c56a80]">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
               Verwertung · Katalog
             </p>
             <h1 className="font-serif text-4xl font-semibold leading-[1.05] tracking-tight text-white text-balance sm:text-5xl">

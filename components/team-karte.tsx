@@ -51,15 +51,15 @@ function TeamPortraet({
 /** Team-Karte im Grid-Format (Startseite, Abschnitt "Team"). */
 export function TeamKarte({ person }: { person: TeamMitglied }) {
   return (
-    <div className="flex flex-col gap-4 border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:border-accent hover:shadow-md">
+    <div className="flex min-w-0 flex-col gap-4 border border-border bg-card p-5 transition-colors duration-200 hover:border-accent sm:p-6">
       <TeamPortraet person={person} groesse="karte" />
-      <div className="flex flex-col gap-1">
+      <div className="flex min-w-0 flex-col gap-1">
         <span className="font-serif text-lg leading-snug text-card-foreground">{person.name}</span>
         <span className="text-sm text-accent">{person.rolle}</span>
         {person.email && (
           <a
             href={`mailto:${person.email}`}
-            className="text-sm text-muted-foreground/80 transition-colors hover:text-accent"
+            className="break-all text-sm text-muted-foreground/80 transition-colors hover:text-accent"
           >
             {person.email}
           </a>

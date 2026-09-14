@@ -42,7 +42,7 @@ export default async function KontaktSeite({
 
   return (
     <div>
-      <section className="border-b border-border bg-[#17130f] text-white">
+      <section className="border-b border-accent/20 bg-accent text-accent-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_0.65fr] lg:items-end lg:gap-16 lg:px-10 lg:py-20">
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
@@ -57,7 +57,7 @@ export default async function KontaktSeite({
             </p>
           </div>
 
-          <div className="border-l-2 border-accent bg-white/5 px-5 py-5 sm:px-6">
+          <div className="border-l-2 border-white/70 bg-white/10 px-5 py-5 sm:px-6">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/55">
               Direkter Kontakt
             </p>
@@ -68,7 +68,7 @@ export default async function KontaktSeite({
               {KANZLEI.telefon.anzeige}
             </a>
             <p className="mt-2 flex items-center gap-2 text-sm text-white/65">
-              <Clock className="h-4 w-4 text-accent" aria-hidden="true" />
+              <Clock className="h-4 w-4 text-white/80" aria-hidden="true" />
               Montag bis Freitag · 8:00–17:00 Uhr
             </p>
           </div>

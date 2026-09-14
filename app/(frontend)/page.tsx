@@ -118,7 +118,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
           </div>
         )}
         <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
-          <span className="border border-white/40 bg-[#17130f]/85 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm">
+          <span className="border border-white/40 bg-accent/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur-sm">
             {STATUS_LABELS[posten.status]}
           </span>
           <span className="max-w-[60%] bg-card/95 px-2.5 py-1 text-right text-[11px] font-medium text-foreground backdrop-blur-sm">
@@ -195,7 +195,7 @@ export default async function Startseite() {
   }))
   return (
     <div>
-      <section className="relative border-b border-border bg-[#17130f]">
+      <section className="relative border-b border-border bg-muted">
         <div className="relative min-h-[500px] overflow-hidden lg:min-h-[540px]">
           <Image
             src="/images/hero-marketplace-v2.webp"
@@ -205,7 +205,7 @@ export default async function Startseite() {
             sizes="100vw"
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#17130f]/95 via-[#17130f]/60 to-[#17130f]/25 lg:hidden" aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-t from-accent/95 via-accent/65 to-accent/20 lg:hidden" aria-hidden="true" />
           <div className="absolute inset-y-0 right-0 hidden w-[60%] bg-[#7a1f32]/94 [clip-path:polygon(16%_0,100%_0,100%_100%,0_100%)] lg:block" aria-hidden="true" />
           <div className="absolute inset-y-0 right-0 hidden w-[42%] bg-gradient-to-r from-transparent to-[#4d1020]/45 lg:block" aria-hidden="true" />
 
@@ -224,7 +224,7 @@ export default async function Startseite() {
               <div className="mt-7 grid gap-3 sm:flex">
                 <Link
                   href="/katalog"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17130f] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-semibold text-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   Vermögenswerte kaufen <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
@@ -346,7 +346,7 @@ export default async function Startseite() {
                         {anzahl} {anzahl === 1 ? 'Position' : 'Positionen'}
                       </p>
                     </div>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/50 bg-black/15 text-white transition-colors group-hover:border-white group-hover:bg-white group-hover:text-foreground">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/50 bg-accent/60 text-white transition-colors group-hover:border-white group-hover:bg-white group-hover:text-foreground">
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </span>
                   </div>
@@ -401,7 +401,7 @@ export default async function Startseite() {
       </section>
 
       {/* PROFESSIONELLE VERWERTUNG */}
-      <section className="border-b border-border bg-[#17130f] text-white">
+      <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-7xl lg:grid-cols-[0.92fr_1.08fr]">
           <div className="relative min-h-[280px] overflow-hidden sm:min-h-[360px] lg:min-h-full">
             <Image
@@ -411,30 +411,30 @@ export default async function Startseite() {
               sizes="(max-width: 1024px) 100vw, 46vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#17130f]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#17130f]/25" aria-hidden="true" />
-            <div className="absolute bottom-4 left-4 border border-white/30 bg-[#17130f]/75 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm sm:bottom-6 sm:left-6">
+            <div className="absolute inset-0 bg-gradient-to-t from-accent/45 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-accent/15" aria-hidden="true" />
+            <div className="absolute bottom-4 left-4 border border-white/40 bg-accent/85 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white backdrop-blur-sm sm:bottom-6 sm:left-6">
               Erfassung · Bewertung · Vermarktung
             </div>
           </div>
 
           <div className="px-4 py-9 sm:px-8 sm:py-12 lg:px-12 lg:py-16">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#c56a80]">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               Verwertungsdienstleistung
             </p>
-            <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl">
+            <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Professionelle Verwertung aus einer Hand
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
               DPSS begleitet Vermögenswerte von der strukturierten Aufnahme bis zur nachvollziehbar
               dokumentierten Abwicklung.
             </p>
 
-            <ol className="mt-7 border-t border-white/15">
+            <ol className="mt-7 border-t border-border">
               {[WARUM_DPSS[0], WARUM_DPSS[1], WARUM_DPSS[2], WARUM_DPSS[4]].map((punkt) => (
-                <li key={punkt.nummer} className="grid grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 py-4 sm:grid-cols-[2.75rem_0.9fr_1.25fr] sm:items-start sm:gap-4">
-                  <span className="font-serif text-lg text-[#c56a80]">{punkt.nummer}</span>
-                  <h3 className="font-semibold leading-snug text-white">{punkt.titel}</h3>
-                  <p className="col-start-2 text-sm leading-relaxed text-white/65 sm:col-start-3">
+                <li key={punkt.nummer} className="grid grid-cols-[2.25rem_1fr] gap-3 border-b border-border py-4 sm:grid-cols-[2.75rem_0.9fr_1.25fr] sm:items-start sm:gap-4">
+                  <span className="font-serif text-lg text-accent">{punkt.nummer}</span>
+                  <h3 className="font-semibold leading-snug text-foreground">{punkt.titel}</h3>
+                  <p className="col-start-2 text-sm leading-relaxed text-muted-foreground sm:col-start-3">
                     {punkt.text}
                   </p>
                 </li>
@@ -450,7 +450,7 @@ export default async function Startseite() {
               </Link>
               <Link
                 href="/verwertung"
-                className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/30 px-6 py-3 text-sm font-medium text-white transition-colors hover:border-white/60"
+                className="inline-flex min-h-12 items-center justify-center gap-2 border border-accent px-6 py-3 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 Leistung kennenlernen <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
@@ -608,47 +608,47 @@ export default async function Startseite() {
       </section>
 
       {/* ABSCHLUSS-CTA */}
-      <section className="-mb-24 border-t border-white/10 bg-[#17130f] text-white">
+      <section className="border-t border-border bg-muted/35">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
           <div className="mb-7 max-w-2xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#c56a80]">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               Nächster Schritt
             </p>
-            <h2 className="font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl">
+            <h2 className="font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Kaufen oder professionell verwerten
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-white/65">
+            <p className="mt-3 text-base leading-relaxed text-muted-foreground">
               Wählen Sie den passenden Einstieg für Ihr Anliegen.
             </p>
           </div>
 
-          <div className="grid gap-px border border-white/15 bg-white/15 md:grid-cols-2">
-            <div className="flex flex-col bg-[#17130f] p-5 sm:p-7 lg:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c56a80]">
+          <div className="grid gap-px border border-border bg-border md:grid-cols-2">
+            <div className="flex flex-col bg-card p-5 sm:p-7 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
                 Für Käufer
               </p>
-              <h3 className="mt-3 font-serif text-2xl font-semibold text-white">
+              <h3 className="mt-3 font-serif text-2xl font-semibold text-foreground">
                 Vermögenswerte entdecken
               </h3>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
                 Aktuelle Fahrzeuge, Maschinen und weitere Positionen durchsuchen und direkt anfragen.
               </p>
               <Link
                 href="/katalog"
-                className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-white px-6 py-3 text-sm font-semibold text-[#17130f] transition-colors hover:bg-white/90 sm:w-fit"
+                className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 sm:w-fit"
               >
                 Zum Verwertungskatalog <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
 
-            <div className="flex flex-col bg-[#17130f] p-5 sm:p-7 lg:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c56a80]">
+            <div className="flex flex-col bg-card p-5 sm:p-7 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
                 Für Auftraggeber
               </p>
-              <h3 className="mt-3 font-serif text-2xl font-semibold text-white">
+              <h3 className="mt-3 font-serif text-2xl font-semibold text-foreground">
                 Verwertung anfragen
               </h3>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
                 Sprechen Sie mit DPSS über die Erfassung, Bewertung, Vermarktung und Abwicklung Ihrer Vermögenswerte.
               </p>
               <Link
