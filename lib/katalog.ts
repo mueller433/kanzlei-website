@@ -80,6 +80,26 @@ export function toArray(value: string | string[] | undefined): string[] {
   return Array.isArray(value) ? value : [value]
 }
 
+const UMSATZSTEUER_SATZ = 0.19
+
+/**
+ * Berechnet aus dem im CMS gepflegten Nettopreis den Bruttopreis und rundet
+ * erst das Endergebnis auf den nächsten vollen 100-Euro-Betrag auf.
+ */
+export function gerundeterBruttopreis(preisNetto: number): number {
+  const bruttoInCent = Math.round(preisNetto * 100 * (1 + UMSATZSTEUER_SATZ))
+  return Math.ceil(bruttoInCent / 10_000) * 100
+}
+
+/** Einheitliche, kaufmännische Preisausgabe für alle öffentlichen Ansichten. */
+export function formatierterBruttopreis(preisNetto: number): string {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(gerundeterBruttopreis(preisNetto))
+}
+
 export type Status = 'verfuegbar' | 'reserviert' | 'verkauft'
 
 export const STATUS_LABELS: Record<Status, string> = {
