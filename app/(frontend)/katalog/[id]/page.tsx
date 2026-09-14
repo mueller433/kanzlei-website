@@ -21,6 +21,29 @@ const STATUS_LABELS: Record<Posten['status'], string> = {
   verkauft: 'Verkauft',
 }
 
+const KAUFABWICKLUNG = [
+  {
+    nummer: '01',
+    titel: 'Kaufanfrage senden',
+    text: 'Kontaktdaten und erforderliche Nachweise über das Sofortkauf-Formular übermitteln.',
+  },
+  {
+    nummer: '02',
+    titel: 'Prüfung und Bestätigung',
+    text: 'DPSS prüft Verfügbarkeit, Käuferdaten und die Bedingungen der angefragten Position.',
+  },
+  {
+    nummer: '03',
+    titel: 'Rechnung und Überweisung',
+    text: 'Nach Bestätigung erhalten Sie die Rechnung. Die Zahlung erfolgt ausschließlich per Überweisung.',
+  },
+  {
+    nummer: '04',
+    titel: 'Termin und Übergabe',
+    text: 'Besichtigung beziehungsweise Abholung erfolgt nach Zahlungseingang und Terminvereinbarung.',
+  },
+] as const
+
 function formatiertePreis(preis: number): string {
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
@@ -197,7 +220,7 @@ export default async function AssetDetailSeite({
           */}
           <div className="flex min-w-0 flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start lg:gap-10 xl:gap-14">
             {/* Kauf- und Informationsbox */}
-            <aside className="order-1 min-w-0 overflow-hidden border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
+            <aside id="kaufanfrage" className="order-1 min-w-0 scroll-mt-32 overflow-hidden border border-border bg-card p-4 shadow-sm sm:p-6 lg:order-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 xl:top-[7.5rem]">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                 Verwertung · Katalog · {KATEGORIE_LABELS[posten.kategorie]}
               </p>
@@ -273,6 +296,59 @@ export default async function AssetDetailSeite({
             {/* Bildergalerie */}
             <div className="order-2 min-w-0 lg:order-1 lg:col-start-1 lg:row-start-1">
               <AssetGalerie bilder={bilder} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Kaufabwicklung */}
+      <section className="border-y border-border bg-muted/35">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+              Kaufabwicklung
+            </p>
+            <h2 className="mt-3 font-serif text-3xl leading-tight text-foreground sm:text-4xl">
+              In vier klaren Schritten zum Kauf
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Die Kaufanfrage startet die Prüfung der Position und Ihrer Angaben. Sie stellt noch
+              keinen verbindlichen Kaufvertrag dar.
+            </p>
+          </div>
+
+          <ol className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {KAUFABWICKLUNG.map((schritt) => (
+              <li key={schritt.nummer} className="border-t-2 border-accent bg-card p-5 sm:p-6">
+                <span className="font-serif text-2xl text-accent">{schritt.nummer}</span>
+                <h3 className="mt-4 font-serif text-xl leading-snug text-foreground">
+                  {schritt.titel}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {schritt.text}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-5 grid border border-border bg-card sm:grid-cols-3">
+            <div className="border-b border-border p-4 sm:border-b-0 sm:border-r sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Zahlung</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Ausschließlich per Überweisung. Keine Barzahlung.
+              </p>
+            </div>
+            <div className="border-b border-border p-4 sm:border-b-0 sm:border-r sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Termin</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Besichtigung und Abholung erst nach vollständigem Zahlungseingang.
+              </p>
+            </div>
+            <div className="p-4 sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-accent">Hinweis</p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">
+                Verkauf vorbehaltlich Verfügbarkeit, Prüfung und Bestätigung durch DPSS.
+              </p>
             </div>
           </div>
         </div>
