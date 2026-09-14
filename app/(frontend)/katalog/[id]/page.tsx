@@ -9,6 +9,7 @@ import React from 'react'
 import { AssetGalerie, type GalerieBild } from '@/components/asset-galerie'
 import { AusklappbarerInhalt } from '@/components/ausklappbarer-inhalt'
 import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-karte'
+import { MerklisteButton } from '@/components/merkliste-button'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
 import { KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
@@ -346,6 +347,17 @@ export default async function AssetDetailSeite({
                     standort={posten.standort}
                   />
                 )}
+
+                <MerklisteButton
+                  variante="detail"
+                  position={{
+                    id: String(posten.id),
+                    titel: posten.titel,
+                    bildUrl: bilder[0]?.url,
+                    preisText,
+                    standort: posten.standort || undefined,
+                  }}
+                />
 
                 {posten.status === 'verkauft' && aehnlichePositionen.length > 0 && (
                   <a
