@@ -19,6 +19,9 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
   // Touch-Swipe auf Mobile: horizontale Wischgeste wechselt das Bild.
   // Muss vor jedem bedingten `return` stehen (Rules of Hooks).
   const touchStartX = React.useRef<number | null>(null)
+  const oeffnerRef = React.useRef<HTMLButtonElement>(null)
+  const dialogRef = React.useRef<HTMLDivElement>(null)
+  const schliessenRef = React.useRef<HTMLButtonElement>(null)
   const anzahl = bilder.length
   const zeigeNavigation = anzahl > 1
   const aktuelles = bilder[aktiv]
@@ -30,6 +33,11 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
     },
     [anzahl],
   )
+
+  const schliesseVorschau = React.useCallback(() => {
+    setVorschauOffen(false)
+    requestAnimationFrame(() => oeffnerRef.current?.focus())
+  }, [])
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
@@ -48,18 +56,35 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
     if (!vorschauOffen) return
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setVorschauOffen(false)
+      if (event.key === 'Escape') schliesseVorschau()
       if (event.key === 'ArrowLeft' && zeigeNavigation) zeige(aktiv - 1)
       if (event.key === 'ArrowRight' && zeigeNavigation) zeige(aktiv + 1)
+      if (event.key === 'Tab' && dialogRef.current) {
+        const fokussierbar = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>('button:not([disabled]), [href]'),
+        )
+        if (fokussierbar.length === 0) return
+        const erstes = fokussierbar[0]
+        const letztes = fokussierbar[fokussierbar.length - 1]
+        if (event.shiftKey && document.activeElement === erstes) {
+          event.preventDefault()
+          letztes.focus()
+        } else if (!event.shiftKey && document.activeElement === letztes) {
+          event.preventDefault()
+          erstes.focus()
+        }
+      }
     }
 
+    const vorherigerOverflow = document.body.style.overflow
     document.addEventListener('keydown', onKeyDown)
     document.body.style.overflow = 'hidden'
+    requestAnimationFrame(() => schliessenRef.current?.focus())
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = ''
+      document.body.style.overflow = vorherigerOverflow
     }
-  }, [aktiv, vorschauOffen, zeige, zeigeNavigation])
+  }, [aktiv, schliesseVorschau, vorschauOffen, zeige, zeigeNavigation])
 
   if (bilder.length === 0) {
     return (
@@ -84,6 +109,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
         onTouchEnd={zeigeNavigation ? onTouchEnd : undefined}
       >
         <button
+          ref={oeffnerRef}
           type="button"
           onClick={() => setVorschauOffen(true)}
           aria-label="Bild vergrößert ansehen"
@@ -108,7 +134,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
               type="button"
               onClick={() => zeige(aktiv - 1)}
               aria-label="Vorheriges Bild"
-              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-border bg-background/90 text-foreground transition-colors hover:border-accent hover:text-accent"
+              className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-border bg-background/90 text-foreground transition-colors hover:border-accent hover:text-accent"
             >
               <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -116,7 +142,7 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
               type="button"
               onClick={() => zeige(aktiv + 1)}
               aria-label="Nächstes Bild"
-              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-border bg-background/90 text-foreground transition-colors hover:border-accent hover:text-accent"
+              className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-border bg-background/90 text-foreground transition-colors hover:border-accent hover:text-accent"
             >
               <ChevronRight className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -141,7 +167,13 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={bild.url || '/placeholder.svg'} alt={bild.alt} className="h-full w-full object-cover" />
+              <img
+                src={bild.url || '/placeholder.svg'}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
             </button>
           ))}
         </div>
@@ -149,15 +181,17 @@ export function AssetGalerie({ bilder }: { bilder: GalerieBild[] }) {
 
       {vorschauOffen && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={`Bildvorschau: ${aktuelles.alt}`}
           className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/90 p-4 md:p-10"
-          onClick={() => setVorschauOffen(false)}
+          onClick={schliesseVorschau}
         >
           <button
+            ref={schliessenRef}
             type="button"
-            onClick={() => setVorschauOffen(false)}
+            onClick={schliesseVorschau}
             aria-label="Bildvorschau schließen"
             className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center border border-background/30 bg-background/90 text-foreground transition-colors hover:bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background"
           >
