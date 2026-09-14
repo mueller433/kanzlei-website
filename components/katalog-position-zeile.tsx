@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import { MerklisteButton } from '@/components/merkliste-button'
 import { ersteBildUrl, STATUS_LABELS } from '@/lib/katalog'
 import type { Posten } from '@/payload-types'
 
@@ -39,10 +40,19 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
     typeof posten.stueckzahl === 'number' ? `${posten.stueckzahl} Stück` : null
   const nebeninfo = [posten.standort, mengeText].filter(Boolean).join(' · ')
 
+  const merklistenPosition = {
+    id: String(posten.id),
+    titel: posten.titel,
+    bildUrl: bildUrl || undefined,
+    preisText,
+    standort: posten.standort || undefined,
+  }
+
   return (
-    <Link
+    <div className="relative">
+      <Link
       href={`/katalog/${posten.id}`}
-      className="group flex gap-3 border-b border-border bg-background py-4 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5"
+      className="group flex gap-3 border-b border-border bg-background py-4 pr-14 transition-colors hover:bg-card focus:outline-none focus-visible:border-accent sm:items-center sm:gap-5 sm:px-5 sm:pr-20"
       data-posten-id={posten.id}
     >
       {/* Thumbnail – erstes Bild aus dem bestehenden Upload-Feld, sonst dezenter Platzhalter */}
@@ -87,6 +97,11 @@ export function KatalogPositionZeile({ posten }: { posten: Posten }) {
           />
         </div>
       </div>
-    </Link>
+      </Link>
+      <MerklisteButton
+        position={merklistenPosition}
+        className="absolute right-0 top-4 z-10 sm:right-4"
+      />
+    </div>
   )
 }
