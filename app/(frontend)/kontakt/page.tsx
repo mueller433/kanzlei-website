@@ -39,6 +39,7 @@ export default async function KontaktSeite({
 }) {
   const sp = await searchParams
   const betreffVorbelegung = typeof sp.betreff === 'string' ? sp.betreff : ''
+  const nachrichtVorbelegung = typeof sp.nachricht === 'string' ? sp.nachricht : ''
 
   return (
     <div>
@@ -147,7 +148,10 @@ export default async function KontaktSeite({
                 Beschreiben Sie kurz Ihr Anliegen. Die mit einem Stern markierten Angaben benötigen
                 wir für die Bearbeitung.
               </p>
-              <KontaktFormular betreffVorbelegung={betreffVorbelegung} />
+              <KontaktFormular
+                betreffVorbelegung={betreffVorbelegung}
+                nachrichtVorbelegung={nachrichtVorbelegung}
+              />
             </div>
           </div>
         </div>
