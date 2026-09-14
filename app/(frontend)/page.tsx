@@ -17,34 +17,6 @@ export const metadata = {
     'DPSS Management GmbH verwertet Vermögenswerte im Auftrag von Insolvenzverwaltern und bietet Käufern einen transparenten Katalog aktueller Positionen.',
 }
 
-const ABLAUF = [
-  {
-    nummer: '01',
-    titel: 'Inventarisierung',
-    beschreibung: 'Vermögenswerte werden vor Ort strukturiert erfasst, fotografiert und dokumentiert.',
-  },
-  {
-    nummer: '02',
-    titel: 'Bewertung',
-    beschreibung: 'Positionen werden marktgerecht eingeordnet und nachvollziehbar bewertet.',
-  },
-  {
-    nummer: '03',
-    titel: 'Vermarktung',
-    beschreibung: 'Passende Interessenten werden über geeignete Kanäle gezielt angesprochen.',
-  },
-  {
-    nummer: '04',
-    titel: 'Verkauf',
-    beschreibung: 'Angebote, Verhandlungen und Verkäufe werden koordiniert abgewickelt.',
-  },
-  {
-    nummer: '05',
-    titel: 'Abwicklung',
-    beschreibung: 'Übergabe, Abrechnung und Dokumentation erfolgen geordnet und transparent.',
-  },
-] as const
-
 const WARUM_DPSS = [
   {
     nummer: '01',
@@ -140,7 +112,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="break-words text-lg font-semibold leading-snug text-foreground sm:text-xl">
+        <h3 className="line-clamp-2 break-words text-lg font-semibold leading-snug text-foreground sm:text-xl">
           {posten.titel}
         </h3>
         {posten.kurzspezifikation && (
@@ -162,7 +134,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
           )}
         </div>
 
-        <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {posten.preisAufAnfrage ? 'Kaufpreis' : 'Preis'}
@@ -184,7 +156,12 @@ export default async function Startseite() {
   const payload = await getPayload({ config: await config })
   const { docs } = await payload.find({
     collection: 'posten',
-    where: { veroeffentlicht: { equals: true } },
+    where: {
+      and: [
+        { veroeffentlicht: { equals: true } },
+        { status: { equals: 'verfuegbar' } },
+      ],
+    },
     sort: '-createdAt',
     depth: 1,
     limit: 6,
@@ -434,9 +411,11 @@ export default async function Startseite() {
             </p>
 
             <ol className="mt-7 border-t border-border">
-              {[WARUM_DPSS[0], WARUM_DPSS[1], WARUM_DPSS[2], WARUM_DPSS[4]].map((punkt) => (
+              {[WARUM_DPSS[0], WARUM_DPSS[1], WARUM_DPSS[2], WARUM_DPSS[4]].map((punkt, index) => (
                 <li key={punkt.nummer} className="grid grid-cols-[2.25rem_1fr] gap-3 border-b border-border py-4 sm:grid-cols-[2.75rem_0.9fr_1.25fr] sm:items-start sm:gap-4">
-                  <span className="font-serif text-lg text-accent">{punkt.nummer}</span>
+                  <span className="font-serif text-lg text-accent">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
                   <h3 className="font-semibold leading-snug text-foreground">{punkt.titel}</h3>
                   <p className="col-start-2 text-sm leading-relaxed text-muted-foreground sm:col-start-3">
                     {punkt.text}
@@ -460,52 +439,6 @@ export default async function Startseite() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ABLAUF */}
-      <section className="border-b border-border bg-card">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14 lg:px-10 lg:py-16">
-          <div className="lg:pt-2">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-              Ablauf
-            </p>
-            <h2 className="max-w-xl font-serif text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-              Von der Aufnahme bis zur Übergabe
-            </h2>
-            <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground">
-              Ein klar strukturierter Prozess schafft verlässliche Zuständigkeiten und eine
-              nachvollziehbare Abwicklung für alle Beteiligten.
-            </p>
-            <Link
-              href="/verwertung"
-              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-accent px-5 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              Ablauf im Detail <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
-
-          <ol className="border-t border-border">
-            {ABLAUF.map((schritt, index) => (
-              <li
-                key={schritt.nummer}
-                className="relative grid grid-cols-[2.75rem_1fr] gap-x-3 border-b border-border py-4 sm:grid-cols-[3.25rem_0.8fr_1.3fr] sm:items-start sm:gap-x-5 sm:py-5"
-              >
-                <span className="font-serif text-xl font-semibold text-accent sm:text-2xl">
-                  {schritt.nummer}
-                </span>
-                <h3 className="text-base font-semibold leading-snug text-foreground sm:text-lg">
-                  {schritt.titel}
-                </h3>
-                <p className="col-start-2 mt-1 text-sm leading-relaxed text-muted-foreground sm:col-start-3 sm:mt-0">
-                  {schritt.beschreibung}
-                </p>
-                {index < ABLAUF.length - 1 && (
-                  <span className="absolute bottom-[-5px] left-[1.05rem] z-10 h-2.5 w-2.5 rotate-45 border-b border-r border-border bg-card sm:left-[1.3rem]" aria-hidden="true" />
-                )}
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
