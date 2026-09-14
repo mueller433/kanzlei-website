@@ -27,7 +27,7 @@ const KAUFABWICKLUNG = [
     nummer: '01',
     titel: 'Kaufanfrage senden',
     beschreibung:
-      'Kontaktdaten und erforderliche Nachweise über „Sofort kaufen“ übermitteln.',
+      'Bei verfügbaren Positionen Kontaktdaten und erforderliche Nachweise über „Sofort kaufen“ übermitteln.',
   },
   {
     nummer: '02',
@@ -117,11 +117,13 @@ function bereinigteBeschreibung(
     const kinder = Array.isArray(objekt.children)
       ? objekt.children.map(bereinige).filter((kind) => kind !== null)
       : objekt.children
+    const wurzel = objekt.root && typeof objekt.root === 'object' ? bereinige(objekt.root) : objekt.root
 
     return {
       ...objekt,
       ...(objekt.type === 'heading' && objekt.tag === 'h1' ? { tag: 'h2' } : {}),
       ...(Array.isArray(objekt.children) ? { children: kinder } : {}),
+      ...(objekt.root && typeof objekt.root === 'object' ? { root: wurzel } : {}),
     }
   }
 
@@ -146,7 +148,7 @@ async function ladePosten(id: string): Promise<Posten | null> {
 
 /**
  * Lädt bis zu 3 weitere veröffentlichte Positionen als Vorschlag – bevorzugt
- * aus derselben Kategorie, sonst die neuesten übrigen Positionen. Schließt
+ * aus derselben Kategorie, sonst die neuesten verfügbaren Positionen. Schließt
  * die aktuell angezeigte Position aus.
  */
 async function ladeAehnlichePositionen(posten: Posten): Promise<Posten[]> {
