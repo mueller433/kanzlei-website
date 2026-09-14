@@ -37,8 +37,10 @@ export function MerklisteButton({
                 ? 'border-accent bg-accent/10 text-accent'
                 : 'text-foreground hover:border-accent hover:text-accent'
             } ${className}`
-          : `inline-flex h-11 w-11 items-center justify-center border border-border bg-card/95 text-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-              gemerkt ? 'border-accent bg-accent text-accent-foreground' : ''
+          : `inline-flex h-11 w-11 items-center justify-center border shadow-sm backdrop-blur-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+              gemerkt
+                ? 'border-accent bg-accent text-accent-foreground'
+                : 'border-border bg-card/95 text-foreground hover:border-accent hover:text-accent'
             } ${className}`
       }
     >
