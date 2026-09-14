@@ -154,7 +154,7 @@ function HomepageAsset({ posten }: { posten: Posten }) {
 
 export default async function Startseite() {
   const payload = await getPayload({ config: await config })
-  const { docs } = await payload.find({
+  const { docs, totalDocs: verfuegbareAnzahl } = await payload.find({
     collection: 'posten',
     where: {
       and: [
@@ -164,7 +164,7 @@ export default async function Startseite() {
     },
     sort: '-createdAt',
     depth: 1,
-    limit: 6,
+    limit: 3,
   })
 
   // Pro Kategorie nur die Anzahl laden. Die Vorschaubilder sind bewusst fest
@@ -260,14 +260,14 @@ export default async function Startseite() {
                   {KATEGORIE_ANZEIGE.map((key) => <option key={key} value={key}>{KATEGORIE_LABELS[key]}</option>)}
                 </select>
               </label>
-              <label className="hidden min-w-0 sm:block">
+              <label className="min-w-0">
                 <span className="sr-only">Zustand</span>
                 <select name="zustand" defaultValue="" className="h-12 w-full border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-accent">
                   <option value="">Alle Zustände</option>
                   {ZUSTAND_REIHENFOLGE.map((key) => <option key={key} value={key}>{ZUSTAND_LABELS[key]}</option>)}
                 </select>
               </label>
-              <label className="hidden min-w-0 sm:block">
+              <label className="min-w-0">
                 <span className="sr-only">Preisbereich</span>
                 <select name="preis" defaultValue="" className="h-12 w-full border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-accent">
                   <option value="">Alle Preise</option>
@@ -293,7 +293,7 @@ export default async function Startseite() {
                 Vermögenswerte entdecken
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Direkt zu den verfügbaren Fahrzeugen, Maschinen und weiteren Vermögenswerten.
+                Direkt zu Fahrzeugen, Maschinen und weiteren veröffentlichten Vermögenswerten.
               </p>
             </div>
             <Link href="/katalog" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
@@ -352,7 +352,8 @@ export default async function Startseite() {
                 Neu im Verwertungskatalog
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Verfügbare Vermögenswerte aus laufenden Verwertungs- und Auflösungsverfahren.
+                Eine aktuelle Auswahl aus {verfuegbareAnzahl}{' '}
+                {verfuegbareAnzahl === 1 ? 'verfügbarer Position' : 'verfügbaren Positionen'}.
               </p>
             </div>
             <Link
@@ -369,7 +370,7 @@ export default async function Startseite() {
             </div>
           ) : (
             <div className="border border-border bg-card p-6 sm:p-8">
-              <h3 className="text-lg font-semibold">Derzeit keine veröffentlichten Positionen.</h3>
+              <h3 className="text-lg font-semibold">Derzeit keine verfügbaren Positionen.</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 Schauen Sie später wieder vorbei oder nehmen Sie direkt Kontakt mit uns auf.
               </p>
