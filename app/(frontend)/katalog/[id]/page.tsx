@@ -294,12 +294,12 @@ export default async function AssetDetailSeite({
 
               {posten.kurzspezifikation && (
                 <div className="mt-4">
-                  <p className="line-clamp-4 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg lg:line-clamp-5">
+                  <p className="line-clamp-3 break-words text-base leading-relaxed text-muted-foreground text-pretty [overflow-wrap:anywhere] md:text-lg">
                     {posten.kurzspezifikation}
                   </p>
                   <a
                     href="#produktbeschreibung"
-                    className="mt-2 inline-flex min-h-10 items-center text-sm font-semibold text-accent hover:underline hover:underline-offset-4"
+                    className="mt-1 inline-flex min-h-8 items-center text-sm font-semibold text-accent hover:underline hover:underline-offset-4"
                   >
                     Vollständige Beschreibung ansehen
                   </a>
