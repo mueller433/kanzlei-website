@@ -54,7 +54,7 @@ export const Kaufanfragen: CollectionConfig = {
     {
       name: 'preis',
       type: 'number',
-      admin: { description: 'Server-seitig geprüfter Preis zum Zeitpunkt der Anfrage. Leer = Preis auf Anfrage.' },
+      admin: { description: 'Serverseitig geprüfter, auf volle 100 € aufgerundeter Bruttopreis zum Zeitpunkt der Anfrage. Leer = Preis auf Anfrage.' },
     },
     {
       name: 'kaeuferTyp',
