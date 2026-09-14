@@ -12,7 +12,7 @@ import { KatalogPositionGridKarte } from '@/components/katalog-position-grid-kar
 import { MerklisteButton } from '@/components/merkliste-button'
 import { KontaktCta } from '@/components/kontakt-cta'
 import { SofortkaufDialog } from '@/components/sofortkauf-dialog'
-import { KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
+import { formatierterBruttopreis, KATEGORIE_LABELS, ZUSTAND_LABELS } from '@/lib/katalog'
 import config from '@/payload.config'
 import type { Media, Posten } from '@/payload-types'
 import '../../styles.css'
@@ -49,14 +49,6 @@ const KAUFABWICKLUNG = [
       'Besichtigung und Abholung erfolgen erst nach vollständigem Zahlungseingang und Terminvereinbarung.',
   },
 ] as const
-
-function formatiertePreis(preis: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(preis)
-}
 
 /**
  * Erzeugt eine stabile, aus der Objekt-ID abgeleitete Positionsnummer im Format
@@ -233,7 +225,7 @@ export default async function AssetDetailSeite({
   const preisText = posten.preisAufAnfrage
     ? 'Preis auf Anfrage'
     : typeof posten.preis === 'number'
-      ? formatiertePreis(Math.round(posten.preis * 1.19))
+      ? formatierterBruttopreis(posten.preis)
       : 'Preis auf Anfrage'
 
   // Kompakte Kerninformationen in der Kaufbox – nur befüllte Felder.
