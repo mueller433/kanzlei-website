@@ -7,9 +7,9 @@ import type { Media, Posten } from '@/payload-types'
  */
 
 export const KATEGORIE_REIHENFOLGE = [
+  'fahrzeuge',
   'smartphones',
   'maschinen',
-  'fahrzeuge',
   'it-bueroelektronik',
   'sonstiges',
   'gastronomie',
