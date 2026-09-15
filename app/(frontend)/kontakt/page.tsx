@@ -127,6 +127,14 @@ export default async function KontaktSeite({
                 ))}
               </div>
 
+              <div className="border-l-2 border-accent bg-card px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                  Ansprechpartnerin
+                </p>
+                <p className="mt-2 font-serif text-xl text-foreground">Monika Schymura</p>
+                <p className="mt-1 text-sm text-muted-foreground">Ihre Kontaktperson</p>
+              </div>
+
               <div className="border border-border bg-muted/45 p-5">
                 <p className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <ShieldCheck className="h-4 w-4 text-accent" aria-hidden="true" />
