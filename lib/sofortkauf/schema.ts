@@ -48,11 +48,14 @@ export type Kaeuferdaten = z.infer<typeof kaeuferdatenSchema>
  * gespeichert – nicht in Vercel Blob, nicht als Payload-Media/-Relation.
  * Sie werden ausschließlich serverseitig im Speicher gelesen, als
  * E-Mail-Anhang per Resend an DPSS Management gesendet und danach verworfen.
- * Die Größe ist bewusst konservativ begrenzt, damit bis zu drei Anhänge pro
- * Anfrage sicher unter dem Anhangslimit von Resend bleiben.
+ * Die Grenzen berücksichtigen insbesondere das 4,5-MB-Limit für Anfragen an
+ * Vercel Functions. Große JPG-/PNG-Fotos werden vor dem Versand im Browser
+ * verkleinert; PDFs bleiben unverändert und müssen die Grenzen bereits erfüllen.
  */
 export const ERLAUBTE_DOKUMENT_TYPEN = ['image/jpeg', 'image/png', 'application/pdf']
-export const MAX_DOKUMENT_GROESSE_BYTES = 5 * 1024 * 1024 // 5 MB
+export const MAX_DOKUMENT_GROESSE_BYTES = 2 * 1024 * 1024 // 2 MB je Datei
+export const MAX_GESAMT_DOKUMENT_GROESSE_BYTES = Math.floor(3.5 * 1024 * 1024) // 3,5 MB gesamt
+export const ZIEL_BILD_GROESSE_BYTES = Math.floor(1.2 * 1024 * 1024) // automatische Foto-Optimierung
 
 export type DokumentSlot = {
   key: string
