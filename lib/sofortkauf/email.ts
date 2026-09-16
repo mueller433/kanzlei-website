@@ -122,6 +122,11 @@ export async function sendeInterneBenachrichtigung(input: InterneBenachrichtigun
         ${kaeuferZeilen.join('')}
       </table>
 
+      ${kaeufer.nachricht ? `
+        <h2 style="font-size:15px;margin:0 0 8px;color:#1a1a1a;">Zusätzliche Nachricht</h2>
+        <div style="margin-bottom:20px;padding:12px;background:#f7f5f1;border:1px solid #e5e5e5;font-size:13px;line-height:1.6;color:#1a1a1a;white-space:pre-wrap;overflow-wrap:anywhere;">${escapeHtml(kaeufer.nachricht)}</div>
+      ` : ''}
+
       ${
         firmenZeilen.length > 0
           ? `<h2 style="font-size:15px;margin:0 0 8px;color:#1a1a1a;">Firmendaten</h2>

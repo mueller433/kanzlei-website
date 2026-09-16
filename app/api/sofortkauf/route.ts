@@ -95,6 +95,7 @@ export async function POST(request: Request): Promise<Response> {
     firmenname: textFeld(formData, 'firmenname'),
     handelsregisternummer: textFeld(formData, 'handelsregisternummer'),
     ustIdNr: textFeld(formData, 'ustIdNr'),
+    nachricht: textFeld(formData, 'nachricht'),
   }
 
   const parsed = kaeuferdatenSchema.safeParse(rohdaten)
@@ -256,6 +257,7 @@ export async function POST(request: Request): Promise<Response> {
         handelsregisternummer:
           kaeufer.kaeuferTyp === 'unternehmen' ? kaeufer.handelsregisternummer || '' : '',
         ustIdNr: kaeufer.kaeuferTyp === 'unternehmen' ? kaeufer.ustIdNr || '' : '',
+        nachricht: kaeufer.nachricht || '',
         eingereichteDokumente: dateien.map((d) => ({ bezeichnung: d.label, dateiname: d.dateiname })),
         identifikationsstatus: 'eingegangen',
         status: 'neu',

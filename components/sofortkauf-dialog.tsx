@@ -101,6 +101,7 @@ type Formwerte = {
   firmenname: string
   handelsregisternummer: string
   ustIdNr: string
+  nachricht: string
 }
 
 const LEERE_FORMWERTE: Formwerte = {
@@ -117,6 +118,7 @@ const LEERE_FORMWERTE: Formwerte = {
   firmenname: '',
   handelsregisternummer: '',
   ustIdNr: '',
+  nachricht: '',
 }
 
 const eingabeKlasse =
@@ -616,6 +618,25 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                           </div>
                         </div>
                       )}
+
+                      <Feld
+                        id="nachricht"
+                        label="Zusätzliche Nachricht (optional)"
+                        fehler={feldFehler.nachricht}
+                      >
+                        <textarea
+                          id="nachricht"
+                          className={`${eingabeKlasse} min-h-28 resize-y`}
+                          value={werte.nachricht}
+                          onChange={(e) => feldAendern('nachricht', e.target.value)}
+                          maxLength={2000}
+                          rows={4}
+                          placeholder="Möchten Sie uns noch etwas zu Ihrer Kaufanfrage mitteilen?"
+                        />
+                        <span className="text-right text-xs text-muted-foreground">
+                          {werte.nachricht.length.toLocaleString('de-DE')} / 2.000 Zeichen
+                        </span>
+                      </Feld>
                     </div>
                   )}
 
@@ -774,6 +795,17 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               </div>
                             )}
                           </dl>
+                        </div>
+                      )}
+
+                      {werte.nachricht.trim() && (
+                        <div>
+                          <h3 className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                            Zusätzliche Nachricht
+                          </h3>
+                          <p className="whitespace-pre-wrap break-words border-t border-border pt-3 text-sm leading-relaxed text-foreground">
+                            {werte.nachricht}
+                          </p>
                         </div>
                       )}
 

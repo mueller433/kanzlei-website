@@ -85,6 +85,12 @@ export const Kaufanfragen: CollectionConfig = {
     { name: 'handelsregisternummer', type: 'text' },
     { name: 'ustIdNr', type: 'text', label: 'USt-IdNr.' },
     {
+      name: 'nachricht',
+      type: 'textarea',
+      label: 'Zusätzliche Nachricht',
+      admin: { description: 'Optionale Nachricht des Käufers zur Kaufanfrage.' },
+    },
+    {
       name: 'eingereichteDokumente',
       type: 'array',
       label: 'Eingereichte Dokumente (nur Bezeichnung, keine Dateien)',

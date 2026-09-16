@@ -270,6 +270,10 @@ export interface Kaufanfragen {
   handelsregisternummer?: string | null;
   ustIdNr?: string | null;
   /**
+   * Optionale Nachricht des Käufers zur Kaufanfrage.
+   */
+  nachricht?: string | null;
+  /**
    * Nur die Bezeichnung der eingereichten Dokumente zur Nachverfolgung. Die eigentlichen Dateien wurden ausschließlich per E-Mail an DPSS Management gesendet und nirgends gespeichert.
    */
   eingereichteDokumente?:
@@ -458,6 +462,7 @@ export interface KaufanfragenSelect<T extends boolean = true> {
   firmenname?: T;
   handelsregisternummer?: T;
   ustIdNr?: T;
+  nachricht?: T;
   eingereichteDokumente?:
     | T
     | {

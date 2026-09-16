@@ -19,6 +19,12 @@ const basisFelder = {
   ort: z.string().trim().min(1, 'Ort ist erforderlich.').max(120),
   land: z.string().trim().min(1, 'Land ist erforderlich.').max(120),
   firma: z.string().trim().max(200).optional().or(z.literal('')),
+  nachricht: z
+    .string()
+    .trim()
+    .max(2000, 'Die Nachricht darf maximal 2.000 Zeichen lang sein.')
+    .optional()
+    .or(z.literal('')),
 }
 
 export const privatpersonSchema = z.object({
