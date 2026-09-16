@@ -18,13 +18,67 @@ import {
   ERLAUBTE_DOKUMENT_TYPEN,
   kaeuferdatenSchema,
   MAX_DOKUMENT_GROESSE_BYTES,
+  MAX_GESAMT_DOKUMENT_GROESSE_BYTES,
+  ZIEL_BILD_GROESSE_BYTES,
   type DokumentSlot,
   type KaeuferTyp,
   type SofortkaufErgebnis,
 } from '@/lib/sofortkauf/schema'
 
 const MAX_DOKUMENT_GROESSE_MB = Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))
+const MAX_GESAMT_DOKUMENT_GROESSE_MB = (
+  MAX_GESAMT_DOKUMENT_GROESSE_BYTES /
+  (1024 * 1024)
+).toLocaleString('de-DE', { maximumFractionDigits: 1 })
 const DATEI_ACCEPT_ATTRIBUT = ERLAUBTE_DOKUMENT_TYPEN.join(',')
+
+async function optimiereBilddatei(datei: File): Promise<File> {
+  if (!['image/jpeg', 'image/png'].includes(datei.type) || datei.size <= ZIEL_BILD_GROESSE_BYTES) {
+    return datei
+  }
+
+  let bild: ImageBitmap
+  try {
+    bild = await createImageBitmap(datei)
+  } catch {
+    return datei
+  }
+
+  try {
+    let faktor = Math.min(1, 2048 / Math.max(bild.width, bild.height))
+    let qualitaet = 0.86
+    let ergebnis: Blob | null = null
+
+    for (let versuch = 0; versuch < 6; versuch += 1) {
+      const canvas = document.createElement('canvas')
+      canvas.width = Math.max(1, Math.round(bild.width * faktor))
+      canvas.height = Math.max(1, Math.round(bild.height * faktor))
+
+      const kontext = canvas.getContext('2d')
+      if (!kontext) return datei
+
+      kontext.drawImage(bild, 0, 0, canvas.width, canvas.height)
+      ergebnis = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, 'image/jpeg', qualitaet)
+      })
+
+      if (!ergebnis || ergebnis.size <= ZIEL_BILD_GROESSE_BYTES) break
+
+      qualitaet = Math.max(0.58, qualitaet - 0.08)
+      faktor *= 0.88
+    }
+
+    if (!ergebnis || ergebnis.size >= datei.size) return datei
+
+    const basisname = datei.name.replace(/\.[^.]+$/, '')
+    return new File([ergebnis], `${basisname}-optimiert.jpg`, {
+      type: 'image/jpeg',
+      lastModified: Date.now(),
+    })
+  } finally {
+    bild.close()
+  }
+}
 
 type Props = {
   produktId: string
@@ -101,6 +155,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
   const [kaeuferTyp, setKaeuferTyp] = useState<KaeuferTyp>('privatperson')
   const [werte, setWerte] = useState<Formwerte>(LEERE_FORMWERTE)
   const [dateien, setDateien] = useState<Record<string, File | null>>({})
+  const [dateienWerdenVerarbeitet, setDateienWerdenVerarbeitet] = useState<Record<string, boolean>>({})
   const [feldFehler, setFeldFehler] = useState<Record<string, string>>({})
   const [serverFehler, setServerFehler] = useState<string | null>(null)
   const [bestaetigtRichtig, setBestaetigtRichtig] = useState(false)
@@ -116,6 +171,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
     setKaeuferTyp('privatperson')
     setWerte(LEERE_FORMWERTE)
     setDateien({})
+    setDateienWerdenVerarbeitet({})
     setFeldFehler({})
     setServerFehler(null)
     setBestaetigtRichtig(false)
@@ -146,6 +202,54 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
     setWerte((prev) => ({ ...prev, [feld]: wert }))
   }
 
+  async function dateiAuswaehlen(slotKey: string, datei: File | null) {
+    setFeldFehler((prev) => {
+      const naechste = { ...prev }
+      delete naechste[slotKey]
+      delete naechste._gesamt
+      return naechste
+    })
+
+    if (!datei) {
+      setDateien((prev) => ({ ...prev, [slotKey]: null }))
+      return
+    }
+
+    setDateienWerdenVerarbeitet((prev) => ({ ...prev, [slotKey]: true }))
+    try {
+      const optimiert = await optimiereBilddatei(datei)
+
+      if (!ERLAUBTE_DOKUMENT_TYPEN.includes(optimiert.type)) {
+        setDateien((prev) => ({ ...prev, [slotKey]: null }))
+        setFeldFehler((prev) => ({
+          ...prev,
+          [slotKey]: 'Erlaubt sind JPG, JPEG, PNG und PDF.',
+        }))
+        return
+      }
+
+      if (optimiert.size > MAX_DOKUMENT_GROESSE_BYTES) {
+        setDateien((prev) => ({ ...prev, [slotKey]: null }))
+        setFeldFehler((prev) => ({
+          ...prev,
+          [slotKey]: `Die Datei ist auch nach der Optimierung größer als ${MAX_DOKUMENT_GROESSE_MB} MB. Bitte verwenden Sie eine kleinere Datei.`,
+        }))
+        return
+      }
+
+      setDateien((prev) => ({ ...prev, [slotKey]: optimiert }))
+    } catch (error) {
+      console.error('[v0] Dokument konnte nicht vorbereitet werden:', error)
+      setDateien((prev) => ({ ...prev, [slotKey]: null }))
+      setFeldFehler((prev) => ({
+        ...prev,
+        [slotKey]: 'Das Foto konnte nicht verarbeitet werden. Bitte verwenden Sie ein JPG, PNG oder PDF.',
+      }))
+    } finally {
+      setDateienWerdenVerarbeitet((prev) => ({ ...prev, [slotKey]: false }))
+    }
+  }
+
   function schritt1Validieren(): boolean {
     const ergebnis = kaeuferdatenSchema.safeParse({
       kaeuferTyp,
@@ -166,6 +270,12 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
 
   function schritt2Validieren(): boolean {
     const fehler: Record<string, string> = {}
+    let gesamtgroesse = 0
+
+    if (Object.values(dateienWerdenVerarbeitet).some(Boolean)) {
+      fehler._gesamt = 'Bitte warten Sie, bis alle Fotos vorbereitet wurden.'
+    }
+
     for (const slot of slots) {
       const datei = dateien[slot.key]
       if (!datei) {
@@ -174,8 +284,15 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
         fehler[slot.key] = `Die Datei darf maximal ${MAX_DOKUMENT_GROESSE_MB} MB groß sein.`
       } else if (!ERLAUBTE_DOKUMENT_TYPEN.includes(datei.type)) {
         fehler[slot.key] = 'Erlaubt sind JPG, JPEG, PNG und PDF.'
+      } else {
+        gesamtgroesse += datei.size
       }
     }
+
+    if (gesamtgroesse > MAX_GESAMT_DOKUMENT_GROESSE_BYTES) {
+      fehler._gesamt = `Alle Dateien zusammen dürfen maximal ${MAX_GESAMT_DOKUMENT_GROESSE_MB} MB groß sein. Bitte ersetzen Sie eine Datei durch eine kleinere Version.`
+    }
+
     setFeldFehler(fehler)
     return Object.keys(fehler).length === 0
   }
@@ -216,8 +333,33 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
           method: 'POST',
           body: formData,
         })
-        const ergebnis: SofortkaufErgebnis = await antwort.json()
-        if (ergebnis.erfolg) {
+
+        const istJson = antwort.headers.get('content-type')?.includes('application/json')
+        const ergebnis = istJson ? ((await antwort.json()) as SofortkaufErgebnis) : null
+
+        if (!antwort.ok) {
+          if (antwort.status === 413) {
+            setServerFehler(
+              `Die ausgewählten Dateien sind insgesamt zu groß. Bitte verwenden Sie Dateien mit zusammen höchstens ${MAX_GESAMT_DOKUMENT_GROESSE_MB} MB.`,
+            )
+          } else {
+            setServerFehler(
+              ergebnis && !ergebnis.erfolg
+                ? ergebnis.fehler
+                : 'Die Kaufanfrage konnte technisch nicht verarbeitet werden. Bitte versuchen Sie es erneut.',
+            )
+          }
+          if (ergebnis && !ergebnis.erfolg && ergebnis.feldFehler) {
+            setFeldFehler(ergebnis.feldFehler)
+          }
+          return
+        }
+
+        if (!ergebnis) {
+          setServerFehler(
+            'Der Server hat keine gültige Antwort gesendet. Bitte versuchen Sie es erneut.',
+          )
+        } else if (ergebnis.erfolg) {
           setErfolgId(ergebnis.kaufanfrageId)
         } else {
           setServerFehler(ergebnis.fehler)
@@ -503,7 +645,11 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                               <span className="flex items-center gap-2 truncate text-foreground">
                                 <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />
                                 <span className="truncate">
-                                  {datei ? datei.name : 'Keine Datei ausgewählt'}
+                                  {dateienWerdenVerarbeitet[slot.key]
+                                    ? 'Foto wird optimiert …'
+                                    : datei
+                                      ? datei.name
+                                      : 'Keine Datei ausgewählt'}
                                 </span>
                               </span>
                               <label
@@ -519,7 +665,7 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                                 className="sr-only"
                                 onChange={(e) => {
                                   const file = e.target.files?.[0] ?? null
-                                  setDateien((prev) => ({ ...prev, [slot.key]: file }))
+                                  void dateiAuswaehlen(slot.key, file)
                                 }}
                               />
                             </div>
@@ -529,6 +675,15 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                           </div>
                         )
                       })}
+                      {feldFehler._gesamt && (
+                        <div
+                          className="flex items-start gap-2.5 border border-accent bg-accent/5 px-4 py-3 text-sm text-accent"
+                          role="alert"
+                        >
+                          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                          <span>{feldFehler._gesamt}</span>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -700,7 +855,8 @@ export function SofortkaufDialog({ produktId, produktTitel, preisText, standort 
                     <button
                       type="button"
                       onClick={weiter}
-                      className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+                      disabled={Object.values(dateienWerdenVerarbeitet).some(Boolean)}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-50"
                     >
                       Weiter
                       <ArrowRight className="h-4 w-4" />
