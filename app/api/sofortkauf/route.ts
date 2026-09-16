@@ -9,6 +9,7 @@ import {
   DOKUMENT_SLOTS_UNTERNEHMEN,
   ERLAUBTE_DOKUMENT_TYPEN,
   MAX_DOKUMENT_GROESSE_BYTES,
+  MAX_GESAMT_DOKUMENT_GROESSE_BYTES,
   kaeuferdatenSchema,
   type Kaeuferdaten,
   type SofortkaufErgebnis,
@@ -131,6 +132,8 @@ export async function POST(request: Request): Promise<Response> {
     kaeufer.kaeuferTyp === 'unternehmen' ? DOKUMENT_SLOTS_UNTERNEHMEN : DOKUMENT_SLOTS_PRIVATPERSON
 
   const dateien: { slot: string; label: string; dateiname: string; inhalt: Buffer }[] = []
+  let gesamtgroesse = 0
+
   for (const slot of erforderlicheSlots) {
     const eintrag = formData.get(slot.key)
     if (!(eintrag instanceof File) || eintrag.size === 0) {
@@ -141,6 +144,17 @@ export async function POST(request: Request): Promise<Response> {
         {
           erfolg: false,
           fehler: `Die Datei „${slot.label}“ überschreitet die maximale Größe von ${Math.round(MAX_DOKUMENT_GROESSE_BYTES / (1024 * 1024))} MB.`,
+        },
+        413,
+      )
+    }
+    gesamtgroesse += eintrag.size
+    if (gesamtgroesse > MAX_GESAMT_DOKUMENT_GROESSE_BYTES) {
+      return fehlerAntwort(
+        {
+          erfolg: false,
+          fehler:
+            'Die hochgeladenen Dokumente sind insgesamt zu groß. Bitte verwenden Sie kleinere Dateien.',
         },
         413,
       )
