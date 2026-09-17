@@ -27,7 +27,7 @@ const KONTAKTDATEN = [
   {
     Icon: Phone,
     label: 'Büro Berlin',
-    zeilen: ['030 75434877'],
+    zeilen: ['+493075434877'],
     href: 'tel:+493075434877',
   },
   {
