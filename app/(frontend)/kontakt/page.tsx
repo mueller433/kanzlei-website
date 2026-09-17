@@ -25,6 +25,12 @@ const KONTAKTDATEN = [
     href: KANZLEI.telefon.href,
   },
   {
+    Icon: Phone,
+    label: 'Büro Berlin',
+    zeilen: ['030 75434877'],
+    href: 'tel:+493075434877',
+  },
+  {
     Icon: Mail,
     label: 'E-Mail',
     zeilen: [KANZLEI.email.anzeige],
